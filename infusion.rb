@@ -6,7 +6,7 @@
 required_version "0.2"
 require 'teapot/build'
 
-define_package "unit-test-0.1.0" do |package|
+define_package "euclid-0.1.0" do |package|
 	package.build(:all) do |platform, environment|
 		# Need to set build_prefix and install_prefix appropriately:
 		top = Teapot::Build.top(Pathname.new(__FILE__).dirname)
