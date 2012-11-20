@@ -17,6 +17,8 @@ define_package "euclid-0.1.0" do |package|
 		local_build = environment.merge do
 			build_prefix "build-#{platform.name}-#{variant}"
 			install_prefix platform.prefix
+			
+			buildflags {["-I", platform.prefix + "include", "-L", platform.prefix + "lib"]}
 		end
 		
 		top.execute(:install, local_build)
