@@ -158,7 +158,6 @@ namespace Euclid
 		template <unsigned E, typename NumericT = RealT>
 		class Vector : public VectorTraits<E, NumericT>, public VectorEqualityTraits<E, NumericT>, public VectorConversionTraits<E, NumericT>{
 		public:
-			enum { ELEMENTS = E };
 			typedef NumericT ElementT;
 
 			/// The type of the vector elements.

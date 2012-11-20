@@ -121,8 +121,8 @@ namespace Euclid
 		template <unsigned _R = 4, unsigned _C = 4, typename _NumericT = RealT>
 		class Matrix : public MatrixSquareTraits<_R, _C, _NumericT>, public MatrixInverseTraits<_R, _C, _NumericT>, public MatrixEqualityTraits<_R, _C, _NumericT> {
 		public:
-			enum { R = _R };
-			enum { C = _C };
+			static const std::size_t R = _R;
+			static const std::size_t C = _C;
 			typedef _NumericT NumericT;
 
 		protected:
