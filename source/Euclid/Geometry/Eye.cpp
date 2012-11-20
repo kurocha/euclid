@@ -79,7 +79,7 @@ namespace Euclid
 			return look_at(origin, forward.direction(), up);
 		}
 		
-		template class Eye<float>;
-		template class Eye<double>;
+		template struct Eye<float>;
+		template struct Eye<double>;
 	}
 }

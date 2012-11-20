@@ -55,8 +55,8 @@ namespace Euclid
 			};
 		}
 		
-		extern template class Eye<float>;
-		extern template class Eye<double>;
+		extern template struct Eye<float>;
+		extern template struct Eye<double>;
 	}
 }
 
