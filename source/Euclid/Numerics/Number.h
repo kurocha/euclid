@@ -11,6 +11,9 @@
 #define _EUCLID_NUMERICS_NUMBER_H
 
 #include "Numerics.h"
+#include "Integer.h"
+#include "Float.h"
+
 #include <algorithm>
 
 namespace Euclid

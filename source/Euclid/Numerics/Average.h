@@ -18,71 +18,71 @@ namespace Euclid
 	{
 		/** This class can assist in the calculation of mathematical averages.
 		 */
-		template <typename type_t>
+		template <typename NumericT>
 		class Average {
 		protected:
 			/// The number of samples taken so far.
-			uint32_t _times;
+			std::size_t _samples;
 			/// The current total.
 			/// @todo This value might overflow. Is there a way to fix this behaviour?
-			type_t _value;
+			NumericT _total;
 
 			/// Add a set of samples to the average.
-			void add_samples (const type_t & v, const uint32_t & t)
+			void add_samples (const NumericT & value, const std::size_t & samples)
 			{
-				_times += t;
-				_value += v;
+				_samples += samples;
+				_total += value;
 			}
 
 		public:
 			/// Default constructor
-			Average () : _times (0), _value (0)
+			Average () : _samples(0), _total(0)
 			{
 			}
 
 			/// Add a single sample to the average.
-			void add_sample (const type_t & v)
+			void add_sample (const NumericT & value)
 			{
-				_times += 1;
-				_value += v;
+				_samples += 1;
+				_total += value;
 			}
 
 			/// Add samples from another instance of Average.
-			void add_samples (const Average<type_t> & other)
+			void add_samples (const Average<NumericT> & other)
 			{
-				add_samples(other._value, other._times);
+				add_samples(other._total, other._samples);
 			}
 
 			/// Calculate the average value.
 			/// @returns The average value.
-			type_t average ()
+			NumericT average ()
 			{
-				if (_times == 0) return 0;
+				if (_samples == 0) return 0;
 
-				return _value / (type_t)_times;
+				return _total / (NumericT)_samples;
 			}
 
 			/// Check if any samples have been added.
 			/// @returns true if there are samples.
 			bool has_samples ()
 			{
-				return _times != 0;
+				return _samples != 0;
 			}
 
 			/// The number of samples taken.
-			uint32_t number_of_samples () const
+			std::size_t number_of_samples () const
 			{
-				return _times;
+				return _samples;
 			}
 
 			/// Helper for adding a sample. Same as add_sample.
-			void operator+= (const type_t & sample)
+			void operator+= (const NumericT & sample)
 			{
 				add_sample(sample);
 			}
 
 			/// Helper for adding a samples. Same as add_samples.
-			void operator+= (const Average<type_t> & other)
+			void operator+= (const Average<NumericT> & other)
 			{
 				add_samples(other);
 			}

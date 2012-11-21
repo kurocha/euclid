@@ -2,7 +2,7 @@
 #include <UnitTest/UnitTest.h>
 #include <Euclid/Geometry/Line.h>
 
-UnitTest::Suite test_geometry_lines_suite {
+UnitTest::Suite TestGeometryLinesSuite {
 	"Test Lines",
 	
 	{"Line Intersections",
@@ -47,9 +47,6 @@ UnitTest::Suite test_geometry_lines_suite {
 			r = mat * v1;
 
 			examiner->check(r.equivalent(Vec3(-10, 0, 0))) << "Transformed vertex is correct";
-
-			//void rotate (const VectorT & rotation_normal, const NumericRealT & angle);
-			//LineT rotated_line (const VectorT & rotation_normal, const NumericRealT & angle) const;
 
 			Line3 q = a.rotated_line(norm, R90);
 

@@ -30,32 +30,6 @@ namespace Euclid
 		}
 
 		template <dimension E>
-		bool VectorEqualityTraits<E, float>::equal_within_tolerance (const Vector<E, float> & other, const unsigned & ulps) const
-		{
-			const Vector<E, float> &v = static_cast<const Vector<E, float> &>(*this);
-
-			for (dimension i = 0; i < E; ++i) {
-				if (!Numerics::equal_within_tolerance(v[i], other[i], ulps))
-					return false;
-			}
-
-			return true;
-		}
-
-		template <dimension E>
-		bool VectorEqualityTraits<E, double>::equal_within_tolerance(const Vector<E, double> & other, const unsigned & ulps) const
-		{
-			const Vector<E, double> &v = static_cast<const Vector<E, double> &>(*this);
-
-			for (dimension i = 0; i < E; ++i) {
-				if (!Numerics::equal_within_tolerance(v[i], other[i], ulps))
-					return false;
-			}
-
-			return true;
-		}
-
-		template <dimension E>
 		bool VectorEqualityTraits<E, float>::equivalent (const Vector<E, float> & other) const
 		{
 			const Vector<E, float> &v = static_cast<const Vector<E, float> &>(*this);

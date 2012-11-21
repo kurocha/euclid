@@ -13,6 +13,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include "Angles.h"
+
 #include "Matrix.NEON.h"
 #include "Matrix.SSE.h"
 
@@ -231,7 +233,7 @@ namespace Euclid
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (equal_within_tolerance(angle, (NumericT)0.0)) return result;
+			if (is_zero(angle)) return result;
 
 			NumericT s = Number<NumericT>::sin(angle);
 			NumericT c = Number<NumericT>::cos(angle);
@@ -279,7 +281,7 @@ namespace Euclid
 		{
 			NumericT angle = to.angle_between(from);
 
-			if (equal_within_tolerance(angle, (NumericT)0.0)) {
+			if (is_zero(angle)) {
 				return IDENTITY;
 			} else if (Math::abs(angle) == R180) {
 				return Matrix<N, N, NumericT>::rotating_matrix(angle, from.cross(normal).normalize());

@@ -84,30 +84,6 @@ namespace Euclid
 		};
 
 // MARK: -
-
-		template <dimension R, dimension C, typename NumericT>
-		class MatrixEqualityTraits {
-		};
-
-		template <dimension R, dimension C>
-		class MatrixEqualityTraits<R, C, float>{
-		protected:
-			typedef Matrix<R, C, float> MatrixT;
-
-		public:
-			bool equal_within_tolerance (const MatrixT & other, const std::size_t & ulps = DEFAULT_ULPS) const;
-		};
-
-		template <dimension R, dimension C>
-		class MatrixEqualityTraits<R, C, double>{
-		protected:
-			typedef Matrix<R, C, double> MatrixT;
-
-		public:
-			bool equal_within_tolerance (const MatrixT & other, const std::size_t & ulps = DEFAULT_ULPS) const;
-		};
-
-// MARK: -
 // MARK: Matrix Class
 
 		std::size_t row_major_offset(std::size_t row, std::size_t col, std::size_t sz);
@@ -119,7 +95,7 @@ namespace Euclid
 		the interface will assume access is done via rows and columns according to this standard notation.
 		 */
 		template <dimension _R = 4, dimension _C = 4, typename _NumericT = RealT>
-		class Matrix : public MatrixSquareTraits<_R, _C, _NumericT>, public MatrixInverseTraits<_R, _C, _NumericT>, public MatrixEqualityTraits<_R, _C, _NumericT> {
+		class Matrix : public MatrixSquareTraits<_R, _C, _NumericT>, public MatrixInverseTraits<_R, _C, _NumericT> {
 		public:
 			static const std::size_t R = _R;
 			static const std::size_t C = _C;

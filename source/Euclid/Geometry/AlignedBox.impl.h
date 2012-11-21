@@ -145,7 +145,7 @@ namespace Euclid
 				b = other._max[axis];
 				c = _max[axis];
 
-				if ((b + offset) < c && compare_edge(a, b, !Numerics::equal_within_tolerance(offset, (NumericT)0.0))) {
+				if ((b + offset) < c && compare_edge(a, b, !Numerics::is_zero(offset))) {
 					//std::cout << "Adjusting [" << axis << "] from " << a << " to " << b - offset << std::endl;
 					_min[axis] = b + offset;
 					return true;
@@ -155,7 +155,7 @@ namespace Euclid
 				b = other._min[axis];
 				c = _min[axis];
 
-				if ((b + offset) > c && compare_edge(b, a, !Numerics::equal_within_tolerance(offset, (NumericT)0.0))) {
+				if ((b + offset) > c && compare_edge(b, a, !Numerics::is_zero(offset))) {
 					//std::cout << "Adjusting [" << axis << "] from " << a << " to " << b - offset << std::endl;
 					_max[axis] = b - offset;
 					return true;

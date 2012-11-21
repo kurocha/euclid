@@ -46,9 +46,6 @@ namespace Euclid
 		template <dimension E>
 		class VectorEqualityTraits<E, float>{
 		public:
-			/// Check whether a vector is equal to another using the equal_within_tolerance set of functions.
-			bool equal_within_tolerance (const Vector<E, float> & other, const unsigned & ulps = DEFAULT_ULPS) const;
-
 			bool equivalent (const Vector<E, float> & other) const;
 		};
 
@@ -57,9 +54,6 @@ namespace Euclid
 		template <dimension E>
 		class VectorEqualityTraits<E, double>{
 		public:
-			/// Check whether a vector is equal to another using the equal_within_tolerance set of functions.
-			bool equal_within_tolerance (const Vector<E, double> & other, const unsigned & ulps = DEFAULT_ULPS) const;
-
 			bool equivalent (const Vector<E, double> & other) const;
 		};
 
