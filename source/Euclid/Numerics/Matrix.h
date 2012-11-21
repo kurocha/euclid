@@ -19,13 +19,13 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		template <unsigned, unsigned, typename>
+		template <std::size_t, std::size_t, typename>
 		class Matrix;
 
 // MARK: -
 // MARK: Matrix Inverse Traits
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <std::size_t R, std::size_t C, typename NumericT>
 		class MatrixInverseTraits {
 		};
 
@@ -43,19 +43,19 @@ namespace Euclid
 // MARK: -
 // MARK: Matrix Square Traits
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		class MatrixSquareTraits {};
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		class MatrixSquareTraits<N, N, NumericT>{
 		private:
 			typedef Matrix<N, N, NumericT> MatrixT;
 
 		public:
-			template <unsigned K>
+			template <dimension K>
 			static MatrixT scaling_matrix (const Vector<K, NumericT> & amount);
 
-			template <unsigned K>
+			template <dimension K>
 			static MatrixT translating_matrix (const Vector<K, NumericT> & amount);
 
 			// Rotations in 3D.
@@ -73,10 +73,10 @@ namespace Euclid
 			MatrixT rotated_matrix (const NumericT & radians, const Vector<3, NumericT> & normal);
 			MatrixT rotated_matrix (const NumericT & radians, const Vector<3, NumericT> & normal, const Vector<3, NumericT> & point);
 
-			template <unsigned K>
+			template <dimension K>
 			MatrixT scaled_matrix (const Vector<K, NumericT> & amount);
 
-			template <unsigned K>
+			template <dimension K>
 			MatrixT translated_matrix (const Vector<K, NumericT> & amount);
 
 			/// In-place transposition (transpose_matrix)
@@ -85,26 +85,26 @@ namespace Euclid
 
 // MARK: -
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		class MatrixEqualityTraits {
 		};
 
-		template <unsigned R, unsigned C>
+		template <dimension R, dimension C>
 		class MatrixEqualityTraits<R, C, float>{
 		protected:
 			typedef Matrix<R, C, float> MatrixT;
 
 		public:
-			bool equal_within_tolerance (const MatrixT & other, const unsigned & ulps = DEFAULT_ULPS) const;
+			bool equal_within_tolerance (const MatrixT & other, const std::size_t & ulps = DEFAULT_ULPS) const;
 		};
 
-		template <unsigned R, unsigned C>
+		template <dimension R, dimension C>
 		class MatrixEqualityTraits<R, C, double>{
 		protected:
 			typedef Matrix<R, C, double> MatrixT;
 
 		public:
-			bool equal_within_tolerance (const MatrixT & other, const unsigned & ulps = DEFAULT_ULPS) const;
+			bool equal_within_tolerance (const MatrixT & other, const std::size_t & ulps = DEFAULT_ULPS) const;
 		};
 
 // MARK: -
@@ -118,7 +118,7 @@ namespace Euclid
 		Standard mathematical notation is column order, therefore regardless of row-major or column-major memory layout,
 		the interface will assume access is done via rows and columns according to this standard notation.
 		 */
-		template <unsigned _R = 4, unsigned _C = 4, typename _NumericT = RealT>
+		template <dimension _R = 4, dimension _C = 4, typename _NumericT = RealT>
 		class Matrix : public MatrixSquareTraits<_R, _C, _NumericT>, public MatrixInverseTraits<_R, _C, _NumericT>, public MatrixEqualityTraits<_R, _C, _NumericT> {
 		public:
 			static const std::size_t R = _R;
@@ -136,7 +136,7 @@ namespace Euclid
 
 			Matrix (const Matrix<R, C, NumericT> & other);
 
-			template <unsigned S, unsigned T, typename OtherNumericT>
+			template <dimension S, dimension T, typename OtherNumericT>
 			Matrix (const Matrix<S, T, OtherNumericT> & other) {
 				set(other);
 			}
@@ -154,12 +154,12 @@ namespace Euclid
 			template <typename AnyT>
 			void set (const AnyT * data)
 			{
-				for (unsigned i = 0; i < R*C; i++) {
+				for (dimension i = 0; i < R*C; i++) {
 					_data[i] = data[i];
 				}
 			}
 
-			template <unsigned S, unsigned T, typename OtherNumericT>
+			template <dimension S, dimension T, typename OtherNumericT>
 			void set (const Matrix<S, T, OtherNumericT> & other) {
 				for (std::size_t s = 0; s < S; s += 1) {
 					for (std::size_t t = 0; t < T; t += 1) {
@@ -179,22 +179,22 @@ namespace Euclid
 			}
 
 			// Accessors
-			const NumericT & at (unsigned r, unsigned c) const
+			const NumericT & at (dimension r, dimension c) const
 			{
 				return _data[offset(r, c)];
 			}
 
-			NumericT & at (unsigned r, unsigned c)
+			NumericT & at (dimension r, dimension c)
 			{
 				return _data[offset(r, c)];
 			}
 			
-			const NumericT & operator[] (unsigned i) const
+			const NumericT & operator[] (dimension i) const
 			{
 				return _data[i];
 			}
 
-			NumericT & operator[] (unsigned i)
+			NumericT & operator[] (dimension i)
 			{
 				return _data[i];
 			}
@@ -214,7 +214,7 @@ namespace Euclid
 			/// Copy a vector into the matix at position r, c
 			/// This copies the vector in the direction of the major format,
 			/// i.e. in column major format it will appear as a column
-			template <unsigned D>
+			template <std::size_t D>
 			void set (const std::size_t & r, const std::size_t & c, const Vector<D, NumericT> & v)
 			{
 				memcpy(&at(r, c), v.value(), sizeof(NumericT) * D);
@@ -224,7 +224,7 @@ namespace Euclid
 			/// The purpose of this function is primarily to facilitate copying a vector into a matrix in an order
 			/// other than the major.
 			/// i.e. set(0, 0, Vec4(...), 4) will set a row in a column major matrix.
-			template <unsigned D>
+			template <std::size_t D>
 			void set (const std::size_t & r, const std::size_t & c, const Vector<D, NumericT> & v, std::size_t element_offset)
 			{
 				std::size_t start_offset = offset(r, c);
@@ -239,8 +239,8 @@ namespace Euclid
 			{
 				Matrix<C, R, NumericT> result;
 
-				for (unsigned c = 0; c < C; ++c)
-					for (unsigned r = 0; r < R; ++r)
+				for (dimension c = 0; c < C; ++c)
+					for (dimension r = 0; r < R; ++r)
 						result.at(c, r) = at(r, c);
 
 				return result;
@@ -249,18 +249,18 @@ namespace Euclid
 			/// Load a test patern into the matrix. Used for testing.
 			void load_test_pattern ()
 			{
-				unsigned i = 0;
+				dimension i = 0;
 
-				for (unsigned c = 0; c < C; c += 1)
-					for (unsigned r = 0; r < R; r += 1)
+				for (dimension c = 0; c < C; c += 1)
+					for (dimension r = 0; r < R; r += 1)
 						at(r, c) = i++;
 			}
 
 			/// Check if a matrices components are exactly equal.
 			bool operator== (const Matrix & other) const
 			{
-				for (unsigned c = 0; c < C; ++c)
-					for (unsigned r = 0; r < R; ++r)
+				for (dimension c = 0; c < C; ++c)
+					for (dimension r = 0; r < R; ++r)
 						if (at(r, c) != other.at(r, c))
 							return false;
 
@@ -269,7 +269,7 @@ namespace Euclid
 
 			bool equivalent(const Matrix & other) const
 			{
-				for (unsigned i = 0; i < R*C; i += 1) {
+				for (dimension i = 0; i < R*C; i += 1) {
 					if (! Number<NumericT>::equivalent(_data[i], other[i])) {
 						return false;
 					}
@@ -280,7 +280,7 @@ namespace Euclid
 		};
 				
 		/// Short-hand notation
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		Vector<C, NumericT> operator* (const Matrix<R, C, NumericT> & left, const Vector<R, NumericT> & right)
 		{
 			Vector<R, NumericT> result(ZERO);
@@ -291,7 +291,7 @@ namespace Euclid
 		}
 		
 		/// Short-hand notation for non-homogeneous vectors
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		Vector<C-1, NumericT> operator* (const Matrix<R, C, NumericT> & left, const Vector<R-1, NumericT> & right)
 		{
 			Vector<C, NumericT> result(ZERO);
@@ -304,7 +304,7 @@ namespace Euclid
 		}
 
 		/// Short hand for matrix multiplication
-		template <unsigned R, unsigned C, unsigned T, typename NumericT>
+		template <dimension R, dimension C, dimension T, typename NumericT>
 		Matrix<R, C, NumericT> operator* (const Matrix<R, T, NumericT> & left, const Matrix<T, C, NumericT> & right)
 		{
 			Matrix<R, C, NumericT> result(ZERO);
@@ -315,13 +315,13 @@ namespace Euclid
 			return result;
 		}
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		Matrix<R, C, NumericT> & operator*= (Matrix<R, C, NumericT> & transform, const Matrix<R, C, NumericT> & step)
 		{
 			return (transform = transform * step);
 		}
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		Matrix<R, C, NumericT> & operator<< (Matrix<R, C, NumericT> & transform, const Matrix<R, C, NumericT> & step)
 		{
 			// To simplify the order of operations, we reverse the order of multiplcation so that transforms can be supplied in forwards order (well, technically backwards).

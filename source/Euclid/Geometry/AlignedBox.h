@@ -34,7 +34,7 @@ namespace Euclid {
 		 @sa Line
 		 @sa LineSegment
 		 */
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class AlignedBox {
 		public:
 			typedef Vector<D, NumericT> VectorT;
@@ -153,7 +153,7 @@ namespace Euclid {
 			void set_corner (const BoolVectorT & cnr, const VectorT & adj);
 
 			/// Set the value for a particular axis for a given corner.
-			void set_corner (const BoolVectorT & cnr, const unsigned & axis, const NumericT & amnt);
+			void set_corner (const BoolVectorT & cnr, const dimension & axis, const NumericT & amnt);
 
 			/// Set the center and size of the box.
 			/// @sa from_center_and_size()
@@ -207,7 +207,7 @@ namespace Euclid {
 			}
 
 			/// Adjust an individual axis of the box by the given amount
-			void shift_axis (unsigned axis, const NumericT &amount) {
+			void shift_axis (dimension axis, const NumericT &amount) {
 				_min[axis] += amount;
 				_max[axis] += amount;
 			}
@@ -267,7 +267,7 @@ namespace Euclid {
 			/// Given an orientation, aligns this box within a superbox.
 			void align_within_super_box (const AlignedBox & super_box, const Vector<D> & orientation)
 			{
-				for (unsigned i = 0; i < D; ++i) {
+				for (dimension i = 0; i < D; ++i) {
 					RealT width = _max[i] - _min[i];
 					RealT super_width = super_box._max[i] - super_box._min[i];
 					RealT scale = super_width - width;
@@ -282,7 +282,7 @@ namespace Euclid {
 			Vector<D> orientation_of (const AlignedBox &other) const {
 				Vector<D> o;
 
-				for (unsigned i = 0; i < D; ++i) {
+				for (dimension i = 0; i < D; ++i) {
 					if (other._min[i] < _min[i])
 						o[i] = 0;
 					else if (other._max[i] > _max[i])
@@ -346,7 +346,7 @@ namespace Euclid {
 			/// @returns true when the two boxes overlap, or edges touch, depending on includes_edges parameter.
 			bool intersects_with (const AlignedBox<D, NumericT> & other, bool includes_edges = true) const
 			{
-				for (unsigned i = 0; i < D; ++i) {
+				for (dimension i = 0; i < D; ++i) {
 					if (compare_edge(_max[i], other._min[i], !includes_edges) || compare_edge(other._max[i], _min[i], !includes_edges))
 						return false;
 				}
@@ -355,8 +355,8 @@ namespace Euclid {
 			}
 
 			// Ordered subtraction methods
-			void subtract_in_order (const AlignedBox & other, const Vector<D, unsigned> & order);
-			void subtract_in_order (const AlignedBox & other, const Vector<D, unsigned> & order, const Vector<D, SubtractResolution> & cuts);
+			void subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order);
+			void subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, SubtractResolution> & cuts);
 
 			// Translation based subtraction methods
 			// These methods assume that only the edges specified by the orientation may overlap. For a more general
@@ -366,10 +366,10 @@ namespace Euclid {
 			AlignedBox subtract_using_translation (const AlignedBox & from, const AlignedBox & to, const NumericT & offset = 0);
 
 			// This just subtracts a single edge from another box, essentially a helper for subtract_using_translation
-			bool subtract_edge (const AlignedBox & other, unsigned axis, const BoxEdge & edge, const NumericT & offset = 0);
+			bool subtract_edge (const AlignedBox & other, dimension axis, const BoxEdge & edge, const NumericT & offset = 0);
 		};
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		std::ostream &operator<<(std::ostream &o, const AlignedBox<D, NumericT> &space) {
 			o << "(" << space.min() << " -> " << space.max() << ")";
 

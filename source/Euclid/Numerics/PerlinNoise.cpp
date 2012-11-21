@@ -14,7 +14,7 @@
 
 namespace Euclid {
 	namespace Numerics {
-		PerlinNoise::PerlinNoise(unsigned seed) {
+		PerlinNoise::PerlinNoise(SeedT seed) {
 			std::mt19937 rng(seed);
 
 			std::uniform_int_distribution<int> byte_distribution(0, 256);

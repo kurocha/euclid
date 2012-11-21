@@ -15,13 +15,13 @@ namespace Euclid
 {
 	namespace Geometry
 	{
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool Plane<D, NumericT>::is_parallel (const Plane<D, NumericT> & other) const
 		{
 			return _normal == other._normal || _normal == (-other._normal);
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool Plane<D, NumericT>::intersects_with (const Plane<D, NumericT> & other, Line<3, NumericT> & line) const
 		{
 			/* Planes are parallel? */
@@ -36,7 +36,7 @@ namespace Euclid
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool Plane<D, NumericT>::intersects_with (const Line<3, NumericT> & line, VectorT & at) const
 		{
 			NumericT d = _normal.dot(line.direction());
@@ -53,7 +53,7 @@ namespace Euclid
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Plane<D, NumericT>::intersects_with (const Sphere<D, NumericT> & sphere) const
 		{
 			NumericT d = distance_to_point(sphere.center());
@@ -66,7 +66,7 @@ namespace Euclid
 				return SHAPES_INTERSECT;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		std::ostream &operator<<(std::ostream &out, const Plane<D, NumericT> & p) {
 			return out << "norm: " << p.normal() << " d: " << p.distance();
 		}

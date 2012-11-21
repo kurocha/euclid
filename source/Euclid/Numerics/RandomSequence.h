@@ -26,7 +26,7 @@ namespace Euclid {
 		public:
 			RandomSequence (unsigned seed, RealT min = -1.0, RealT max = 1.0);
 
-			template <unsigned D>
+			template <dimension D>
 			const Vector<D> next_vector () {
 				Vector<D> result;
 

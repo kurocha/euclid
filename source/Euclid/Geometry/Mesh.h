@@ -18,7 +18,7 @@
 
 namespace Euclid {
 	namespace Geometry {
-		template <typename ElementT, unsigned N>
+		template <typename ElementT, dimension N>
 		std::size_t array_count(const ElementT(&)[N]) {
 			return N;
 		}

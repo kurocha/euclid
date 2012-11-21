@@ -42,11 +42,11 @@ namespace Euclid
 			static const uint64_t ACCURACY = 4427486594234968593ULL;
 		};
 
-		template <typename t>
+		template <typename _FloatT>
 		class FloatingPointTraits {
 		public:
-			typedef t FloatT;
-			typedef typename FloatingPointIntegerTraits<t>::FIntT FIntT;
+			typedef _FloatT FloatT;
+			typedef typename FloatingPointIntegerTraits<FloatT>::FIntT FIntT;
 
 			union Conversion
 			{ FloatT f; FIntT i; };
@@ -88,14 +88,14 @@ namespace Euclid
 			}
 
 			static bool is_zero (const FloatT & value) {
-				return is_zero(value, FloatingPointIntegerTraits<t>::ACCURACY);
+				return is_zero(value, FloatingPointIntegerTraits<FloatT>::ACCURACY);
 			}
 
 			static bool is_zero (const FIntT & value) {
-				return is_zero(value, FloatingPointIntegerTraits<t>::ACCURACY);
+				return is_zero(value, FloatingPointIntegerTraits<FloatT>::ACCURACY);
 			}
 
-			static unsigned integral_difference(const FloatT & a, const FloatT & b) {
+			static FIntT integral_difference(const FloatT & a, const FloatT & b) {
 				// Make lexicographically ordered as a twos-complement int
 				FIntT a_integral = convert_to_integer(a);
 				FIntT b_integral = convert_to_integer(b);
@@ -106,7 +106,7 @@ namespace Euclid
 					return a_integral - b_integral;
 			}
 
-			static bool equal_within_tolerance (const FloatT & a, const FloatT & b, const unsigned & max_ulps)
+			static bool equal_within_tolerance (const FloatT & a, const FloatT & b, const FIntT & max_ulps)
 			{
 				// Make sure max_ulps is non-negative and small enough that the
 				// default NAN won't compare as equal to anything.

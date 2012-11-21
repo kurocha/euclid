@@ -17,7 +17,7 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		class Vector;
 
 // MARK: -
@@ -25,7 +25,7 @@ namespace Euclid
 
 		/** Vector conversion traits. Default specialization.
 		 */
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		class VectorConversionTraits {
 		};
 
@@ -37,13 +37,13 @@ namespace Euclid
 
 		/** Vector equality traits for specific template parameters. Default specialization.
 		 */
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		class VectorEqualityTraits {
 		};
 
 		/** Single floating point vector equality traits.
 		 */
-		template <unsigned E>
+		template <dimension E>
 		class VectorEqualityTraits<E, float>{
 		public:
 			/// Check whether a vector is equal to another using the equal_within_tolerance set of functions.
@@ -54,7 +54,7 @@ namespace Euclid
 
 		/** Double floating point vector equality traits.
 		 */
-		template <unsigned E>
+		template <dimension E>
 		class VectorEqualityTraits<E, double>{
 		public:
 			/// Check whether a vector is equal to another using the equal_within_tolerance set of functions.
@@ -65,7 +65,7 @@ namespace Euclid
 
 		/** Vector traits for specific template parameters. Default specialization.
 		 */
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		class VectorTraits {
 		};
 
@@ -155,7 +155,7 @@ namespace Euclid
 		 The purpose of this comparison is ordering. It is possible to order a sequence of points in size. Thus, it is possible to store points in containers
 		 that rely on strict ordering behaviour such as <tt>std::set</tt> and <tt>std::map</tt>.
 		 */
-		template <unsigned E, typename NumericT = RealT>
+		template <dimension E, typename NumericT = RealT>
 		class Vector : public VectorTraits<E, NumericT>, public VectorEqualityTraits<E, NumericT>, public VectorConversionTraits<E, NumericT>{
 		public:
 			typedef NumericT ElementT;
@@ -222,7 +222,7 @@ namespace Euclid
 
 			/// Set the vector to the value of another of a different type and length.
 			/// Will only copy as much as possible.
-			template <unsigned E2, typename OtherNumericT>
+			template <dimension E2, typename OtherNumericT>
 			void set (const Vector<E2, OtherNumericT> & other);
 
 			/// Set the value of this instance to zero.
@@ -270,7 +270,7 @@ namespace Euclid
 			}
 
 			/// Assignment of a Vec<N> to a Vec<E> results in copying as much as possible and setting remaining elements to zero.
-			template <unsigned N, typename OtherNumericT>
+			template <dimension N, typename OtherNumericT>
 			Vector & operator=(const Vector<N, OtherNumericT> & other) {
 				for (std::size_t i = 0; i < E; i += 1) {
 					if (i < N)
@@ -293,12 +293,12 @@ namespace Euclid
 			}
 
 			/// Access a component of the vector.
-			NumericT & operator[] (unsigned i)
+			NumericT & operator[] (dimension i)
 			{
 				return _vector[i];
 			}
 			/// Access a component of the vector.
-			const NumericT & operator[] (unsigned i) const
+			const NumericT & operator[] (dimension i) const
 			{
 				return _vector[i];
 			}
@@ -505,7 +505,7 @@ namespace Euclid
 // MARK: Vector Combinations
 
 		/// Append a component to a vector
-		template <unsigned int E, typename NumericT, typename OtherNumericT>
+		template <dimension E, typename NumericT, typename OtherNumericT>
 		inline Vector<E+1, NumericT> operator<< (const Vector<E, NumericT> & vector, const OtherNumericT & next)
 		{
 			Vector<E+1, NumericT> result;
@@ -516,13 +516,13 @@ namespace Euclid
 		}
 
 		/// Join two vectors together
-		template <unsigned E1, unsigned E2, typename n1_t, typename n2_t>
+		template <dimension E1, dimension E2, typename n1_t, typename n2_t>
 		inline Vector<E1+E2> operator<< (const Vector<E1, n1_t> & v1, const Vector<E2, n2_t> & v2)
 		{
 			Vector<E1+E2, n1_t> result;
 
 			result.set(v1.value(), E1);
-			for (unsigned i = 0; i < E2; i += 1)
+			for (dimension i = 0; i < E2; i += 1)
 				result[E1+i] = v2[i];
 
 			return result;
@@ -532,7 +532,7 @@ namespace Euclid
 // MARK: Binary Operators
 
 #define OPERATOR(OP, OPE) \
-	template <unsigned int E, typename NumericT, typename AnyT> \
+	template <dimension E, typename NumericT, typename AnyT> \
 	inline Vector<E, NumericT> operator OP (const Vector<E, NumericT> & lhs, const AnyT & n) \
 	{ \
 		Vector<E, NumericT> tmp(lhs); \
@@ -553,10 +553,10 @@ namespace Euclid
 // MARK: Unary Operators
 
 #define OPERATOR(OP) \
-	template <unsigned E, typename NumericT, typename OtherNumericT> \
+	template <dimension E, typename NumericT, typename OtherNumericT> \
 	Vector<E, NumericT> & operator OP (Vector<E, NumericT> & lhs, const Vector<E, OtherNumericT> & n) \
 	{ \
-		for (unsigned int i = 0; i < E; ++i) \
+		for (dimension i = 0; i < E; ++i) \
 			lhs[i] OP n[i]; \
 		return lhs; \
 	}
@@ -568,10 +568,10 @@ namespace Euclid
 		OPERATOR(&=)
 		OPERATOR(|=)
 
-		template <unsigned E, typename NumericT, typename OtherNumericT>
+		template <dimension E, typename NumericT, typename OtherNumericT>
 		Vector<E, NumericT> & operator%= (Vector<E, NumericT> & lhs, const Vector<E, OtherNumericT> & n)
 		{
-			for (unsigned int i = 0; i < E; ++i)
+			for (dimension i = 0; i < E; ++i)
 				lhs[i] = Number<NumericT>::mod(lhs[i], n[i]);
 
 			return lhs;
@@ -580,10 +580,10 @@ namespace Euclid
 #undef OPERATOR
 
 #define OPERATOR(OP) \
-	template <unsigned E, typename NumericT, typename OtherNumericT> \
+	template <dimension E, typename NumericT, typename OtherNumericT> \
 	Vector<E, NumericT> & operator OP (Vector<E, NumericT> & lhs, const OtherNumericT & n) \
 	{ \
-		for (unsigned int i = 0; i < E; ++i) \
+		for (dimension i = 0; i < E; ++i) \
 			lhs[i] OP n; \
 		return lhs; \
 	}
@@ -595,10 +595,10 @@ namespace Euclid
 		OPERATOR(&=)
 		OPERATOR(|=)
 
-		template <unsigned E, typename NumericT, typename OtherNumericT>
+		template <dimension E, typename NumericT, typename OtherNumericT>
 		Vector<E, NumericT> & operator%= (Vector<E, NumericT> & lhs, const OtherNumericT & n)
 		{
-			for (unsigned int i = 0; i < E; ++i)
+			for (dimension i = 0; i < E; ++i)
 				lhs[i] = Number<NumericT>::mod(lhs[i], n);
 
 			return lhs;
@@ -610,10 +610,10 @@ namespace Euclid
 // MARK: IO Operators
 
 		/// Write a vector to an std::ostream
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		std::ostream & operator<<(std::ostream & out, const Vector<E, NumericT> & vec)
 		{
-			for (unsigned int i = 0; i < E; ++i) {
+			for (dimension i = 0; i < E; ++i) {
 				// We use this helper to ensure that char and unsigned char are printed correctly.
 				out << (typename NumericType<NumericT>::NumericT)(vec[i]) << ((i + 1) != E ? " " : "");
 			}
@@ -622,23 +622,23 @@ namespace Euclid
 		}
 
 		/// Read a vector from a std::istream
-		template <unsigned E, typename NumericT>
+		template <dimension E, typename NumericT>
 		std::istream & operator>> (std::istream & in, Vector<E, NumericT> & vec)
 		{
-			for (unsigned int i = 0; i < E; ++i) {
+			for (dimension i = 0; i < E; ++i) {
 				in >> vec[i];
 			}
 
 			return in;
 		}
 
-		template <unsigned N>
+		template <dimension N>
 		bool equivalent (const Vector<N, float> a, const Vector<N, float> b)
 		{
 			return a.equivalent(b);
 		}
 
-		template <unsigned N>
+		template <dimension N>
 		bool equivalent (const Vector<N, double> a, const Vector<N, double> b)
 		{
 			return a.equivalent(b);

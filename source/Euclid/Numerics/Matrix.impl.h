@@ -51,11 +51,11 @@ namespace Euclid
 
 		 */
 
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		void multiply (Vector<R, NumericT> & result, const Matrix<R, C, NumericT> & left, const Vector<C, NumericT> & right)
 		{
-			for (unsigned r = 0; r < R; ++r)
-				for (unsigned c = 0; c < C; ++c)
+			for (dimension r = 0; r < R; ++r)
+				for (dimension c = 0; c < C; ++c)
 					result[r] += right[c] * left.at(r, c);
 		}
 
@@ -74,14 +74,14 @@ namespace Euclid
 		 
 		 */
 		
-		template <unsigned R, unsigned C, unsigned T, typename NumericT>
+		template <dimension R, dimension C, dimension T, typename NumericT>
 		void multiply (Matrix<R, C, NumericT> & result, const Matrix<R, T, NumericT> & left, const Matrix<T, C, NumericT> & top)
 		{
-			for (unsigned r = 0; r < R; ++r) {
-				for (unsigned c = 0; c < C; ++c) {
+			for (dimension r = 0; r < R; ++r) {
+				for (dimension c = 0; c < C; ++c) {
 					NumericT & value = result.at(r, c);
 					
-					for (unsigned t = 0; t < T; t++)
+					for (dimension t = 0; t < T; t++)
 						value += left.at(r, t) * top.at(t, c);
 				}
 			}
@@ -197,7 +197,7 @@ namespace Euclid
 // MARK: -
 // MARK: Matrix Square Implementation
 
-		template <unsigned N, typename NumericT> template <unsigned K>
+		template <dimension N, typename NumericT> template <dimension K>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::scaling_matrix (const Vector<K, NumericT> & amount)
 		{
 			static_assert(K <= N, "Vector must be equal or smaller than matrix!");
@@ -206,12 +206,12 @@ namespace Euclid
 			result.load_identity();
 
 			// Copy the vector along the diagonal
-			for (unsigned i = 0; i < K; i += 1) result.at(i, i) = amount[i];
+			for (dimension i = 0; i < K; i += 1) result.at(i, i) = amount[i];
 
 			return result;
 		}
 
-		template <unsigned N, typename NumericT> template <unsigned K>
+		template <dimension N, typename NumericT> template <dimension K>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::translating_matrix (const Vector<K, NumericT> & amount)
 		{
 			static_assert(K <= N, "Vector must be equal or smaller than matrix!");
@@ -219,12 +219,12 @@ namespace Euclid
 			Matrix<N, N, NumericT> result(IDENTITY);
 
 			// Copy the vector along bottom row
-			for (unsigned i = 0; i < K; i += 1) result.at(i, N-1) = amount[i];
+			for (dimension i = 0; i < K; i += 1) result.at(i, N-1) = amount[i];
 
 			return result;
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix (const NumericT & angle, const Vector<3, NumericT> & p)
 		{
 			static_assert(N == 3 || N == 4, "Matrix rotation is only implemented for size 3x3 or 4x4");
@@ -254,7 +254,7 @@ namespace Euclid
 			return result;
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix (const NumericT & angle, const Vector<3, NumericT> & normal, const Vector<3, NumericT> & pt)
 		{
 			Matrix<N, N, NumericT> t, rotation = Matrix<N, N, NumericT>::rotating_matrix(angle, normal);
@@ -274,7 +274,7 @@ namespace Euclid
 			return t;
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix (const Vector<3, NumericT> & from, const Vector<3, NumericT> & to, const Vector<3, NumericT> & normal)
 		{
 			NumericT angle = to.angle_between(from);
@@ -288,7 +288,7 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix_around_x (const NumericT & radians)
 		{
 			static_assert(N >= 3, "Matrix must be size 3 or bigger!");
@@ -308,7 +308,7 @@ namespace Euclid
 			return result;
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix_around_y (const NumericT & radians)
 		{
 			static_assert(N >= 3, "Matrix must be size 3 or bigger!");
@@ -329,7 +329,7 @@ namespace Euclid
 		}
 
 		// This rotation can be used on 2D matricies, unlike the above
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotating_matrix_around_z (const NumericT & radians)
 		{
 			static_assert(N >= 2, "Matrix must be size 3 or bigger!");
@@ -349,7 +349,7 @@ namespace Euclid
 			return result;
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotated_matrix (const NumericT & angle, const Vector<3, NumericT> & n)
 		{
 			MatrixT * t = static_cast<MatrixT*>(this);
@@ -357,7 +357,7 @@ namespace Euclid
 			return (*t) * Matrix<N, N, NumericT>::rotating_matrix(angle, n);
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::rotated_matrix (const NumericT & angle, const Vector<3, NumericT> & n,
 		                                                                           const Vector<3, NumericT> & p)
 		{
@@ -366,7 +366,7 @@ namespace Euclid
 			return (*t) * Matrix<N, N, NumericT>::rotating_matrix(angle, n, p);
 		}
 
-		template <unsigned N, typename NumericT> template <unsigned K>
+		template <dimension N, typename NumericT> template <dimension K>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::translated_matrix (const Vector<K, NumericT> & amount)
 		{
 			MatrixT * t = static_cast<MatrixT*>(this);
@@ -374,7 +374,7 @@ namespace Euclid
 			return (*t) * Matrix<N, N, NumericT>::translating_matrix(amount);
 		}
 
-		template <unsigned N, typename NumericT> template <unsigned K>
+		template <dimension N, typename NumericT> template <dimension K>
 		Matrix<N, N, NumericT> MatrixSquareTraits<N, N, NumericT>::scaled_matrix (const Vector<K, NumericT> & amount)
 		{
 			MatrixT * t = static_cast<MatrixT*>(this);
@@ -382,13 +382,13 @@ namespace Euclid
 			return (*t) * Matrix<N, N, NumericT>::scaling_matrix(amount);
 		}
 
-		template <unsigned N, typename NumericT>
+		template <dimension N, typename NumericT>
 		Matrix<N, N, NumericT> & MatrixSquareTraits<N, N, NumericT>::transpose ()
 		{
 			MatrixT * t = static_cast<MatrixT*>(this);
 
-			for (unsigned c = 0; c < (N-1); ++c)
-				for (unsigned r = c+1; r < N; ++r)
+			for (dimension c = 0; c < (N-1); ++c)
+				for (dimension r = c+1; r < N; ++r)
 					std::swap(t->at(r, c), t->at(c, r));
 
 			return *t;
@@ -396,14 +396,14 @@ namespace Euclid
 
 // MARK: -
 // MARK: IO Operators
-		template <unsigned R, unsigned C, typename NumericT>
+		template <dimension R, dimension C, typename NumericT>
 		inline std::ostream & operator<< (std::ostream & out, const Matrix<R, C, NumericT> & m)
 		{
 			using namespace std;
 
-			unsigned k = 0;
-			for (unsigned c = 0; c < C; ++c)
-				for (unsigned r = 0; r < R; ++r) {
+			dimension k = 0;
+			for (dimension c = 0; c < C; ++c)
+				for (dimension r = 0; r < R; ++r) {
 					out << setw(10) << setprecision(4) << m.at(r, c);
 
 					if (k % R == (R-1))
@@ -419,36 +419,36 @@ namespace Euclid
 
 // MARK: -
 // MARK: class Matrix
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		Matrix<R, C, N>::Matrix ()
 		{
 		}
 
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		Matrix<R, C, N>::Matrix (const Identity &)
 		{
 			load_identity();
 		}
 
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		Matrix<R, C, N>::Matrix (const Zero &)
 		{
 			zero();
 		}
 
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		Matrix<R, C, N>::Matrix (const Matrix<R, C, N> & other)
 		{
 			set(other._data);
 		}
 
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		void Matrix<R, C, N>::zero ()
 		{
 			memset(this->_data, 0, sizeof(this->_data));
 		}
 
-		template <unsigned R, unsigned C, typename N>
+		template <dimension R, dimension C, typename N>
 		void Matrix<R, C, N>::load_identity (const NumericT & n)
 		{
 			static_assert(R == C, "Matrix must be square");
@@ -459,7 +459,7 @@ namespace Euclid
 				return;
 			}
 
-			for (unsigned i = 0; i < R; i += 1)
+			for (dimension i = 0; i < R; i += 1)
 				at(i, i) = n;
 		}
 	}

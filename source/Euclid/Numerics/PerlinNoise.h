@@ -21,7 +21,9 @@ namespace Euclid {
 			unsigned char _indicies[256];
 
 		public:
-			PerlinNoise(unsigned seed);
+			typedef std::uint32_t SeedT;
+			
+			PerlinNoise(SeedT seed);
 
 			RealT sample (const Vec3 &v) const;
 

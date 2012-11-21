@@ -17,51 +17,51 @@ namespace Euclid
 {
 	namespace Geometry
 	{
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Sphere<D, NumericT>::Sphere ()
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Sphere<D, NumericT>::Sphere (const Zero &) : _center(ZERO), _radius(0)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Sphere<D, NumericT>::Sphere (const Identity &, const NumericT & n) : _center(ZERO), _radius(n)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Sphere<D, NumericT>::Sphere(Vector<D, NumericT> center, NumericT radius) : _center(center), _radius(radius)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		const Vector<D, NumericT> & Sphere<D, NumericT>::center () const
 		{
 			return _center;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		void Sphere<D, NumericT>::set_center (const Vector<D> & center)
 		{
 			_center = center;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		const NumericT & Sphere<D, NumericT>::radius () const
 		{
 			return _radius;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		void Sphere<D, NumericT>::set_radius (const NumericT & radius)
 		{
 			_radius = radius;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		typename RealType<NumericT>::RealT Sphere<D, NumericT>::distance_between_edges (const Sphere<D, NumericT> & other, Vector<D, NumericT> & displacement) const
 		{
 			displacement = _center - other._center;
@@ -70,7 +70,7 @@ namespace Euclid
 			return displacement.length() - total_radius;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		typename RealType<NumericT>::RealT Sphere<D, NumericT>::distance_from_point (const Vector<D, NumericT> & point, Vector<D, NumericT> & displacement) const
 		{
 			displacement = point - _center;
@@ -78,7 +78,7 @@ namespace Euclid
 			return displacement.length() - _radius;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const Sphere<D, NumericT> & other, Vector<D, NumericT> & displacement) const
 		{
 			typename RealType<NumericT>::RealT d = distance_between_edges(other, displacement);
@@ -92,7 +92,7 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const Vector<D, NumericT> & point, Vector<D, NumericT> & displacement) const
 		{
 			typename RealType<NumericT>::RealT d = distance_from_point(point, displacement);
@@ -106,7 +106,7 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const Line<D, NumericT> &line, RealT & entry_time, RealT & exit_time) const
 		{
 			//Optimized method sphere/ray intersection
@@ -134,7 +134,7 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const LineSegment<D, NumericT> &segment, RealT & entry_time, RealT & exit_time) const
 		{
 			Line<D> line = segment.to_line();

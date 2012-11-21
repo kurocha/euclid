@@ -72,9 +72,9 @@ namespace Euclid
 			static Quaternion from_1ijk(Vec4T);
 
 			/// Proxy function for convenience
-			const NumericT & operator[] (unsigned i) const;
+			const NumericT & operator[] (dimension i) const;
 			/// Proxy function for convenience
-			NumericT & operator[] (unsigned i);
+			NumericT & operator[] (dimension i);
 
 			/// Apply the rotation to a vector.
 			Vec3T rotate (const Vec3T &) const;

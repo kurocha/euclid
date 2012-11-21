@@ -15,7 +15,7 @@
 
 namespace Euclid {
 	namespace Geometry {
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class LineTranslationTraits {
 		};
 
@@ -35,7 +35,7 @@ namespace Euclid {
 			LineT rotated_line (const VectorT & rotation_normal, const NumericRealT & angle) const;
 		};
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class Line : public LineTranslationTraits<D, NumericT>{
 		protected:
 			typedef typename RealType<NumericT>::RealT NumericRealT;
@@ -137,13 +137,13 @@ namespace Euclid {
 		typedef Line<2> Line2;
 		typedef Line<3> Line3;
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		inline Line<D, NumericT> operator+ (const Line<D, NumericT> & l, const Vector<D, NumericT> & v);
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT> operator- (const Line<D, NumericT> & l, const Vector<D, NumericT> & v);
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class LineSegment {
 		public:
 			typedef typename RealType<NumericT>::RealT NumericRealT;

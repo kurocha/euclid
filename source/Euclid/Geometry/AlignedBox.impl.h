@@ -18,15 +18,15 @@ namespace Euclid
 {
 	namespace Geometry
 	{
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		void AlignedBox<D, NumericT>::set_corner (const BoolVectorT & cnr, const VectorT & adj)
 		{
 			for (std::size_t axis = 0; axis < D; axis += 1)
 				set_corner(cnr, axis, adj[axis]);
 		}
 
-		template <unsigned D, typename NumericT>
-		void AlignedBox<D, NumericT>::set_corner (const BoolVectorT & cnr, const unsigned & axis, const NumericT & amnt)
+		template <dimension D, typename NumericT>
+		void AlignedBox<D, NumericT>::set_corner (const BoolVectorT & cnr, const dimension & axis, const NumericT & amnt)
 		{
 			if (cnr[axis])
 				_max[axis] = amnt;
@@ -36,25 +36,25 @@ namespace Euclid
 
 // MARK: Line Intersection Tests
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Sphere<D, NumericT> AlignedBox<D, NumericT>::bounding_sphere () const
 		{
 			return Sphere<D, NumericT>(center(), (center() - _min).length());
 		}
 
-		template <unsigned D, typename NumericT>
-		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, unsigned> & order) {
+		template <dimension D, typename NumericT>
+		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order) {
 			subtract_in_order(other, order, Vector<D, SubtractResolution>(SUBTRACT_SMALLEST, SUBTRACT_SMALLEST, SUBTRACT_SMALLEST));
 		}
 
-		template <unsigned D, typename NumericT>
-		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, unsigned> & order, const Vector<D, SubtractResolution> & cuts)
+		template <dimension D, typename NumericT>
+		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, SubtractResolution> & cuts)
 		{
 			// This function is fairly complex, for a good reason - it does a fairly complex geometric operation.
 			// This operation can be summarised as subtracting one box from another. The reason why this is complex is because there are many edge cases to
 			// consider, and this function works for boxes in n dimensions.
 
-			Vector<D, unsigned> k(IDENTITY, 2);
+			Vector<D, dimension> k(IDENTITY, 2);
 
 			// Total number of corners for a given D.
 			const std::size_t CORNERS = 1 << D;
@@ -74,7 +74,7 @@ namespace Euclid
 				// We consider each axis for these corners
 				for (std::size_t axis_index = 0; axis_index < D; axis_index += 1) {
 					// We pick out the current axis
-					unsigned axis = order[axis_index];
+					dimension axis = order[axis_index];
 
 					// We consider the lines on this axis
 					NumericT a1 = this_current_corner[axis];
@@ -133,8 +133,8 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
-		bool AlignedBox<D, NumericT>::subtract_edge (const AlignedBox<D, NumericT> & other, unsigned axis, const BoxEdge & edge, const NumericT & offset)
+		template <dimension D, typename NumericT>
+		bool AlignedBox<D, NumericT>::subtract_edge (const AlignedBox<D, NumericT> & other, dimension axis, const BoxEdge & edge, const NumericT & offset)
 		{
 			NumericT a, b, c;
 
@@ -166,14 +166,14 @@ namespace Euclid
 			return false;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		AlignedBox<D, NumericT> AlignedBox<D, NumericT>::subtract_using_translation (const AlignedBox<D, NumericT> & from, const AlignedBox<D, NumericT> & to,
 		                                                                             const NumericT & offset)
 		{
 			VectorT orientation = from.orientation_of(to);
 			AlignedBox translation = from;
 
-			for (unsigned i = 0; i < D; ++i) {
+			for (dimension i = 0; i < D; ++i) {
 				AlignedBox to_copy = to;
 				bool result = false;
 

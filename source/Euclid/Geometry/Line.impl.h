@@ -76,32 +76,32 @@ namespace Euclid
 // MARK: -
 // MARK: class Line
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT>::Line ()
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT>::Line (const Zero &) : _point(ZERO), _direction(ZERO)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT>::Line (const Identity &, const NumericT & n) : _point(ZERO), _direction(IDENTITY, n)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT>::Line (const VectorT & direction) : _point(ZERO), _direction(direction)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Line<D, NumericT>::Line (const VectorT & point, const VectorT & direction) : _point(point), _direction(direction)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		NumericT Line<D, NumericT>::time_for_closest_point (const VectorT & p3) const
 		{
 			const VectorT & p1 = _point;
@@ -110,7 +110,7 @@ namespace Euclid
 			NumericT d = _direction.length2();
 			NumericT t = 0;
 
-			for (unsigned i = 0; i < D; ++i)
+			for (dimension i = 0; i < D; ++i)
 				t += (p3[i] - p1[i]) * (p2[i] - p1[i]);
 
 			return t / d;
@@ -137,7 +137,7 @@ namespace Euclid
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool line_intersection_test (const Line<D, NumericT> & lhs, const Line<D, NumericT> & rhs, NumericT & left_time, NumericT & right_time)
 		{
 			Vector<2, NumericT> lhs_point, lhs_dir, rhs_point, rhs_dir;
@@ -162,7 +162,7 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool Line<D, NumericT>::intersects_with (const Line<D, NumericT> & other, NumericT & this_time, NumericT & other_time) const
 		{
 			return line_intersection_test(*this, other, this_time, other_time);
@@ -189,24 +189,24 @@ namespace Euclid
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool Line<D, NumericT>::intersects_with(const AlignedBox<D, NumericT> &a, NumericT & t1, NumericT & t2) const {
 			t1 = (NumericT)0;
 			t2 = (NumericT)1;
 
-			for (unsigned i = 0; i < D; i += 1) {
+			for (dimension i = 0; i < D; i += 1) {
 				if (!ray_slabs_intersection(_point[i], _direction[i], a.min()[i], a.max()[i], t1, t2)) return false;
 			}
 
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		inline Line<D, NumericT> operator+ (const Line<D, NumericT> &l, const Vector<D, NumericT> &v) {
 			return Line<D, NumericT>(l.point() + v, l.direction());
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		inline Line<D, NumericT> operator- (const Line<D, NumericT> &l, const Vector<D, NumericT> &v) {
 			return Line<D, NumericT>(l.point() - v, l.direction());
 		}
@@ -214,34 +214,34 @@ namespace Euclid
 // MARK: -
 // MARK: class LineSegment
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		LineSegment<D, NumericT>::LineSegment ()
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		LineSegment<D, NumericT>::LineSegment (const Zero &) : _start(ZERO), _end(ZERO)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		LineSegment<D, NumericT>::LineSegment (const Identity &, const NumericT & n) : _start(ZERO), _end(IDENTITY, n)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		LineSegment<D, NumericT>::LineSegment (const Line<D, NumericT> & line, const NumericT & start_time, const NumericT & end_time)
 		{
 			_start = line.point_at_time(start_time);
 			_end = line.point_at_time(end_time);
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		LineSegment<D, NumericT>::LineSegment (const VectorT & start, const VectorT & end) : _start(start), _end(end)
 		{
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool LineSegment<D, NumericT>::intersects_with (const AlignedBox<D, NumericT> &other, VectorT & at) const
 		{
 			Vector<D, NumericT> d((end() - start()).normalize());
@@ -303,7 +303,7 @@ namespace Euclid
 			return true;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool line_intersection_test (const LineSegment<D, NumericT> & lhs, const LineSegment<D, NumericT> & rhs, NumericT & left_time, NumericT & right_time)
 		{
 			Vector<2, NumericT> lhs_start, lhs_end, rhs_start, rhs_end;
@@ -328,13 +328,13 @@ namespace Euclid
 			}
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool LineSegment<D, NumericT>::intersects_with (const LineSegment<D, NumericT> & other, LineSegment<D, NumericT> & overlap) const
 		{
 			return line_intersection_test(*this, other, overlap);
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		bool LineSegment<D, NumericT>::intersects_with (const LineSegment<D, NumericT> & other, NumericT & left_time, NumericT & right_time) const
 		{
 			return line_intersection_test(*this, other, left_time, right_time);

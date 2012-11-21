@@ -28,7 +28,7 @@ namespace Euclid
 			return false;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Triangle<D, NumericT>::Triangle (const Vector<D, NumericT> & p1, const Vector<D, NumericT> & p2, const Vector<D, NumericT> & p3)
 		{
 			this->_points[0] = p1;
@@ -36,13 +36,13 @@ namespace Euclid
 			this->_points[2] = p3;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		Vector<D, NumericT> Triangle<D, NumericT>::normal () const
 		{
 			return this->_points[0].normal(this->_points[1], this->_points[2]);
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		IntersectionResult Triangle<D, NumericT>::intersects_with (const Line<3, NumericT> & line, Vector<D, NumericT> & at) const
 		{
 			Plane<D, NumericT> p (*this);
@@ -58,7 +58,7 @@ namespace Euclid
 			return NO_INTERSECTION;
 		}
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		AlignedBox<D, NumericT> Triangle<D, NumericT>::bounding_box ()
 		{
 			AlignedBox<D, NumericT> box(this->_points[0], this->_points[1]);

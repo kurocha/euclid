@@ -25,7 +25,7 @@ namespace Euclid {
 		 A general = 0ion of a shape in D-space with P points. Used as a base class for several shapes. Provides access to points and some general
 		 functions.
 		 */
-		template <unsigned D, unsigned P, typename NumericT>
+		template <dimension D, dimension P, typename NumericT>
 		class Shape {
 		public:
 			typedef Vector<D, NumericT> VectorT;
@@ -37,18 +37,18 @@ namespace Euclid {
 			VectorT center () const
 			{
 				VectorT total(_points[0]);
-				for (unsigned i = 1; i < P; i++)
+				for (dimension i = 1; i < P; i++)
 					total += _points[i];
 
 				return total / (NumericT)P;
 			}
 
-			const VectorT & operator[] (unsigned i) const
+			const VectorT & operator[] (dimension i) const
 			{
 				return _points[i];
 			}
 
-			VectorT & operator[] (unsigned i)
+			VectorT & operator[] (dimension i)
 			{
 				return _points[i];
 			}
@@ -85,22 +85,22 @@ namespace Euclid {
 		    tests. Therefore, we predefine all general geometry classes here.
 		 */
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class Triangle;
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class Sphere;
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class Plane;
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class Line;
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class LineSegment;
 
-		template <unsigned D, typename NumericT = RealT>
+		template <dimension D, typename NumericT = RealT>
 		class AlignedBox;
 	}
 }

@@ -20,7 +20,7 @@ namespace Euclid {
 		 It is fast for using with collision detection, as the comparison between a sphere and other geometric objects is typically very fast due to the
 		 simple nature of a sphere.
 		 */
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class Sphere {
 		protected:
 			Vector<D, NumericT> _center;

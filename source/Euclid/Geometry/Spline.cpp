@@ -18,11 +18,11 @@ namespace Euclid {
 // MARK: -
 // MARK: ISpline
 
-		template <unsigned D>
+		template <dimension D>
 		ISpline<D>::~ISpline () {
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> ISpline<D>::tangent_at_time(RealT t) const {
 			// TODO: Need to write a better function !!
 			const RealT f = 0.001;
@@ -58,7 +58,7 @@ namespace Euclid {
 			return tg3.cross(orth).reduce().normalize();
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		std::vector<RealT> ISpline<D>::nominal_times () const {
 			RealT d = (RealT)1.0 / this->segments();
 			std::vector<RealT> times;
@@ -69,7 +69,7 @@ namespace Euclid {
 			return times;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		std::vector<RealT> ISpline<D>::divide_and_append(int n, RealT res) const {
 			// Entry point for the function below.
 			// The higher res is, the more detail will be present.
@@ -80,7 +80,7 @@ namespace Euclid {
 			return times;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		void ISpline<D>::divide_and_append(RealT t, RealT d, int n, RealT res2, bool first, std::vector<RealT> &times) const {
 			RealT hd = d / 2.0;
 
@@ -101,7 +101,7 @@ namespace Euclid {
 			if (divide) divide_and_append(t + hd, hd, n - 1, res2, false, times);
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		std::vector<RealT> ISpline<D>::times_at_resolution(RealT resolution, unsigned divisions) const {
 			// We must divide at least once per point.
 			int d = (int)Math::ceil(Math::sqrt(this->points().size()) + 1);
@@ -110,19 +110,19 @@ namespace Euclid {
 			return divide_and_append(divisions, resolution);
 		}
 
-		template <unsigned D>
-		unsigned ISpline<D>::segments () const {
+		template <dimension D>
+		std::size_t ISpline<D>::segments () const {
 			// The number of segments between points
 			return this->segment_points().size() - 1;
 		}
 
-		template <unsigned D>
-		unsigned ISpline<D>::starting_point(RealT t) const {
+		template <dimension D>
+		std::size_t ISpline<D>::starting_point(RealT t) const {
 			// The starting point for a given t in [0.0, 1.0]
 			return (unsigned)Math::floor(this->segments() * t);
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		RealT ISpline<D>::fractional_component(RealT t) const {
 			// The fractional component (ie, in [0.0, 1.0]) of a particular segment.
 			RealT m = this->segments() * t;
@@ -135,27 +135,27 @@ namespace Euclid {
 // MARK: -
 // MARK: SplineWithNormal
 
-		template <unsigned D>
+		template <dimension D>
 		SplineWithNormal<D>::SplineWithNormal(const SplineT * spline, const SplineT * normal_spline) : _spline(spline),
 			_normal_spline(normal_spline)
 		{
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		SplineWithNormal<D>::~SplineWithNormal () {
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> SplineWithNormal<D>::point_at_time(RealT t) const {
 			return _spline->point_at_time(t);
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> SplineWithNormal<D>::tangent_at_time(RealT t) const {
 			return _spline->tangent_at_time(t);
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> SplineWithNormal<D>::normal_at_time(RealT t) const {
 			// We will assume we don't need to normalize this result, but
 			// that could be dangerous.
@@ -168,12 +168,12 @@ namespace Euclid {
 			return n2.cross(t1).normalize();
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		const std::vector<Vector<D>> & SplineWithNormal<D>::points() const {
 			return _spline->points();
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		class _SplineWithNormalGenerator {
 		public:
 			struct Intersection {
@@ -330,7 +330,7 @@ namespace Euclid {
 			}
 		};
 
-		template <unsigned D>
+		template <dimension D>
 		void SplineWithNormal<D>::for_spline (const ISpline<D> * spline, const ISpline<D> * normal_spline) {
 			_SplineWithNormalGenerator<D>::for_spline(spline, normal_spline);
 		}
@@ -340,25 +340,25 @@ namespace Euclid {
 // MARK: -
 // MARK: Spline
 
-		template <unsigned D>
+		template <dimension D>
 		Spline<D>::Spline () : _closed(true) {
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Spline<D>::~Spline () {
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		void Spline<D>::reset_segment_points_cache () {
 			_segment_points.clear();
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		bool Spline<D>::closed () const {
 			return _closed;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		void Spline<D>::set_closed (bool closed) {
 			if (_closed != closed) {
 				_closed = closed;
@@ -366,7 +366,7 @@ namespace Euclid {
 			}
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		const std::vector<Vector<D>>& Spline<D>::segment_points() const {
 			if (_segment_points.empty()) {
 				_segment_points = generate_segment_points();
@@ -375,7 +375,7 @@ namespace Euclid {
 			return _segment_points;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		std::vector<Vector<D>> Spline<D>::generate_segment_points() const {
 			if (!_closed) {
 				return _points;
@@ -392,9 +392,9 @@ namespace Euclid {
 // MARK: -
 // MARK: LinearSpline
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> LinearSpline<D>::point_at_time(RealT t) const {
-			unsigned sp = this->starting_point(t);
+			std::size_t sp = this->starting_point(t);
 			RealT fr = this->fractional_component(t);
 
 			if (t >= 1.0) return this->_points[sp];
@@ -404,14 +404,14 @@ namespace Euclid {
 // MARK: -
 // MARK: CubicSpline
 
-		template <unsigned D>
-		unsigned CubicSpline<D>::segments () const {
+		template <dimension D>
+		std::size_t CubicSpline<D>::segments () const {
 			// Remove two segments which are used for initial cubic tangent generation
 			// (one at each end)
 			return Spline<D>::segments() - 2;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		std::vector<Vector<D>> CubicSpline<D>::generate_segment_points() const {
 			if (!this->_closed) {
 				return Spline<D>::generate_segment_points();
@@ -428,12 +428,12 @@ namespace Euclid {
 			return pts;
 		}
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> CubicSpline<D>::point_at_time(RealT t) const {
 			const PointsT &pts = this->segment_points();
 			assert(pts.size() > 3 && "CublicSpline<D> requires at least 4 points");
 
-			unsigned sp = this->starting_point(t) + 1;
+			std::size_t sp = this->starting_point(t) + 1;
 			RealT fr = this->fractional_component(t);
 
 			if (t >= 1.0) return pts[sp];
@@ -444,13 +444,13 @@ namespace Euclid {
 // MARK: -
 // MARK: HermiteSpline
 
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> HermiteSpline<D>::point_at_time(RealT t) const {
 			const PointsT &pts = this->segment_points();
 
 			assert(pts.size() > 3 && "HermiteSpline<D> requires at least 4 points");
 
-			unsigned sp = this->starting_point(t) + 1;
+			std::size_t sp = this->starting_point(t) + 1;
 			RealT fr = this->fractional_component(t);
 
 			if (t >= 1.0) return pts[sp];
@@ -462,20 +462,20 @@ namespace Euclid {
 		}
 
 		/// Catmull-Rom tangent function
-		template <unsigned D>
-		Vector<D> HermiteSpline<D>::catmull_rom_spline (const ISpline<D> *s, unsigned n) {
+		template <dimension D>
+		Vector<D> HermiteSpline<D>::catmull_rom_spline (const ISpline<D> *s, std::size_t n) {
 			const PointsT &pts = s->segment_points();
 
 			return ((pts[n+1 % pts.size()] - pts[n-1 % pts.size()]) * 0.5);
 		}
 
-		template <unsigned D>
-		Vector<D> HermiteSpline<D>::four_point_linear_mu (const ISpline<D> *s, unsigned n) {
+		template <dimension D>
+		Vector<D> HermiteSpline<D>::four_point_linear_mu (const ISpline<D> *s, std::size_t n) {
 			const PointsT &pts = s->segment_points();
 
 			if (n > 1) n += 1;
 
-			unsigned p1 = n, p2 = n-1;
+			std::size_t p1 = n, p2 = n-1;
 
 			Vector<D> mu (pts[p1] - pts[p2]);
 			mu.normalize() *= (pts[1] - pts[2]).length();
@@ -483,13 +483,13 @@ namespace Euclid {
 			return mu;
 		}
 
-		template <unsigned D>
-		Vector<D> HermiteSpline<D>::four_point_exponential_mu (const ISpline<D>* s, unsigned n) {
+		template <dimension D>
+		Vector<D> HermiteSpline<D>::four_point_exponential_mu (const ISpline<D>* s, std::size_t n) {
 			const PointsT &pts = s->segment_points();
 
 			if (n > 1) n += 1;
 
-			unsigned p1 = n, p2 = n-1;
+			std::size_t p1 = n, p2 = n-1;
 
 			Vector<D> mu (pts[p1] - pts[p2]);
 
@@ -500,7 +500,7 @@ namespace Euclid {
 		}
 
 		/// Simple linear tangent function
-		template <unsigned D>
+		template <dimension D>
 		Vector<D> HermiteSpline<D>::multi_point_linear_mu (const ISpline<D>* s, unsigned n) {
 			const PointsT &pts = s->segment_points();
 

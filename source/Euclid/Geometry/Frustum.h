@@ -34,7 +34,7 @@ namespace Euclid {
 				build_frustrum_from_matrix(view_matrix);
 			}
 
-			const PlaneT & operator[] (unsigned i) const {
+			const PlaneT & operator[] (dimension i) const {
 				return _planes[i];
 			}
 

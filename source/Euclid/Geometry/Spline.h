@@ -23,7 +23,7 @@ namespace Euclid {
 		    function normal_at_time, which is not well defined for 3-space. You should
 		    use SplineWithNormal to combine a normal spline with a regular spline.
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class ISpline {
 		public:
 			typedef Vector<D> VecT;
@@ -57,10 +57,10 @@ namespace Euclid {
 			virtual const PointsT & points() const = 0;
 
 			/// The number of segments along the spline.
-			virtual unsigned segments () const;
+			virtual std::size_t segments () const;
 
 			/// The index of the first point given time t.
-			unsigned starting_point(RealT t) const;
+			std::size_t starting_point(RealT t) const;
 
 			/// The fraction between two points given time t.
 			RealT fractional_component(RealT t) const;
@@ -77,7 +77,7 @@ namespace Euclid {
 		/** A concrete spline base class.
 		    A point-based spline can inherit from this class to gain a point-based interface.
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class Spline : virtual public ISpline<D>{
 		protected:
 			typedef Vector<D> PointT;
@@ -115,7 +115,7 @@ namespace Euclid {
 		    The primary spline is exposed through point_at_time and tangent_at_time,
 		    while the difference of point_at_time(t) is used to provide normal_at_time(t)
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class SplineWithNormal : virtual public ISpline<D>{
 		protected:
 			typedef SplineWithNormal<D> this_t;
@@ -149,7 +149,7 @@ namespace Euclid {
 
 		    Tangent approximation may be curved at midpoints.
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class LinearSpline : public Spline<D>{
 		public:
 			virtual Vector<D> point_at_time(RealT t) const;
@@ -157,7 +157,7 @@ namespace Euclid {
 
 		/** A basic 4-point cubic spline.
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class CubicSpline : public Spline<D>{
 		protected:
 			typedef Vector<D> PointT;
@@ -165,7 +165,7 @@ namespace Euclid {
 
 			/// Cublic splines require one additional point at the start and at the
 			/// end, so this function is overridden.
-			virtual unsigned segments () const;
+			virtual std::size_t segments () const;
 
 			///	A closed cubic requires in addition to a closed spline, two additional
 			/// points to be wrapped, one at the start, and one at the end.
@@ -177,26 +177,26 @@ namespace Euclid {
 
 		/**	A hermite cubic spline with programmatic mu.
 		*/
-		template <unsigned D>
+		template <dimension D>
 		class HermiteSpline : public CubicSpline<D>{
 		protected:
 			// Tangent Helper
-			inline Vector<D> tangent(unsigned n) const {
+			inline Vector<D> tangent(std::size_t n) const {
 				return _tangent(this, n);
 			}
 
 			// Tangent (MU) Function
-			typedef std::function<Vector<D>(const HermiteSpline<D> *spline, unsigned n)> SplineFunctionT;
+			typedef std::function<Vector<D>(const HermiteSpline<D> *spline, std::size_t n)> SplineFunctionT;
 			SplineFunctionT _tangent;
 
 			typedef Vector<D> PointT;
 			typedef std::vector<PointT> PointsT;
 		public:
 			/// Catmull-Rom tangent function
-			static Vector<D> catmull_rom_spline (const ISpline<D> *spline, unsigned n);
+			static Vector<D> catmull_rom_spline (const ISpline<D> *spline, std::size_t n);
 
-			static Vector<D> four_point_linear_mu (const ISpline<D> *s, unsigned n);
-			static Vector<D> four_point_exponential_mu (const ISpline<D>* s, unsigned n);
+			static Vector<D> four_point_linear_mu (const ISpline<D> *s, std::size_t n);
+			static Vector<D> four_point_exponential_mu (const ISpline<D>* s, std::size_t n);
 
 			/// Simple linear tangent function
 			static Vector<D> multi_point_linear_mu (const ISpline<D>* s, unsigned n);

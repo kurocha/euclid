@@ -124,13 +124,13 @@ namespace Euclid
 		}
 
 		template <typename _NumericT>
-		const _NumericT & Quaternion<_NumericT>::operator[] (unsigned i) const
+		const _NumericT & Quaternion<_NumericT>::operator[] (dimension i) const
 		{
 			return _vector[i];
 		}
 
 		template <typename _NumericT>
-		_NumericT & Quaternion<_NumericT>::operator[] (unsigned i)
+		_NumericT & Quaternion<_NumericT>::operator[] (dimension i)
 		{
 			return _vector[i];
 		}

@@ -15,7 +15,7 @@
 
 namespace Euclid {
 	namespace Geometry {
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class Plane {
 		protected:
 			typedef Vector<D, NumericT> VectorT;
@@ -80,7 +80,7 @@ namespace Euclid {
 			}
 		};
 
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		std::ostream &operator<< (std::ostream &out, const Plane<D, NumericT> & p);
 
 		typedef Plane<2, RealT> Plane2;

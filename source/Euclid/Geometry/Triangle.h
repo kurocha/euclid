@@ -14,7 +14,7 @@
 
 namespace Euclid {
 	namespace Geometry {
-		template <unsigned D, typename NumericT>
+		template <dimension D, typename NumericT>
 		class Triangle : public Shape<D, 3, NumericT>{
 		public:
 			Triangle (const Vector<D, NumericT> & p1, const Vector<D, NumericT> & p2, const Vector<D, NumericT> & p3);

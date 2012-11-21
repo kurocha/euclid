@@ -68,7 +68,7 @@ namespace Euclid
 		template <typename NumericT>
 		bool Frustum<NumericT>::intersects_with (const Sphere<3, NumericT> & s) const
 		{
-			for (unsigned i = 0; i < 6; ++i) {
+			for (dimension i = 0; i < 6; ++i) {
 				NumericT d = _planes[i].distance_to_point(s.center());
 
 				if (d <= -s.radius())
@@ -96,7 +96,7 @@ namespace Euclid
 
 		/*
 		 bool Frustum::contains_point (const Vec3 &p) const {
-		    for (unsigned i = 0; i < 6; ++i) {
+		    for (dimension i = 0; i < 6; ++i) {
 		        RealT d = _planes[i].distance_to_point(p);
 
 		        if (d <= 0)

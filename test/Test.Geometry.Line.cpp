@@ -88,5 +88,5 @@ UnitTest::Suite test_geometry_lines_suite {
 			LineSegment3 c(Vec3(ZERO), Vec3(IDENTITY, 10.1));
 			examiner->check(!a.intersects_with(c, ta, tb)) << "Line segments don't intersect";
 		}
-	}
+	},
 };

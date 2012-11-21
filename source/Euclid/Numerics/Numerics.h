@@ -25,6 +25,9 @@ namespace Euclid
 		/// Default floating point type
 		typedef float RealT;
 
+		/// Used as a template type for size dimension.
+		typedef std::size_t dimension;
+
 		/// Zero type. Used in some Numerics constructors.
 		enum Zero {
 			ZERO = 0
@@ -83,7 +86,7 @@ namespace Euclid
 		
 		std::uint32_t next_highest_power_of_2 (std::uint32_t);
 
-		/// Checks if an unsigned int is a power of 2.
+		/// Checks if an unsigned is a power of 2.
 		bool is_power_of_2 (uint32_t);
 
 		enum {
@@ -128,7 +131,7 @@ namespace Euclid
 
 		template <>
 		struct NumericType<unsigned char>{
-			typedef unsigned int NumericT;
+			typedef unsigned NumericT;
 		};
 
 		template <>

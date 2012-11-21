@@ -81,8 +81,8 @@ namespace Euclid {
 				    vertex.position[X] = height;
 				    mesh.vertices.push_back(vertex);
 
-				    unsigned base = 0, top = (divisions - 1) * slices;
-				    unsigned centers = mesh.vertices.size() - 2;
+				    std::size_t base = 0, top = (divisions - 1) * slices;
+				    std::size_t centers = mesh.vertices.size() - 2;
 
 				    for (std::size_t slice = 0; slice < slices; ++slice) {
 				        // Add in triangles for the caps
