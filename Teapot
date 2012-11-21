@@ -1,0 +1,3 @@
+
+package "unit-test"
+package "euclid", :local => "./"
