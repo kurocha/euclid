@@ -242,7 +242,7 @@ namespace Euclid {
 					PlaneAtTime &pat2 = planes[(i+1) % planes.size()];
 
 					Intersection it;
-					it.intersection.zero();
+					it.intersection = ZERO;
 
 					if (pat1.plane.is_parallel(pat2.plane)) {
 						//These points are in sequence and in the same direction, ie '|' straight line
@@ -290,7 +290,7 @@ namespace Euclid {
 					if (nat.fixed) {
 						nat.normal = (its[i].intersection - spline->point_at_time(pat.time)).normalize();
 					} else {
-						nat.normal.zero();
+						nat.normal = ZERO;
 					}
 
 					normals.push_back(nat);

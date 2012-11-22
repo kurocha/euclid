@@ -27,6 +27,18 @@ UnitTest::Suite TestNumericsSuite {
 		}
 	},
 
+	{"Identities",
+		[](UnitTest::Examiner * examiner) {
+			using namespace Euclid::Numerics;
+
+			float a = ZERO;
+			float b = IDENTITY;
+
+			examiner->check_equal(a, 0.0f);
+			examiner->check_equal(b, 1.0f);
+		}
+	},
+
 	{"Angles",
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;

@@ -14,8 +14,7 @@ namespace Euclid {
 			RealT calculate_rotation_length (const std::size_t rotation, const std::vector<Vec3> &left, const std::vector<Vec3> &right) {
 				RealT length = 0;
 
-				Vec3 centers[2];
-				centers[0].zero(); centers[1].zero();
+				Vec3 centers[2] = {ZERO, ZERO};
 
 				for (std::size_t i = 0; i < left.size(); i += 1) {
 					centers[0] += left[i];

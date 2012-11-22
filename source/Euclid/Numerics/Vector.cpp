@@ -13,8 +13,8 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		extern template class Vector<2, RealT>;
-		extern template class Vector<3, RealT>;
-		extern template class Vector<4, RealT>;
+		template class Vector<2, RealT>;
+		template class Vector<3, RealT>;
+		template class Vector<4, RealT>;
 	}
 }

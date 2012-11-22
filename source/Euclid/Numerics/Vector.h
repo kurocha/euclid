@@ -13,6 +13,7 @@
 #include "Numerics.h"
 #include "Number.h"
 
+#include <type_traits>
 #include <array>
 
 namespace Euclid
@@ -35,28 +36,6 @@ namespace Euclid
 		class VectorConversionTraits<1, NumericT>{
 		public:
 			operator NumericT () const;
-		};
-
-		/** Vector equality traits for specific template parameters. Default specialization.
-		 */
-		template <dimension E, typename NumericT>
-		class VectorEqualityTraits {
-		};
-
-		/** Single floating point vector equality traits.
-		 */
-		template <dimension E>
-		class VectorEqualityTraits<E, float>{
-		public:
-			bool equivalent (const Vector<E, float> & other) const;
-		};
-
-		/** Double floating point vector equality traits.
-		 */
-		template <dimension E>
-		class VectorEqualityTraits<E, double>{
-		public:
-			bool equivalent (const Vector<E, double> & other) const;
 		};
 
 		/** Vector traits for specific template parameters. Default specialization.
@@ -152,160 +131,65 @@ namespace Euclid
 		 that rely on strict ordering behaviour such as <tt>std::set</tt> and <tt>std::map</tt>.
 		 */
 		template <dimension E, typename NumericT = RealT>
-		class Vector : public VectorTraits<E, NumericT>, public VectorEqualityTraits<E, NumericT>, public VectorConversionTraits<E, NumericT>{
+		class Vector : public std::array<NumericT, E>, public VectorTraits<E, NumericT>, public VectorConversionTraits<E, NumericT> {
+			static_assert(std::is_arithmetic<NumericT>::value, "Vector only supports numeric data-types!");
+
 		public:
-			typedef NumericT ElementT;
-
 			/// The type of the vector elements.
-			typedef typename RealType<NumericT>::RealT NumericRealT;
-
-			/// The actual data.
-			NumericT _vector[E];
+			typedef typename RealType<NumericT>::RealT RealT;
 
 			/// Empty constructor. Value of vector is undefined.
 			Vector () = default;
 
-			// Default copy constructor and assignment operator
-			Vector (const Vector & other) {
-				this->set(other._vector);
-			}
-
-			Vector & operator= (const Vector & other) {
-				this->set(other._vector);
-
-				return *this;
-			}
-
-			/// Zero constructor. Value is zeroed.
-			Vector (const Zero &)
+			Vector (const NumericT & value)
 			{
-				zero();
+				this->fill(value);
 			}
 
-			/// Identity constructor. Value is identity.
-			Vector (const Identity &, const NumericT & n = 1)
+			Vector (const Vector & other) : std::array<NumericT, E>(other)
 			{
-				load_identity(n);
 			}
 
-			/// Construct a vector from a different type.
-			template <typename OtherNumericT>
-			Vector (const Vector<E, OtherNumericT> & other);
+			template <dimension F, typename OtherNumericT>
+			Vector (const Vector<F, OtherNumericT> & other)
+			{
+				auto next = std::copy(other.begin(), other.begin() + std::min(F, E), this->begin());
+				std::fill(next, this->end(), 0);
+			}
 
-			/// Construct a vector with all elements of value x.
-			Vector (const NumericT & x);
+			template <typename... TailT>
+			Vector (const NumericT & head, const TailT&&... tail) : std::array<NumericT, E>{{head, (NumericT)tail...}}
+			{
+			}
 
 			Vector (std::initializer_list<NumericT> list)
 			{
-				assert(list.size() == E && "Vector must be correct size!");
-
-				std::copy(list.begin(), list.end(), _vector);
+				auto next = std::copy(list.begin(), list.begin() + std::min(list.size(), E), this->begin());
+				std::fill(next, this->end(), 0);
 			}
-
-			/// Construct a vector from raw data.
-			Vector (const NumericT * data)
-			{
-				set(data);
-			}
-
-			/// Copy raw data into the vector.
-			void set (const NumericT * data);
+			
 			/// Copy count elements of raw data into the vector.
-			void set (const NumericT * other, unsigned count, unsigned offset = 0);
-			/// Copy raw data into the vector
-			template <typename OtherNumericT>
-			void set (const OtherNumericT * other);
+			void set (const NumericT * other, unsigned count = E, unsigned offset = 0) {
+				std::copy(other, other+count, this->begin() + offset);
+			}
 
-			/// Set the vector to the value of another of a different type and length.
-			/// Will only copy as much as possible.
-			template <dimension E2, typename OtherNumericT>
-			void set (const Vector<E2, OtherNumericT> & other);
-
-			/// Set the value of this instance to zero.
-			void zero ();
 			/// Check if the value of this instance is zero.
-			bool is_zero () const;
-			/// Set the value of all components of the vector to the value specified.
-			/// The default value is 1.
-			void load_identity (const NumericT & n = 1);
+			bool is_zero () const {
+				for (auto item : *this)
+					if (!Numerics::is_zero(item)) return false;
 
-			/// Return a pointer to the raw data.
-			const NumericT * value () const
-			{
-				return _vector;
+				return true;
 			}
 
-			/// Return a copy of the vector.
-			Vector copy () const
-			{
-				return *this;
-			}
-
-			/// Return a vector which has one less component.
-			/// Removes the last component of the vector.
-			Vector<E-1, NumericT> reduce () const
-			{
-				Vector<E-1, NumericT> result;
-
-				result.set (value());
-				return result;
-			}
-
-			/// Assign a value to all components of the vector.
-			template <typename OtherNumericT>
-			Vector & operator= (const OtherNumericT & n)
-			{
-				if ((NumericT)n)
-					for (unsigned i = 0; i < E; ++i)
-						_vector[i] = (NumericT)n;
-
-				else
-					this->zero();
-
-				return *this;
-			}
-
-			/// Assignment of a Vec<N> to a Vec<E> results in copying as much as possible and setting remaining elements to zero.
-			template <dimension N, typename OtherNumericT>
-			Vector & operator=(const Vector<N, OtherNumericT> & other) {
-				for (std::size_t i = 0; i < E; i += 1) {
-					if (i < N)
-						_vector[i] = other[i];
-					else
-						_vector[i] = 0;
+			/// Check for equivalence, which is typically relaxed for floating point numbers:
+			bool equivalent(const Vector<E, NumericT> & other) const {
+				for (dimension i = 0; i < E; ++i) {
+					if (!Numerics::equivalent(this->data()[i], other[i]))
+						return false;
 				}
 
-				return *this;
+				return true;
 			}
-
-			/// Assign components from another vector to this vector.
-			template <typename OtherNumericT>
-			Vector & operator= (const Vector<E, OtherNumericT> & other)
-			{
-				for (unsigned i = 0; i < E; ++i)
-					_vector[i] = (NumericT)other[i];
-
-				return *this;
-			}
-
-			/// Access a component of the vector.
-			NumericT & operator[] (dimension i)
-			{
-				return _vector[i];
-			}
-			/// Access a component of the vector.
-			const NumericT & operator[] (dimension i) const
-			{
-				return _vector[i];
-			}
-
-			/// Check for exact equivalence.
-			template <typename OtherT>
-			bool operator== (const OtherT & other) const;
-
-			/// Check for exact non-equivalence.
-			template <typename OtherT>
-			bool operator!= (const OtherT & other) const;
 
 			/// Geometric comparison.
 			/// @returns true if all components are numerically lesser than the others.
@@ -327,26 +211,6 @@ namespace Euclid
 			template <typename OtherT>
 			bool greater_than_or_equal (const OtherT & other) const;
 
-			/// Numeric comparison.
-			/// @returns true if the vector is numerically lesser than the other.
-			template <typename OtherT>
-			bool operator< (const OtherT & other) const;
-
-			/// Numeric comparison.
-			/// @returns true if the vector is numerically greater than the other.
-			template <typename OtherT>
-			bool operator> (const OtherT & other) const;
-
-			/// Numeric comparison.
-			/// @returns true if the vector is numerically lesser than or equal to the other.
-			template <typename OtherT>
-			bool operator<= (const OtherT & other) const;
-
-			/// Numeric comparison.
-			/// @returns true if the vector is numerically greater than or equal to the other.
-			template <typename OtherT>
-			bool operator>= (const OtherT & other) const;
-
 			/// Return the length of the vector squared.
 			/// This method avoids calculating the square root, therefore is faster when you only need to compare the relative lengths of vectors.
 			NumericT length2 () const
@@ -355,9 +219,9 @@ namespace Euclid
 			}
 
 			/// Return the length of the vector.
-			NumericRealT length () const
+			RealT length () const
 			{
-				return Number<NumericRealT>::sqrt(this->length2());
+				return Number<RealT>::sqrt(this->length2());
 			}
 
 			/// Calculate the dot product of two vectors.
@@ -443,6 +307,39 @@ namespace Euclid
 			/// Unpack elements of a vector from a single variable
 			template <typename PackedT>
 			void unpack (unsigned bits, const PackedT & p);
+
+			/// Returns a vector with F components, by default one less than the current size.
+			template <dimension F = E - 1>
+			Vector<F, NumericT> reduce() const {
+				static_assert(F <= E, "Cannot reduce size of vector to larger size");
+
+				Vector<F, NumericT> result;
+
+				std::copy(this->begin(), this->begin() + F, result.begin());
+
+				return result;
+			}
+
+			template <typename... ArgumentsT>
+			Vector<E+sizeof...(ArgumentsT), NumericT> expand(ArgumentsT... arguments) const {
+				Vector<E+sizeof...(ArgumentsT), NumericT> result;
+
+				auto next = std::copy(this->begin(), this->end(), result.begin());
+
+				NumericT tail[] = {(NumericT)arguments...};
+				std::copy(std::begin(tail), std::end(tail), next);
+
+				return result;
+			}
+
+			Vector<E+1, NumericT> operator<<(const NumericT & tail) const {
+				Vector<E+1, NumericT> result;
+
+				auto next = std::copy(this->begin(), this->end(), result.begin());
+				*next = tail;
+
+				return result;
+			}
 		};
 
 // MARK: -
@@ -473,33 +370,6 @@ namespace Euclid
 		constexpr inline Vector<1+sizeof...(TailT), HeadT> vector (const HeadT & head, TailT... tail)
 		{
 			return {head, (HeadT)tail...};
-		}
-
-// MARK:
-// MARK: Vector Combinations
-
-		/// Append a component to a vector
-		template <dimension E, typename NumericT, typename OtherNumericT>
-		inline Vector<E+1, NumericT> operator<< (const Vector<E, NumericT> & vector, const OtherNumericT & next)
-		{
-			Vector<E+1, NumericT> result;
-
-			result.set(vector.value(), E);
-			result[E] = next;
-			return result;
-		}
-
-		/// Join two vectors together
-		template <dimension E1, dimension E2, typename n1_t, typename n2_t>
-		inline Vector<E1+E2> operator<< (const Vector<E1, n1_t> & v1, const Vector<E2, n2_t> & v2)
-		{
-			Vector<E1+E2, n1_t> result;
-
-			result.set(v1.value(), E1);
-			for (dimension i = 0; i < E2; i += 1)
-				result[E1+i] = v2[i];
-
-			return result;
 		}
 
 // MARK: -

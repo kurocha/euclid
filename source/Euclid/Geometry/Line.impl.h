@@ -82,12 +82,12 @@ namespace Euclid
 		}
 
 		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const Zero &) : _point(ZERO), _direction(ZERO)
+		Line<D, NumericT>::Line (const Zero &) : _point(0), _direction(0)
 		{
 		}
 
 		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const Identity &, const NumericT & n) : _point(ZERO), _direction(IDENTITY, n)
+		Line<D, NumericT>::Line (const Identity &, const NumericT & n) : _point(0), _direction(n)
 		{
 		}
 
@@ -140,12 +140,11 @@ namespace Euclid
 		template <dimension D, typename NumericT>
 		bool line_intersection_test (const Line<D, NumericT> & lhs, const Line<D, NumericT> & rhs, NumericT & left_time, NumericT & right_time)
 		{
-			Vector<2, NumericT> lhs_point, lhs_dir, rhs_point, rhs_dir;
-			lhs_point.set(lhs.point());
-			lhs_dir.set(lhs.direction());
-
-			rhs_point.set(rhs.point());
-			rhs_dir.set(rhs.direction());
+			Vector<2, NumericT>
+				lhs_point = lhs.point(),
+				lhs_dir = lhs.direction(),
+				rhs_point = rhs.point(),
+				rhs_dir = rhs.direction();
 
 			Line<2, NumericT> lhs2d(lhs_point, lhs_dir), rhs2d(rhs_point, rhs_dir);
 			if (line_intersection_test(lhs2d, rhs2d, left_time, right_time)) {
@@ -307,11 +306,11 @@ namespace Euclid
 		bool line_intersection_test (const LineSegment<D, NumericT> & lhs, const LineSegment<D, NumericT> & rhs, NumericT & left_time, NumericT & right_time)
 		{
 			Vector<2, NumericT> lhs_start, lhs_end, rhs_start, rhs_end;
-			lhs_start.set(lhs.start());
-			lhs_end.set(lhs.end());
+			lhs_start = lhs.start();
+			lhs_end = lhs.end();
 
-			rhs_start.set(rhs.start());
-			rhs_end.set(rhs.end());
+			rhs_start = rhs.start();
+			rhs_end = rhs.end();
 
 			LineSegment<2, NumericT> lhs2d(lhs_start, lhs_end), rhs2d(rhs_start, rhs_end);
 			if (line_intersection_test(lhs2d, rhs2d, left_time, right_time)) {

@@ -14,7 +14,7 @@ UnitTest::Suite TestNumericsVectorsSuite {
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;
 			
-			Vector<1, int> b1 = {1};
+			Vector<1, int> b1 = IDENTITY;
 			Vector<2, int> b2 = {1, 2};
 			Vector<3, int> b3 = {1, 2, 3};
 			Vector<4, int> b4 = {1, 2, 3, 4};
@@ -34,22 +34,22 @@ UnitTest::Suite TestNumericsVectorsSuite {
 			examiner->check(b3.sum() == 5+9+17) << "Vector components constructed correctly";
 			examiner->check(b4.sum() == 5+9+17+29) << "Vector components constructed correctly";
 
-			b2.set(b4);
+			b2 = b4;
 
 			examiner->check(b2[0] == b4[0]) << "Vector components are equal";
 			examiner->check(b2[1] == b4[1]) << "Vector components are equal";
 
 			Vector<4, float> f4;
 
-			f4.set(b4);
+			f4 = b4;
 
 			examiner->check(b4.sum() == f4.sum()) << "Vector components copied correctly";
 
-			f4.zero();
+			f4 = ZERO;
 
 			examiner->check(f4.sum() == 0.0f) << "Vector is zeroed";
 
-			f4.load_identity();
+			f4 = IDENTITY;
 
 			examiner->check(f4.sum() == 4.0f) << "Vector is identity";
 
@@ -61,7 +61,7 @@ UnitTest::Suite TestNumericsVectorsSuite {
 
 			examiner->check(b4.sum() == f4.sum()) << "Vector components copied correctly";
 			
-			examiner->check(f4 == b4) << "Vectors are equal";
+			examiner->check(f4.equivalent(b4));
 		}
 	},
 
@@ -235,6 +235,17 @@ UnitTest::Suite TestNumericsVectorsSuite {
 
 			examiner->check(distribution(generator) > Vec3{0.2, 0.2, 0.2});
 			examiner->check(distribution(generator) < Vec3{0.8, 0.8, 0.8});
+		}
+	},
+
+	{"Expansion",
+		[](UnitTest::Examiner * examiner) {
+			using namespace Euclid::Numerics;
+
+			auto v1 = vector(1, 2, 3, 4, 5);
+			auto v2 = vector(1).expand(2, 3, 4, 5);
+
+			examiner->check_equal(v1, v2);
 		}
 	},
 };

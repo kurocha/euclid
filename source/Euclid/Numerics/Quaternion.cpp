@@ -29,7 +29,7 @@ namespace Euclid
 			if (dot > DOT_THRESHOLD) {
 				// If the inputs are too close for comfort, linearly interpolate
 				// and normalize the result.
-				Vec4T result(v0 + (v1 - (Vec4)v0) * t);
+				Vec4T result(v0 + (v1 - v0) * t);
 
 				result.normalize();
 				return Quaternion(result);
@@ -52,14 +52,14 @@ namespace Euclid
 		template <typename _NumericT>
 		Quaternion<_NumericT>::Quaternion (const Identity &)
 		{
-			_vector.zero();
-			_vector[W] = 1;
+			// Set W component to 1:
+			_vector = {0, 0, 0, 1};
 		}
 
 		template <typename _NumericT>
 		Quaternion<_NumericT>::Quaternion (const Vec4T & other)
 		{
-			_vector.set(other);
+			_vector = other;
 		}
 
 		template <typename _NumericT>
@@ -71,8 +71,8 @@ namespace Euclid
 		template <typename _NumericT>
 		Quaternion<_NumericT>::Quaternion (const Vec3T & point)
 		{
-			_vector.set(point);
-			_vector[W] = 0;
+			// Set W component to 0:
+			_vector = point << 0;
 		}
 
 		template <typename _NumericT>
@@ -188,7 +188,7 @@ namespace Euclid
 		template <typename _NumericT>
 		Quaternion<_NumericT> & Quaternion<_NumericT>::operator= (const Vec4T & other)
 		{
-			_vector.set(other);
+			_vector = other;
 
 			return *this;
 		}
@@ -242,8 +242,7 @@ namespace Euclid
 		template <typename _NumericT>
 		void Quaternion<_NumericT>::set_to_angle_axis_rotation (const RealT & angle, const Vec3T & axis)
 		{
-			_vector.set(axis * Number<NumericT>::sin(angle / 2.0));
-			_vector[W] = Math::cos(angle / 2.0);
+			_vector = (axis * Number<NumericT>::sin(angle / 2.0)) << Math::cos(angle / 2.0);
 		}
 
 		template <typename _NumericT>

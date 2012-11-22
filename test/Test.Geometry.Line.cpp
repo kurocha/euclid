@@ -58,7 +58,7 @@ UnitTest::Suite TestGeometryLinesSuite {
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Geometry;
 			
-			LineSegment3 a(Vec3(ZERO), Vec3(IDENTITY, 10));
+			LineSegment3 a(ZERO, 10);
 			examiner->check(a.offset().length2() == (10 * 10) * 3) << "Line is correct length";
 
 			LineSegment3 d(ZERO);
@@ -66,8 +66,8 @@ UnitTest::Suite TestGeometryLinesSuite {
 
 			Line3 la(IDENTITY, 1);
 			LineSegment3 e(la, 10, 30);
-			examiner->check(e.offset().equivalent(Vec3(IDENTITY, 20))) << "LineSegment is correct size";
-			examiner->check(e.start().equivalent(Vec3(IDENTITY, 10))) << "LineSegment starts at correct point";
+			examiner->check(e.offset().equivalent(20)) << "LineSegment is correct size";
+			examiner->check(e.start().equivalent(10)) << "LineSegment starts at correct point";
 		}
 	},
 	
@@ -82,7 +82,7 @@ UnitTest::Suite TestGeometryLinesSuite {
 			examiner->check(a.intersects_with(b, ta, tb)) << "Line segments intersect";
 			examiner->check(a.point_at_time(ta).equivalent({5, 5, 5})) << "Intersection point is correct";
 
-			LineSegment3 c(Vec3(ZERO), Vec3(IDENTITY, 10.1));
+			LineSegment3 c(0, 10.1);
 			examiner->check(!a.intersects_with(c, ta, tb)) << "Line segments don't intersect";
 		}
 	},

@@ -29,32 +29,6 @@ namespace Euclid
 			return v[0];
 		}
 
-		template <dimension E>
-		bool VectorEqualityTraits<E, float>::equivalent (const Vector<E, float> & other) const
-		{
-			const Vector<E, float> &v = static_cast<const Vector<E, float> &>(*this);
-
-			for (dimension i = 0; i < E; ++i) {
-				if (!Numerics::equivalent(v[i], other[i]))
-					return false;
-			}
-
-			return true;
-		}
-
-		template <dimension E>
-		bool VectorEqualityTraits<E, double>::equivalent (const Vector<E, double> & other) const
-		{
-			const Vector<E, double> &v = static_cast<const Vector<E, double> &>(*this);
-
-			for (dimension i = 0; i < E; ++i) {
-				if (!Numerics::equivalent(v[i], other[i]))
-					return false;
-			}
-
-			return true;
-		}
-
 		template <typename NumericT>
 		Vector<3, NumericT> surface_normal (const Vector<3, NumericT> & a, const Vector<3, NumericT> & b, const Vector<3, NumericT> & c)
 		{
@@ -196,85 +170,11 @@ namespace Euclid
 // MARK: -
 // MARK: Vector
 
-		template <dimension E, typename NumericT>
-		Vector<E, NumericT>::Vector (const NumericT & x)
-		{
-			for (dimension i = 0; i < E; i += 1) {
-				_vector[i] = x;
-			}
-		}
-
-		template <dimension E, typename NumericT> template <typename other_numeric_t>
-		Vector<E, NumericT>::Vector (const Vector<E, other_numeric_t> & other)
-		{
-			(*this) = other;
-		}
-
-		template <dimension E, typename NumericT>
-		void Vector<E, NumericT>::zero ()
-		{
-			memset(_vector, 0, sizeof(_vector));
-		}
-
-		template <dimension E, typename NumericT>
-		void Vector<E, NumericT>::load_identity (const NumericT & value)
-		{
-			(*this) = value;
-		}
-
-		template <dimension E, typename NumericT>
-		bool Vector<E, NumericT>::is_zero () const
-		{
-			return !this->sum();
-		}
-
-		template <dimension E, typename NumericT> template <dimension E2, typename other_numeric_t>
-		void Vector<E, NumericT>::set (const Vector<E2, other_numeric_t> & other)
-		{
-			const dimension I = E < E2 ? E : E2;
-
-			for (dimension i = 0; i < I; ++i)
-				this->_vector[i] = (NumericT)other[i];
-		}
-
-		template <dimension E, typename NumericT>
-		void Vector<E, NumericT>::set (const NumericT * other)
-		{
-			memcpy(this->_vector, other, sizeof(_vector));
-		}
-
-		template <dimension E, typename NumericT>
-		void Vector<E, NumericT>::set (const NumericT * other, unsigned count, unsigned offset)
-		{
-			memcpy(this->_vector + offset, other, sizeof(NumericT) * count);
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherNumericT>
-		void Vector<E, NumericT>::set (const OtherNumericT * other) {
-			for (dimension i = 0; i < E; i += 1)
-				this->_vector[i] = other[i];
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator== (const OtherT & other) const
-		{
-			return !(*this != other);
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator!= (const OtherT & other) const
-		{
-			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] != other[i]) return true;
-
-			return false;
-		}
-
 		template <dimension E, typename NumericT> template <typename OtherT>
 		bool Vector<E, NumericT>::less_than (const OtherT & other) const
 		{
 			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] >= other[i])
+				if ((*this)[i] >= other[i])
 					return false;
 
 			return true;
@@ -284,7 +184,7 @@ namespace Euclid
 		bool Vector<E, NumericT>::greater_than (const OtherT & other) const
 		{
 			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] <= other[i])
+				if ((*this)[i] <= other[i])
 					return false;
 
 			return true;
@@ -295,7 +195,7 @@ namespace Euclid
 		bool Vector<E, NumericT>::less_than_or_equal (const OtherT & other) const
 		{
 			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] > other[i])
+				if ((*this)[i] > other[i])
 					return false;
 
 			return true;
@@ -305,47 +205,8 @@ namespace Euclid
 		bool Vector<E, NumericT>::greater_than_or_equal (const OtherT & other) const
 		{
 			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] < other[i])
+				if ((*this)[i] < other[i])
 					return false;
-
-			return true;
-		}
-
-		// Set comparisons
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator< (const OtherT & other) const
-		{
-			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] > other[i]) return false;
-				else if (_vector[i] < other[i]) return true;
-
-			return false;
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator> (const OtherT & other) const
-		{
-			for (dimension i = 0; i < E; ++i)
-				if (_vector[i] < other[i]) return false;
-				else if (_vector[i] > other[i]) return true;
-
-			return false;
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator<= (const OtherT & other) const
-		{
-			if (operator!=(other))
-				return operator<(other);
-
-			return true;
-		}
-
-		template <dimension E, typename NumericT> template <typename OtherT>
-		bool Vector<E, NumericT>::operator>= (const OtherT & other) const
-		{
-			if (operator!=(other))
-				return operator>(other);
 
 			return true;
 		}
@@ -356,7 +217,7 @@ namespace Euclid
 			NumericT result = 0;
 
 			for (dimension i = 0; i < E; ++i) {
-				result += _vector[i] * other[i];
+				result += (*this)[i] * other[i];
 			}
 
 			return result;
@@ -376,7 +237,7 @@ namespace Euclid
 			NumericT result = 0;
 
 			for (dimension i = 0; i < E; ++i)
-				result += _vector[i];
+				result += (*this)[i];
 
 			return result;
 		}
@@ -386,7 +247,7 @@ namespace Euclid
 		{
 			NumericT result = 1;
 			for (dimension i = 0; i < E; ++i)
-				result *= _vector[i];
+				result *= (*this)[i];
 
 			return result;
 		}
@@ -402,7 +263,7 @@ namespace Euclid
 			assert(m);
 
 			for (dimension i = E; i > 0; i -= 1) {
-				m /= _vector[i-1];
+				m /= (*this)[i-1];
 				r[i-1] = Number<NumericT>::floor(k / m);
 				k = Number<NumericT>::mod(k, m);
 			}
@@ -423,7 +284,7 @@ namespace Euclid
 			//		x(1) + y(sx) + z(sx*sy)
 			for (dimension i = 0; i < E; i += 1) {
 				idx += coord[i] * m;
-				m *= _vector[i];
+				m *= (*this)[i];
 			}
 
 			return idx;
@@ -432,7 +293,7 @@ namespace Euclid
 		template <dimension E, typename NumericT>
 		Vector<E, NumericT> & Vector<E, NumericT>::clamp (const unsigned i, const NumericT & min, const NumericT & max)
 		{
-			_vector[i] = Math::clamp(_vector[i], min, max);
+			(*this)[i] = Math::clamp((*this)[i], min, max);
 
 			return *this;
 		}
@@ -441,7 +302,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::clamp (const NumericT & min, const NumericT & max)
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = Number<NumericT>::clamp(_vector[i], min, max);
+				(*this)[i] = Number<NumericT>::clamp((*this)[i], min, max);
 
 			return *this;
 		}
@@ -450,7 +311,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::abs ()
 		{
 			for (dimension i = 0; i < E; ++i) {
-				_vector[i] = Math::abs(_vector[i]);
+				(*this)[i] = Math::abs((*this)[i]);
 			}
 
 			return *this;
@@ -460,7 +321,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::floor ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = Number<NumericT>::floor(_vector[i]);
+				(*this)[i] = Number<NumericT>::floor((*this)[i]);
 
 			return *this;
 		}
@@ -469,7 +330,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::ceil ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = Number<NumericT>::ceil(_vector[i]);
+				(*this)[i] = Number<NumericT>::ceil((*this)[i]);
 
 			return *this;
 		}
@@ -478,7 +339,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::frac ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = _vector[i] - Number<NumericT>::floor(_vector[i]);
+				(*this)[i] = (*this)[i] - Number<NumericT>::floor((*this)[i]);
 
 			return *this;
 		}
@@ -517,9 +378,9 @@ namespace Euclid
 		{
 			for (dimension i = 0; i < E; ++i) {
 				if (limits[i] < 0) {
-					_vector[i] = (_vector[i] < with[i] ? _vector[i] : with[i]) * -(NumericT)limits[i];
+					(*this)[i] = ((*this)[i] < with[i] ? (*this)[i] : with[i]) * -(NumericT)limits[i];
 				} else if (limits[i] > 0) {
-					_vector[i] = (_vector[i] > with[i] ? _vector[i] : with[i]) * (NumericT)limits[i];
+					(*this)[i] = ((*this)[i] > with[i] ? (*this)[i] : with[i]) * (NumericT)limits[i];
 				}
 			}
 		}
@@ -528,7 +389,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::negate ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = -_vector[i];
+				(*this)[i] = -(*this)[i];
 
 			return *this;
 		}
@@ -536,14 +397,16 @@ namespace Euclid
 		template <dimension E, typename NumericT>
 		Vector<E, NumericT> Vector<E, NumericT>::operator- () const
 		{
-			return this->copy().negate();
+			auto copy = *this;
+			
+			return copy.negate();
 		}
 
 		template <dimension E, typename NumericT>
 		Vector<E, NumericT> & Vector<E, NumericT>::inverse ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				_vector[i] = !_vector[i];
+				(*this)[i] = !(*this)[i];
 
 			return *this;
 		}
@@ -551,7 +414,9 @@ namespace Euclid
 		template <dimension E, typename NumericT>
 		Vector<E, NumericT> Vector<E, NumericT>::operator! () const
 		{
-			return this->copy().inverse();
+			auto copy = *this;
+
+			return copy.inverse();
 		}
 
 		template <dimension E, typename NumericT>
@@ -565,10 +430,10 @@ namespace Euclid
 		bool Vector<E, NumericT>::increment (const Vector<E, NumericT> & max)
 		{
 			for (dimension i = 0; i < E; ++i) {
-				if ((_vector[i] + 1) < max[i]) {
-					_vector[i] += 1;
+				if (((*this)[i] + 1) < max[i]) {
+					(*this)[i] += 1;
 
-					if (i) _vector[i-1] = 0;
+					if (i) (*this)[i-1] = 0;
 
 					return true;
 				}
@@ -587,7 +452,7 @@ namespace Euclid
 				p <<= bits;
 
 				// Mask out higher order bits
-				p += _vector[i] & mask;
+				p += (*this)[i] & mask;
 			}
 		}
 
@@ -596,7 +461,7 @@ namespace Euclid
 		void Vector<E, NumericT>::unpack (unsigned bits, const PackedT & p)
 		{
 			for (unsigned i = 0; i < E; ++i) {
-				_vector[E-(i+1)] = (p >> (bits*i)) & ((1 << bits) - 1);
+				(*this)[E-(i+1)] = (p >> (bits*i)) & ((1 << bits) - 1);
 			}
 		}
 	}
