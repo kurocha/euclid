@@ -111,17 +111,17 @@ namespace Euclid
 				Mat44 b, c;
 
 				Vec4 r, pt(10.0, 0.0, 0.0, 1.0);
-				b = rotation(R90, vec(0.0, 1.0, 0.0));
+				b = rotation(R90, vector(0.0, 1.0, 0.0));
 
 				r = b * pt;
 
-				check(r.equivalent(vec(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
+				check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
 
-				b = rotation(R180, vec(0.0, 1.0, 0.0), vec(0.0, 10.0, 10.0));
+				b = rotation(R180, vector(0.0, 1.0, 0.0), vector(0.0, 10.0, 10.0));
 
 				r = b * pt;
 
-				check(r.equivalent(vec(-10.0, 0.0, 20.0, 1.0))) << "Rotation was successful";
+				check(r.equivalent(vector(-10.0, 0.0, 20.0, 1.0))) << "Rotation was successful";
 			}
 
 			{

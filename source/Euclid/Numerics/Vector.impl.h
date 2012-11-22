@@ -204,36 +204,6 @@ namespace Euclid
 			}
 		}
 
-		template <dimension E, typename NumericT>
-		Vector<E, NumericT>::Vector (const NumericT & x, const NumericT & y)
-		{
-			static_assert(E == 2, "Vector must be correct size!");
-
-			_vector[0] = x;
-			_vector[1] = y;
-		}
-
-		template <dimension E, typename NumericT>
-		Vector<E, NumericT>::Vector (const NumericT & x, const NumericT & y, const NumericT & z)
-		{
-			static_assert(E == 3, "Vector must be correct size!");
-
-			_vector[0] = x;
-			_vector[1] = y;
-			_vector[2] = z;
-		}
-
-		template <dimension E, typename NumericT>
-		Vector<E, NumericT>::Vector (const NumericT & x, const NumericT & y, const NumericT & z, const NumericT & w)
-		{
-			static_assert(E == 4, "Vector must be correct size!");
-
-			_vector[0] = x;
-			_vector[1] = y;
-			_vector[2] = z;
-			_vector[3] = w;
-		}
-
 		template <dimension E, typename NumericT> template <typename other_numeric_t>
 		Vector<E, NumericT>::Vector (const Vector<E, other_numeric_t> & other)
 		{
@@ -429,7 +399,7 @@ namespace Euclid
 			Vector r(ZERO);
 			NumericT m = this->product();
 
-			DREAM_ASSERT(m);
+			assert(m);
 
 			for (dimension i = E; i > 0; i -= 1) {
 				m /= _vector[i-1];
@@ -437,7 +407,7 @@ namespace Euclid
 				k = Number<NumericT>::mod(k, m);
 			}
 
-			DREAM_ASSERT(m == 1);
+			assert(m == 1);
 
 			return r;
 		}
@@ -522,7 +492,7 @@ namespace Euclid
 				return *this;
 			}
 
-			//DREAM_ASSERT(n > 0 && "Trying to normalize zero-length vector!");
+			//assert(n > 0 && "Trying to normalize zero-length vector!");
 
 			if (to_length != n) {
 				NumericT factor = to_length / n;
@@ -587,7 +557,7 @@ namespace Euclid
 		template <dimension E, typename NumericT>
 		Vector<E, NumericT> Vector<E, NumericT>::lerp (const NumericT & t, Vector<E, NumericT> other) const
 		{
-			return (*this) + t * (other - *this);
+			return (*this) + (other - *this) * t;
 		}
 
 		// Is there a more generic way to do this?

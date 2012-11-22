@@ -37,7 +37,7 @@ namespace Euclid
 			// Reverse the viewport transformation from normalized device coordinates back into object space
 			Eye<NumericT> result;
 
-			result.origin = Vector<3, NumericT>(inverse_view_matrix.at(3, 0), inverse_view_matrix.at(3, 1), inverse_view_matrix.at(3, 2));
+			result.origin = {inverse_view_matrix.at(3, 0), inverse_view_matrix.at(3, 1), inverse_view_matrix.at(3, 2)};
 
 			auto p1 = (inverse_view_matrix * (inverse_projection_matrix * (normalized_point << 1.0)));
 
@@ -50,7 +50,7 @@ namespace Euclid
 			result.forward = Line<3, NumericT>(p1.reduce(), (p2 - p1).reduce().normalize());
 
 			// Calculate up direction
-			Vector<3, NumericT> eye_up(0.0, 1.0, 0.0);
+			Vector<3, NumericT> eye_up = {0.0, 1.0, 0.0};
 			result.up = inverse_view_matrix * eye_up;
 
 			return result;

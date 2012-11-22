@@ -268,8 +268,8 @@ namespace Euclid
 			if (rmin > rmax) std::swap(rmin, rmax);
 
 			Vector<2, NumericT> o;
-			if (segments_intersect(vec(lmin, lmax), vec(rmin, rmax), o)) {
-				overlap = LineSegment<1, NumericT>(vec(o[0]), vec(o[1]));
+			if (segments_intersect(vector(lmin, lmax), vector(rmin, rmax), o)) {
+				overlap = LineSegment<1, NumericT>(vector(o[0]), vector(o[1]));
 				return true;
 			} else   {
 				return false;

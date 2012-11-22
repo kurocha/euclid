@@ -39,9 +39,9 @@ namespace Euclid {
 			void cylinder(MeshT & mesh, const RealT &base_radius, const RealT &top_radius, const RealT &height, const std::size_t &slices, const std::size_t &stacks, bool cap_start, bool cap_end) {
 				mesh.layout = TRIANGLES;
 
-				Vec3 base (0, base_radius, 0);
-				Vec3 top (height, top_radius, 0);
-				Vec3 center(1, 0, 0);
+				Vec3 base = {0, base_radius, 0};
+				Vec3 top = {height, top_radius, 0};
+				Vec3 center = {1, 0, 0};
 
 				assert((base_radius != 0.0 || top_radius != 0.0) && "Both base_radius and top_radius are zero!");
 
@@ -50,8 +50,8 @@ namespace Euclid {
 				// N stacks has n+1 divisions, one for the start, one for the end
 				std::size_t divisions = stacks + 1;
 
-				//auto index = array_index<2>(vec(divisions, slices));
-				//ArrayIndex<2> index(vec(divisions, slices));
+				//auto index = array_index<2>(vector(divisions, slices));
+				//ArrayIndex<2> index(vector(divisions, slices));
 				//index(mesh->vertices)[y][x]
 
 				mesh.vertices.reserve(divisions * slices);

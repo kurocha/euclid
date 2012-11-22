@@ -13,6 +13,8 @@
 #include "Numerics.h"
 #include "Number.h"
 
+#include <array>
+
 namespace Euclid
 {
 	namespace Numerics
@@ -193,12 +195,12 @@ namespace Euclid
 			/// Construct a vector with all elements of value x.
 			Vector (const NumericT & x);
 
-			/// Construct a 2-space vector.
-			Vector (const NumericT & x, const NumericT & y);
-			/// Construct a 3-space vector.
-			Vector (const NumericT & x, const NumericT & y, const NumericT & z);
-			/// Construct a 4-space vector.
-			Vector (const NumericT & x, const NumericT & y, const NumericT & z, const NumericT & w);
+			Vector (std::initializer_list<NumericT> list)
+			{
+				assert(list.size() == E && "Vector must be correct size!");
+
+				std::copy(list.begin(), list.end(), _vector);
+			}
 
 			/// Construct a vector from raw data.
 			Vector (const NumericT * data)
@@ -467,32 +469,10 @@ namespace Euclid
 		typedef Vector<4, bool> Vec4b;
 
 		/// Construct a 1-space vector
-		template <typename NumericT>
-		inline Vector<1, NumericT> vec (const NumericT & x)
+		template <typename HeadT, typename... TailT>
+		constexpr inline Vector<1+sizeof...(TailT), HeadT> vector (const HeadT & head, TailT... tail)
 		{
-			return Vector<1, NumericT>(x);
-		}
-
-		/// Construct a 2-space vector
-		template <typename NumericT, typename numeric1_t>
-		inline Vector<2, NumericT> vec (const NumericT & x, const numeric1_t & y)
-		{
-			return Vector<2, NumericT>((NumericT)x, (NumericT)y);
-		}
-
-		/// Construct a 3-space vector
-		template <typename NumericT, typename numeric1_t, typename numeric2_t>
-		inline Vector<3, NumericT> vec (const NumericT & x, const numeric1_t & y, const numeric2_t & z)
-		{
-			return Vector<3, NumericT>((NumericT)x, (NumericT)y, (NumericT)z);
-		}
-
-		/// Construct a 4-space vector
-		template <typename NumericT, typename numeric1_t, typename numeric2_t, typename numeric3_t>
-		inline Vector<4, NumericT> vec (const NumericT & x, const numeric1_t & y, const numeric2_t & z,
-		                                const numeric3_t & w)
-		{
-			return Vector<4, NumericT>((NumericT)x, (NumericT)y, (NumericT)z, (NumericT)w);
+			return {head, (HeadT)tail...};
 		}
 
 // MARK:
@@ -637,6 +617,13 @@ namespace Euclid
 		{
 			return a.equivalent(b);
 		}
+
+// MARK: -
+
+		extern template class Vector<2, RealT>;
+		extern template class Vector<3, RealT>;
+		extern template class Vector<4, RealT>;
+
 	}
 }
 

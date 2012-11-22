@@ -40,7 +40,7 @@ namespace Euclid {
 			//Vec3 pt = point_at_time(t);
 
 			Vec4 tg4 = tg << 0.0;
-			Vec4 orth (0.0, 0.0, 0.0, 1.0);
+			Vec4 orth = {0.0, 0.0, 0.0, 1.0};
 			Vec4 ori = (tangent_at_time(t-0.2) - tangent_at_time(t+0.2)) << 1.0;
 
 			Vec4 res (cross_product(tg4, orth, ori));
@@ -53,7 +53,7 @@ namespace Euclid {
 			Vec2 tg = tangent_at_time(t);
 
 			Vec3 tg3 = tg << 0.0;
-			Vec3 orth (0.0, 0.0, 1.0);
+			Vec3 orth = {0.0, 0.0, 1.0};
 
 			return tg3.cross(orth).reduce().normalize();
 		}

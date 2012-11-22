@@ -30,23 +30,23 @@ namespace Euclid {
 
 			testing("Intersections: Contains point");
 
-			AlignedBox<3> box1(vec(0.0, 0.0, 0.0), vec(1.0, 1.0, 1.0)),
-			box2(vec(0.0, 0.0, 0.0), vec(10.0, 10.0, 10.0)),
-			box3(vec(5.0, 5.0, 5.0), vec(10.0, 10.0, 10.0)),
-			box4(vec(9.0, 9.0, 9.0), vec(10.0, 10.0, 10.0)),
-			box5(vec(-5.0, 0.0, 0.0), vec(5.0, 10.0, 10.0)),
-			box5a(vec(0.0, 0.0, 0.0), vec(5.0, 10.0, 10.0)),
-			box6(vec(5.0, 0.0, 0.0), vec(10.0, 10.0, 10.0));
+			AlignedBox<3> box1(vector(0.0, 0.0, 0.0), vector(1.0, 1.0, 1.0)),
+			box2(vector(0.0, 0.0, 0.0), vector(10.0, 10.0, 10.0)),
+			box3(vector(5.0, 5.0, 5.0), vector(10.0, 10.0, 10.0)),
+			box4(vector(9.0, 9.0, 9.0), vector(10.0, 10.0, 10.0)),
+			box5(vector(-5.0, 0.0, 0.0), vector(5.0, 10.0, 10.0)),
+			box5a(vector(0.0, 0.0, 0.0), vector(5.0, 10.0, 10.0)),
+			box6(vector(5.0, 0.0, 0.0), vector(10.0, 10.0, 10.0));
 
-			check(box1.contains_point(vec(0.0, 0.0, 0.0), true )) << "Contains point was correct";
-			check(!box1.contains_point(vec(0.0, 0.0, 0.0), false)) << "Contains point was correct";
-			check(box1.contains_point(vec(1.0, 1.0, 0.5), true )) << "Contains point was correct";
-			check(!box1.contains_point(vec(1.0, 1.0, 0.5), false)) << "Contains point was correct";
-			check(box1.contains_point(vec(1.0, 1.0, 1.0), true )) << "Contains point was correct";
-			check(!box1.contains_point(vec(1.0, 1.0, 1.0), false)) << "Contains point was correct";
-			check(!box1.contains_point(vec(1.0, 2.0, 1.0), true )) << "Contains point was correct";
-			check(!box1.contains_point(vec(1.0, 1.0, 2.0), false)) << "Contains point was correct";
-			check(!box1.contains_point(vec(3.0, 1.0, 0.0), false)) << "Contains point was correct";
+			check(box1.contains_point(vector(0.0, 0.0, 0.0), true )) << "Contains point was correct";
+			check(!box1.contains_point(vector(0.0, 0.0, 0.0), false)) << "Contains point was correct";
+			check(box1.contains_point(vector(1.0, 1.0, 0.5), true )) << "Contains point was correct";
+			check(!box1.contains_point(vector(1.0, 1.0, 0.5), false)) << "Contains point was correct";
+			check(box1.contains_point(vector(1.0, 1.0, 1.0), true )) << "Contains point was correct";
+			check(!box1.contains_point(vector(1.0, 1.0, 1.0), false)) << "Contains point was correct";
+			check(!box1.contains_point(vector(1.0, 2.0, 1.0), true )) << "Contains point was correct";
+			check(!box1.contains_point(vector(1.0, 1.0, 2.0), false)) << "Contains point was correct";
+			check(!box1.contains_point(vector(3.0, 1.0, 0.0), false)) << "Contains point was correct";
 
 			testing("Intersections: Other boxes");
 
@@ -57,10 +57,10 @@ namespace Euclid {
 
 			AlignedBox<3> box1a(box1);
 
-			check(box2.orientation_of(box3) == vec(1.0, 1.0, 1.0)) << "Box orientation was correct";
-			box1a.align_within_super_box(box2, vec(1.0, 1.0, 1.0));
+			check(box2.orientation_of(box3) == vector(1.0, 1.0, 1.0)) << "Box orientation was correct";
+			box1a.align_within_super_box(box2, vector(1.0, 1.0, 1.0));
 			check(box1a == box4) << "Box was aligned correctly";
-			box1a.align_within_super_box(box2, vec(0.0, 0.0, 0.0));
+			box1a.align_within_super_box(box2, vector(0.0, 0.0, 0.0));
 			check(box1 == box1a) << "Box was aligned correctly";
 
 			// Is this desirable behaviour?

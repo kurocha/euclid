@@ -98,7 +98,7 @@ namespace Euclid
 		Quaternion<_NumericT> Quaternion<_NumericT>::from_matrix (const Mat44 & m) {
 			RealT w = Math::sqrt(1 + m[0] + m[5] + m[10]) / 2.0;
 
-			Vec4 e;
+			Vec4T e;
 			e[X] = (m[6] - m[9]) / (4 * w);
 			e[Y] = (m[8] - m[2]) / (4 * w);
 			e[Z] = (m[1] - m[4]) / (4 * w);
@@ -109,16 +109,16 @@ namespace Euclid
 
 		template <typename _NumericT>
 		Quaternion<_NumericT> Quaternion<_NumericT>::from_euler(Vec3T angles) {
-			Quaternion x_rotation(angles[X], Vec3T(1.0, 0.0, 0.0));
-			Quaternion y_rotation(angles[Y], Vec3T(0.0, 1.0, 0.0));
-			Quaternion z_rotation(angles[Z], Vec3T(0.0, 0.0, 1.0));
+			Quaternion x_rotation(angles[X], {1.0, 0.0, 0.0});
+			Quaternion y_rotation(angles[Y], {0.0, 1.0, 0.0});
+			Quaternion z_rotation(angles[Z], {0.0, 0.0, 1.0});
 
 			return x_rotation * y_rotation * z_rotation;
 		}
 
 		template <typename _NumericT>
 		Quaternion<_NumericT> Quaternion<_NumericT>::from_1ijk(Vec4T r4) {
-			Vec4T vector(r4[1], r4[2], r4[3], r4[0]);
+			Vec4T vector = {r4[1], r4[2], r4[3], r4[0]};
 
 			return Quaternion(vector);
 		}
@@ -229,11 +229,11 @@ namespace Euclid
 			Vec3T result;
 
 			if (a == X) {
-				result = Vec3(1, 0, 0);
+				result = {1, 0, 0};
 			} else if (a == Y) {
-				result = Vec3(0, 1, 0);
+				result = {0, 1, 0};
 			} else if (a == Z) {
-				result = Vec3(0, 0, 1);
+				result = {0, 0, 1};
 			}
 
 			return rotating_matrix() * result;
@@ -298,11 +298,11 @@ namespace Euclid
 			testing("Construction");
 
 			// Angle axis
-			Quat q(R90, vec(1.0, 0.0, 0.0));
+			Quat q(R90, vector(1.0, 0.0, 0.0));
 			check(q.rotation_axis().equivalent(Vec3(1.0, 0.0, 0.0))) << "Rotation axis is correct";
 			check(equivalent((RealT)R90, (RealT)q.rotation_angle())) << "Rotation angle is correct";
 
-			Mat44 m = Mat44::rotating_matrix(R90, vec(1.0, 0.0, 0.0));
+			Mat44 m = Mat44::rotating_matrix(R90, vector(1.0, 0.0, 0.0));
 			check(q.rotating_matrix().equivalent(m)) << "Rotation matrix from quaternion is correct";
 
 			testing("Multiplication");

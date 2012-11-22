@@ -75,7 +75,7 @@ namespace Euclid {
 			NumericT l = (minc + maxc) / 2.0;
 
 			if (minc == maxc)
-				return Vector<3, NumericT>(0.0, 0.0, l);
+				return {0.0, 0.0, l};
 
 			// Saturation
 			NumericT s;
@@ -101,7 +101,7 @@ namespace Euclid {
 
 			h = Number<NumericT>::mod(h / 6.0, 1.0);
 
-			return Vector<3, NumericT>(h, s, l);
+			return {h, s, l};
 		}
 
 		template <typename NumericT>
@@ -141,11 +141,11 @@ namespace Euclid {
 
 			NumericT m1 = 2.0 * color[2] - m2;
 
-			return Vector<3, NumericT>(
+			return {
 			    _v(m1, m2, color[0]+ONE_THIRD),
 			    _v(m1, m2, color[0]),
 			    _v(m1, m2, color[0]-ONE_THIRD)
-			    );
+			};
 		}
 
 		/// HSV: Hue, Saturation, Value
@@ -161,7 +161,7 @@ namespace Euclid {
 			NumericT v = maxc;
 
 			if (minc == maxc)
-				return Vector<3, NumericT>(0.0, 0.0, v);
+				return {0.0, 0.0, v};
 
 			// Saturation
 			NumericT s = (maxc-minc) / maxc;
@@ -182,7 +182,7 @@ namespace Euclid {
 
 			h = Number<NumericT>::wrap(h / 6.0, 1.0);
 
-			return Vector<3, NumericT>(h, s, v);
+			return {h, s, v};
 		}
 
 		template <typename NumericT>
@@ -200,12 +200,12 @@ namespace Euclid {
 
 			i = i % 6;
 			switch (i % 6) {
-			case 0: return Vector<3, NumericT>(v, t, p);
-			case 1: return Vector<3, NumericT>(q, v, p);
-			case 2: return Vector<3, NumericT>(p, v, t);
-			case 3: return Vector<3, NumericT>(p, q, v);
-			case 4: return Vector<3, NumericT>(t, p, v);
-			case 5: return Vector<3, NumericT>(v, p, q);
+				case 0: return {v, t, p};
+				case 1: return {q, v, p};
+				case 2: return {p, v, t};
+				case 3: return {p, q, v};
+				case 4: return {t, p, v};
+				case 5: return {v, p, q};
 			}
 
 			// Should never get here!
