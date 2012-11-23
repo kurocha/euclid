@@ -150,7 +150,7 @@ namespace Euclid
 			std::size_t offset(std::size_t row, std::size_t column) const {
 				assert(row < R && column < C);
 				
-				return column_major_offset(row, column, C);
+				return column_major_offset(row, column, R);
 				//return row_major_offset(row, column, C);
 			}
 
@@ -193,7 +193,7 @@ namespace Euclid
 			template <std::size_t D>
 			void set (const std::size_t & r, const std::size_t & c, const Vector<D, NumericT> & v)
 			{
-				memcpy(&at(r, c), v.value(), sizeof(NumericT) * D);
+				memcpy(&at(r, c), v.data(), sizeof(NumericT) * D);
 			}
 
 			/// Copy a vector into the matrix at position r, c, with element_offset distance between each element.
@@ -225,7 +225,7 @@ namespace Euclid
 			/// Load a test patern into the matrix. Used for testing.
 			void load_test_pattern ()
 			{
-				dimension i = 0;
+				NumericT i = 0;
 
 				for (dimension c = 0; c < C; c += 1)
 					for (dimension r = 0; r < R; r += 1)
@@ -246,7 +246,7 @@ namespace Euclid
 			bool equivalent(const Matrix & other) const
 			{
 				for (dimension i = 0; i < R*C; i += 1) {
-					if (! Number<NumericT>::equivalent(_data[i], other[i])) {
+					if (!Numerics::equivalent(_data[i], other[i])) {
 						return false;
 					}
 				}
@@ -323,7 +323,7 @@ namespace Euclid
 
 		template <typename NumericT>
 		Matrix<4, 4, NumericT> perspective_matrix (const NumericT & field_of_view, const NumericT & aspect_ratio, const NumericT & near, const NumericT & far) {
-			NumericT f = 1.0 / Number<NumericT>::tan(field_of_view * 0.5);
+			NumericT f = 1.0 / std::tan(field_of_view * 0.5);
 			NumericT n = 1.0 / (near - far);
 
 			Matrix<4, 4, NumericT> result(ZERO);

@@ -25,7 +25,7 @@ namespace Euclid
 			// Compute the cosine of the angle between the two vectors.
 			NumericT dot = v0.dot(v1);
 
-			const RealT DOT_THRESHOLD = 0.9995;
+			const NumericT DOT_THRESHOLD = 0.9995;
 			if (dot > DOT_THRESHOLD) {
 				// If the inputs are too close for comfort, linearly interpolate
 				// and normalize the result.
@@ -35,12 +35,10 @@ namespace Euclid
 				return Quaternion(result);
 			}
 
-			// Robustness: Stay within domain of acos():
-			Number<NumericT>::clamp(dot);
 			// theta_0 = angle between input vectors:
-			RealT theta_0 = acos(dot);
+			NumericT theta_0 = std::acos(dot);
 			// theta = angle between v0 and result:
-			RealT theta = theta_0 * t;
+			NumericT theta = theta_0 * t;
 			Vec4T v2 = v1 - v0 * dot;
 
 			v2.normalize();
@@ -72,14 +70,14 @@ namespace Euclid
 		Quaternion<_NumericT>::Quaternion (const Vec3T & point)
 		{
 			// Set W component to 0:
-			_vector = point << 0;
+			_vector = (point << 0);
 		}
 
 		template <typename _NumericT>
 		Quaternion<_NumericT>::Quaternion (const Vec3T & from, const Vec3T & to, _NumericT factor)
 		{
 			Vec3T axis = from.cross(to).normalize();
-			RealT angle = from.angle_between(to) * factor;
+			NumericT angle = from.angle_between(to) * factor;
 
 			set_to_angle_axis_rotation(angle, axis);
 		}
@@ -89,14 +87,14 @@ namespace Euclid
 		Quaternion<_NumericT>::Quaternion (const Vec3T & from, const Vec3T & to)
 		{
 			Vec3T axis = from.cross(to).normalize();
-			RealT angle = from.angle_between(to);
+			NumericT angle = from.angle_between(to);
 
 			set_to_angle_axis_rotation(angle, axis);
 		}
 
 		template <typename _NumericT>
 		Quaternion<_NumericT> Quaternion<_NumericT>::from_matrix (const Mat44 & m) {
-			RealT w = Math::sqrt(1 + m[0] + m[5] + m[10]) / 2.0;
+			NumericT w = std::sqrt(1.0 + m[0] + m[5] + m[10]) / 2.0;
 
 			Vec4T e;
 			e[X] = (m[6] - m[9]) / (4 * w);
@@ -202,23 +200,25 @@ namespace Euclid
 		template <typename _NumericT>
 		typename Quaternion<_NumericT>::MatrixT Quaternion<_NumericT>::rotating_matrix () const
 		{
-			Matrix<4, 4, NumericT> matrix(IDENTITY);
+			Matrix<4, 4, NumericT> matrix = ZERO;
 
-			assert(is_zero(_vector.length2() - 1.0) && "Quaternion.rotating_matrix magnitude must be 1");
+			assert(Numerics::equivalent(_vector.length2(), (NumericT)1.0) && "Quaternion.rotating_matrix magnitude must be 1");
 
 			NumericT x = _vector[X], y = _vector[Y], z = _vector[Z], w = _vector[W];
 
-			matrix.at(0, 0) = 1 - 2 * (y*y + z*z);
-			matrix.at(0, 1) =     2 * (x*y - w*z);
-			matrix.at(0, 2) =     2 * (x*z + w*y);
+			matrix.at(0, 0) = 1.0 - 2.0 * (y*y + z*z);
+			matrix.at(0, 1) =       2.0 * (x*y - w*z);
+			matrix.at(0, 2) =       2.0 * (x*z + w*y);
 
-			matrix.at(1, 0) =     2 * (x*y + w*z);
-			matrix.at(1, 1) = 1 - 2 * (x*x + z*z);
-			matrix.at(1, 2) =     2 * (y*z - w*x);
+			matrix.at(1, 0) =       2.0 * (x*y + w*z);
+			matrix.at(1, 1) = 1.0 - 2.0 * (x*x + z*z);
+			matrix.at(1, 2) =       2.0 * (y*z - w*x);
 
-			matrix.at(2, 0) =     2 * (x*z - w*y);
-			matrix.at(2, 1) =     2 * (y*z + w*x);
-			matrix.at(2, 2) = 1 - 2 * (x*x + y*y);
+			matrix.at(2, 0) =       2.0 * (x*z - w*y);
+			matrix.at(2, 1) =       2.0 * (y*z + w*x);
+			matrix.at(2, 2) = 1.0 - 2.0 * (x*x + y*y);
+
+			matrix.at(3, 3) = 1.0;
 
 			return matrix;
 		}
@@ -240,15 +240,16 @@ namespace Euclid
 		}
 
 		template <typename _NumericT>
-		void Quaternion<_NumericT>::set_to_angle_axis_rotation (const RealT & angle, const Vec3T & axis)
+		void Quaternion<_NumericT>::set_to_angle_axis_rotation (const NumericT & angle, const Vec3T & axis)
 		{
-			_vector = (axis * Number<NumericT>::sin(angle / 2.0)) << Math::cos(angle / 2.0);
+			_vector = axis * std::sin(angle / 2.0);
+			_vector[W] = std::cos(angle / 2.0);
 		}
 
 		template <typename _NumericT>
 		_NumericT Quaternion<_NumericT>::rotation_angle () const
 		{
-			return Number<NumericT>::acos(_vector[W]) * 2;
+			return std::acos(_vector[W]) * 2.0;
 		}
 
 		template <typename _NumericT>
@@ -287,74 +288,5 @@ namespace Euclid
 
 		template class Quaternion<float>;
 		template class Quaternion<double>;
-
-// MARK: -
-// MARK: Unit Tests
-
-#ifdef ENABLE_TESTING
-		UNIT_TEST(Quaternion)
-		{
-			testing("Construction");
-
-			// Angle axis
-			Quat q(R90, vector(1.0, 0.0, 0.0));
-			check(q.rotation_axis().equivalent(Vec3(1.0, 0.0, 0.0))) << "Rotation axis is correct";
-			check(equivalent((RealT)R90, (RealT)q.rotation_angle())) << "Rotation angle is correct";
-
-			Mat44 m = Mat44::rotating_matrix(R90, vector(1.0, 0.0, 0.0));
-			check(q.rotating_matrix().equivalent(m)) << "Rotation matrix from quaternion is correct";
-
-			testing("Multiplication");
-
-			Vec3 si(15.14, -12.5, 4.55);
-
-			Vec3 r1, r2;
-
-			r1 = q * si;
-			r2 = m * si;
-
-			check(r1.equivalent(r2)) << "Represented rotation is same";
-
-			Quat a(R90, Vec3(1, 0, 0).normalized_vector());
-			Quat b(R90, Vec3(0, 1, 0).normalized_vector());
-			Quat c = a.rotation_to(b);
-
-			check(a.vector().equivalent(Vec4(0.707107, 0, 0, 0.707107))) << "Quaternion rotation is correct";
-			check(b.vector().equivalent(Vec4(0, 0.707107, 0, 0.707107))) << "Quaternion rotation is correct";
-			check(c.vector().equivalent(Vec4(-0.5, 0.5, -0.5, 0.5))) << "Quaternion rotation is correct";
-
-			check(a.conjugated_quaternion().vector().equivalent(Vec4(-0.707107, 0, 0, 0.707107))) << "Quaternion conjugate is correct";
-
-			check((a * c).vector().equivalent(b.vector())) << "Rotations are equivalent";
-
-			testing("Axis Extraction");
-
-			Quat identity(IDENTITY);
-
-			check(identity.extract_axis(X).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
-			check(identity.extract_axis(Y).equivalent(Vec3(0, 1, 0))) << "Y axis is correct";
-			check(identity.extract_axis(Z).equivalent(Vec3(0, 0, 1))) << "Z axis is correct";
-
-			check(a.extract_axis(X).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
-			check(a.extract_axis(Y).equivalent(Vec3(0, 0, 1))) << "Y axis is correct";
-			check(a.extract_axis(Z).equivalent(Vec3(0, -1, 0))) << "Z axis is correct";
-
-			testing("Rotation Matrix");
-
-			Quat d(R360 * 0.34, Vec3(0.52, 0.1, -0.9).normalized_vector());
-			Vec3 va(1, 0, 0), vb(0, 1, 0), vc(0, 0, 1);
-
-			Mat44 t = d.rotating_matrix();
-
-			check(d.extract_axis(X).equivalent(t * va)) << "X axis is correct";
-			check(d.extract_axis(Y).equivalent(t * vb)) << "Y axis is correct";
-			check(d.extract_axis(Z).equivalent(t * vc)) << "Z axis is correct";
-
-			// Transformation by matrix and transformation by multiplication is not correct
-			// check((d * va).equivalent(t * va)) << "X rotation is correct";
-			// check((d * vb).equivalent(t * vb)) << "Y rotation is correct";
-			// check((d * vc).equivalent(t * vc)) << "Z rotation is correct";
-		}
-#endif
 	}
 }

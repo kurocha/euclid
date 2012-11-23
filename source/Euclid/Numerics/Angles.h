@@ -53,6 +53,10 @@ namespace Euclid
 			constexpr Radians operator / (const FloatT & other) {
 				return {value / other.value};
 			}
+
+			FloatT sin() const {
+				return std::sin(value);
+			}
 		};
 
 		template <typename FloatT>

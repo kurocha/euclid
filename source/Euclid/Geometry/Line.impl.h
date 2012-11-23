@@ -170,7 +170,7 @@ namespace Euclid
 		template <typename NumericT>
 		bool ray_slabs_intersection(NumericT start, NumericT dir, NumericT min, NumericT max, NumericT& tfirst, NumericT& tlast)
 		{
-			if (Number<NumericT>::equivalent(dir, 0))
+			if (Numerics::equivalent(dir, 0))
 				return (start < max && start > min);
 
 			NumericT tmin = (min - start) / dir;

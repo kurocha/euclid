@@ -55,7 +55,7 @@ namespace Euclid
 
 			/// Calculate the average value.
 			/// @returns The average value.
-			NumericT average ()
+			NumericT value ()
 			{
 				if (_samples == 0) return 0;
 

@@ -22,7 +22,7 @@ namespace Euclid {
 		template <typename NumericT>
 		class LineTranslationTraits<3, NumericT>{
 		public:
-			typedef typename RealType<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
 			typedef Matrix<4, 4, NumericRealT> MatrixT;
 			typedef Vector<3, NumericRealT> VectorT;
 			typedef Line<3, NumericT> LineT;
@@ -38,7 +38,7 @@ namespace Euclid {
 		template <dimension D, typename NumericT>
 		class Line : public LineTranslationTraits<D, NumericT>{
 		protected:
-			typedef typename RealType<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
 			typedef Vector<D, NumericT> VectorT;
 
 			VectorT _point;
@@ -108,7 +108,7 @@ namespace Euclid {
 					return false;
 
 				// Is the distance between the parallel lines equivalent to zero?
-				return Number<NumericT>::equivalent(shortest_distance_to_point(other._point), 0);
+				return Numerics::equivalent(shortest_distance_to_point(other._point), 0);
 			}
 
 			bool intersects_with (const Line<D, NumericT> & other, NumericT & this_time, NumericT & other_time) const;
@@ -146,7 +146,7 @@ namespace Euclid {
 		template <dimension D, typename NumericT>
 		class LineSegment {
 		public:
-			typedef typename RealType<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
 			typedef Vector<D, NumericT> VectorT;
 
 		protected:

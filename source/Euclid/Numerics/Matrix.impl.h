@@ -235,8 +235,8 @@ namespace Euclid
 
 			if (is_zero(angle)) return result;
 
-			NumericT s = Number<NumericT>::sin(angle);
-			NumericT c = Number<NumericT>::cos(angle);
+			NumericT s = std::sin(angle);
+			NumericT c = std::cos(angle);
 			NumericT a = 1.0 - c;
 
 			Vector<3, NumericT> sp = p * s;
@@ -283,7 +283,7 @@ namespace Euclid
 
 			if (is_zero(angle)) {
 				return IDENTITY;
-			} else if (Math::abs(angle) == R180) {
+			} else if (std::abs(angle) == R180) {
 				return Matrix<N, N, NumericT>::rotating_matrix(angle, from.cross(normal).normalize());
 			} else {
 				return Matrix<N, N, NumericT>::rotating_matrix(angle, from.cross(to).normalize());
@@ -295,12 +295,12 @@ namespace Euclid
 		{
 			static_assert(N >= 3, "Matrix must be size 3 or bigger!");
 
-			NumericT ca = Number<NumericT>::cos(radians);
-			NumericT sa = Number<NumericT>::sin(radians);
+			NumericT ca = std::cos(radians);
+			NumericT sa = std::sin(radians);
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (equal_within_tolerance(radians, 0.0f)) return result;
+			if (Numerics::is_zero(radians)) return result;
 
 			result.at(1, 1) = ca;
 			result.at(1, 2) = -sa;
@@ -315,12 +315,12 @@ namespace Euclid
 		{
 			static_assert(N >= 3, "Matrix must be size 3 or bigger!");
 
-			NumericT ca = Number<NumericT>::cos(radians);
-			NumericT sa = Number<NumericT>::sin(radians);
+			NumericT ca = std::cos(radians);
+			NumericT sa = std::sin(radians);
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (equal_within_tolerance(radians, 0.0f)) return result;
+			if (Numerics::is_zero(radians)) return result;
 
 			result.at(0, 0) = ca;
 			result.at(2, 2) = ca;
@@ -336,12 +336,12 @@ namespace Euclid
 		{
 			static_assert(N >= 2, "Matrix must be size 3 or bigger!");
 
-			NumericT ca = Number<NumericT>::cos(radians);
-			NumericT sa = Number<NumericT>::sin(radians);
+			NumericT ca = std::cos(radians);
+			NumericT sa = std::sin(radians);
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (equal_within_tolerance(radians, 0.0f)) return result;
+			if (Numerics::is_zero(radians)) return result;
 
 			result.at(0, 0) = ca;
 			result.at(1, 1) = ca;

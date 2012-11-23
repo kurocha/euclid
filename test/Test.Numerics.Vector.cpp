@@ -7,7 +7,7 @@
 #include <set>
 #include <tuple>
 
-UnitTest::Suite TestNumericsVectorsSuite {
+UnitTest::Suite TestNumericsVectorSuite {
 	"Test Vector",
 
 	{"Construction",

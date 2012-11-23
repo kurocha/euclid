@@ -94,14 +94,14 @@ UnitTest::Suite TestNumericsSuite {
 			s += 5;
 			s += 15;
 
-			examiner->check_equal(s.average(), 10);
+			examiner->check_equal(s.value(), 10);
 
 			Average<int> q;
 			q += 20;
 			q += 20;
 			q += s;
 
-			examiner->check_equal(q.average(), 15);
+			examiner->check_equal(q.value(), 15);
 		}
 	},
 

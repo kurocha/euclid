@@ -21,15 +21,15 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		/// Helper to get floating point type from a fixed point type
-		template <typename t>
-		struct RealType {
+		/// Helper to get floating point type from a fixed point type.
+		/// By default we map all integer types to single precision floats.
+		template <typename TypeT>
+		struct RealTypeTraits {
 			typedef float RealT;
 		};
 
-		/// By default we map all integer types to double precision floats.
 		template <>
-		struct RealType<double>{
+		struct RealTypeTraits<double>{
 			typedef double RealT;
 		};
 		

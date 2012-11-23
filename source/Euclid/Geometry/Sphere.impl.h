@@ -62,16 +62,16 @@ namespace Euclid
 		}
 
 		template <dimension D, typename NumericT>
-		typename RealType<NumericT>::RealT Sphere<D, NumericT>::distance_between_edges (const Sphere<D, NumericT> & other, Vector<D, NumericT> & displacement) const
+		typename RealTypeTraits<NumericT>::RealT Sphere<D, NumericT>::distance_between_edges (const Sphere<D, NumericT> & other, Vector<D, NumericT> & displacement) const
 		{
 			displacement = _center - other._center;
-			typename RealType<NumericT>::RealT total_radius = _radius + other._radius;
+			typename RealTypeTraits<NumericT>::RealT total_radius = _radius + other._radius;
 
 			return displacement.length() - total_radius;
 		}
 
 		template <dimension D, typename NumericT>
-		typename RealType<NumericT>::RealT Sphere<D, NumericT>::distance_from_point (const Vector<D, NumericT> & point, Vector<D, NumericT> & displacement) const
+		typename RealTypeTraits<NumericT>::RealT Sphere<D, NumericT>::distance_from_point (const Vector<D, NumericT> & point, Vector<D, NumericT> & displacement) const
 		{
 			displacement = point - _center;
 
@@ -81,7 +81,7 @@ namespace Euclid
 		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const Sphere<D, NumericT> & other, Vector<D, NumericT> & displacement) const
 		{
-			typename RealType<NumericT>::RealT d = distance_between_edges(other, displacement);
+			typename RealTypeTraits<NumericT>::RealT d = distance_between_edges(other, displacement);
 
 			if (d < 0.0) {
 				return SHAPES_INTERSECT;
@@ -95,7 +95,7 @@ namespace Euclid
 		template <dimension D, typename NumericT>
 		IntersectionResult Sphere<D, NumericT>::intersects_with (const Vector<D, NumericT> & point, Vector<D, NumericT> & displacement) const
 		{
-			typename RealType<NumericT>::RealT d = distance_from_point(point, displacement);
+			typename RealTypeTraits<NumericT>::RealT d = distance_from_point(point, displacement);
 
 			if (d < 0.0) {
 				return SHAPES_INTERSECT;
@@ -120,14 +120,14 @@ namespace Euclid
 			RealT d = b * b - c;
 
 			if (d == 0.0) {
-				entry_time = (-b) - Number<NumericT>::sqrt(d);
+				entry_time = (-b) - std::sqrt(d);
 				exit_time = entry_time;
 				return EDGES_INTERSECT;
 			}
 
 			if (d > 0) {
-				entry_time = (-b) - Number<NumericT>::sqrt(d);
-				exit_time = (-b) + Number<NumericT>::sqrt(d);
+				entry_time = (-b) - std::sqrt(d);
+				exit_time = (-b) + std::sqrt(d);
 				return SHAPES_INTERSECT;
 			} else {
 				return NO_INTERSECTION;

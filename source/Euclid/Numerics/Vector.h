@@ -11,7 +11,8 @@
 #define _EUCLID_NUMERICS_VECTOR_H
 
 #include "Numerics.h"
-#include "Number.h"
+#include "Integer.h"
+#include "Float.h"
 
 #include <type_traits>
 #include <array>
@@ -136,7 +137,7 @@ namespace Euclid
 
 		public:
 			/// The type of the vector elements.
-			typedef typename RealType<NumericT>::RealT RealT;
+			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 
 			/// Empty constructor. Value of vector is undefined.
 			Vector () = default;
@@ -221,7 +222,7 @@ namespace Euclid
 			/// Return the length of the vector.
 			RealT length () const
 			{
-				return Number<RealT>::sqrt(this->length2());
+				return std::sqrt((RealT)this->length2());
 			}
 
 			/// Calculate the dot product of two vectors.
@@ -257,7 +258,7 @@ namespace Euclid
 
 			/// Clamp a specific component of the vector between given values.
 			/// @sa Number::clamp
-			Vector & clamp (const unsigned i, const NumericT & min = 0.0, const NumericT & max = 1.0);
+			Vector & clamp (dimension i, const NumericT & min = 0.0, const NumericT & max = 1.0);
 			/// Clamp all components of the vector between given values.
 			/// @sa Number::clamp
 			Vector & clamp (const NumericT & min = 0.0, const NumericT & max = 1.0);
@@ -411,15 +412,7 @@ namespace Euclid
 		OPERATOR(/=)
 		OPERATOR(&=)
 		OPERATOR(|=)
-
-		template <dimension E, typename NumericT, typename OtherNumericT>
-		Vector<E, NumericT> & operator%= (Vector<E, NumericT> & lhs, const Vector<E, OtherNumericT> & n)
-		{
-			for (dimension i = 0; i < E; ++i)
-				lhs[i] = Number<NumericT>::mod(lhs[i], n[i]);
-
-			return lhs;
-		}
+		OPERATOR(%=)
 
 #undef OPERATOR
 
@@ -438,15 +431,7 @@ namespace Euclid
 		OPERATOR(/=)
 		OPERATOR(&=)
 		OPERATOR(|=)
-
-		template <dimension E, typename NumericT, typename OtherNumericT>
-		Vector<E, NumericT> & operator%= (Vector<E, NumericT> & lhs, const OtherNumericT & n)
-		{
-			for (dimension i = 0; i < E; ++i)
-				lhs[i] = Number<NumericT>::mod(lhs[i], n);
-
-			return lhs;
-		}
+		OPERATOR(%=)
 
 #undef OPERATOR
 

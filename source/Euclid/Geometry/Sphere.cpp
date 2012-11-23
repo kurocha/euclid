@@ -8,7 +8,6 @@
 //
 
 #include "Sphere.h"
-#include "../Numerics/Number.h"
 #include "../Numerics/Vector.h"
 
 namespace Euclid {

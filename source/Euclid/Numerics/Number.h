@@ -20,282 +20,160 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		template <typename NumericT>
-		class Number;
+		// Private base implementation of a variety of common numerical operations:
+		namespace {
+			template <typename NumericT>
+			typename std::enable_if<std::is_floating_point<NumericT>::value, NumericT>::type
+			/* NumericT */ _truncate (const NumericT & value, bool up = false) {
+				return up ? std::ceil(value) : std::floor(value);
+			}
+
+			template <typename NumericT>
+			typename std::enable_if<std::is_integral<NumericT>::value, NumericT>::type
+			/* NumericT */ _truncate (const NumericT & value, bool) {
+				return value;
+			}
+
+			template <typename ValueT, typename ModulusT>
+			typename std::enable_if<std::is_floating_point<ValueT>::value || std::is_floating_point<ModulusT>::value, ModulusT>::type
+			/* NumericT */ _modulo (const ValueT & value, const ModulusT & modulus) {
+				return std::fmod(value, modulus);
+			}
+
+			template <typename ValueT, typename ModulusT>
+			typename std::enable_if<std::is_integral<ValueT>::value && std::is_integral<ModulusT>::value, ValueT>::type
+			/* NumericT */ _modulo (const ValueT & value, const ModulusT & modulus) {
+				return value % modulus;
+			}
+
+			template <typename BaseT, typename ExponentT>
+			typename std::enable_if<std::is_floating_point<BaseT>::value || std::is_signed<ExponentT>::value, BaseT>::type
+			/* BaseT */ _raise (const BaseT & base, const ExponentT & exponent) {
+				return std::pow(base, exponent);
+			}
+
+			template <typename BaseT, typename ExponentT>
+			typename std::enable_if<std::is_integral<BaseT>::value && std::is_unsigned<ExponentT>::value, BaseT>::type
+			/* BaseT */ _raise (BaseT base, ExponentT exponent) {
+				BaseT result = 1;
+
+				while (exponent != 0) {
+					if ((exponent & 1) == 1)
+						result *= base;
+					
+					base *= base;
+					exponent >>= 1;
+				}
+				
+				return result;
+			}
+		}
 
 		/** Functionality common to all numeric types.
 		 */
 		template <typename NumericT>
-		class NumberTraits {
-		public:
-			/// Clamp a value between a lower and upper bound.
-			template <typename t>
-			static inline t clamp (const t & v, const t & lower = 0.0, const t & upper = 1.0)
-			{
-				if (v < lower) return lower;
+		struct Number {
+			static_assert(std::is_arithmetic<NumericT>::value, "Number can only work with arithmetic data-types!");
+			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 
-				if (v > upper) return upper;
-
-				return v;
+			template <typename ValueT>
+			static ValueT value_of(const ValueT & value) {
+				return value;
 			}
 
-			/// Clamp a value at a lower bound.
-			template <typename t>
-			static inline t clamp_bottom (const t & v, const t & l = 0.0)
-			{
-				if (v < l) return l;
-
-				return v;
+			template <typename ValueT>
+			static ValueT value_of(const Number<ValueT> & number) {
+				return number.value;
 			}
 
-			/// Clamp a value at an upper bound.
-			template <typename t>
-			static inline t clamp_top (const t & v, const t & u = 1.0)
-			{
-				if (v > u) return u;
+			NumericT value;
 
-				return v;
+			constexpr Number (const NumericT & value_) : value(value_) {
 			}
 
-			/// Return the minimum of two numeric values.
-			static inline RealT min (const NumericT & a, const NumericT & b)
-			{
-				return std::min(a, b);
+			template <typename OtherNumericT>
+			constexpr Number (const OtherNumericT & value_) : value(value_) {
 			}
 
-			/// Return the maximum of two numeric values.
-			static inline RealT max (const NumericT & a, const NumericT & b)
-			{
-				return std::max(a, b);
+			constexpr operator NumericT () {
+				return value;
 			}
 
-			/// Return the reciprocal (1 / n) of a number.
-			static inline NumericT recip (const NumericT & n)
-			{
-				return (NumericT)1.0 / n;
+			constexpr Number clamp (const Number & lower = 0, const Number & upper = 1) const {
+				return value < lower.value ? lower : (value > upper.value ? upper : *this);
 			}
 
-			/// Returns a number in the range 0...m
-			static inline NumericT wrap (const NumericT & n, const NumericT & m)
-			{
-				if (n < 0) {
-					return Number<NumericT>::mod(n, m) + m;
-				} else {
-					return Number<NumericT>::mod(n, m);
-				}
+			constexpr Number absolute() {
+				return value * (value < 0 ? -1 : 1);
+			}
+
+			Number truncate(bool up = false) {
+				return _truncate(value, up);
+			}
+
+			Number modulo(const Number & modulus) {
+				return _modulo(value, (NumericT)modulus);
+			}
+
+			Number wrap(const Number & modulus) {
+				return modulo(modulus) + (value < 0 ? modulus : (Number)0);
+			}
+
+			template <typename ExponentT>
+			Number raise(const ExponentT & exponent) {
+				return _raise(value, value_of(exponent));
+			}
+
+			bool equivalent(const Number & other) {
+				return Numerics::equivalent(value, other.value);
+			}
+
+			Number<RealT> square_root() const {
+				return std::sqrt(value);
+			}
+
+			Number fractional_part() const {
+				return value - _truncate(value);
+			}
+
+			template <typename OtherNumericT>
+			Number operator+ (const OtherNumericT & other) { return value + other; };
+
+			template <typename OtherNumericT>
+			Number operator- (const OtherNumericT & other) { return value - other; };
+
+			template <typename OtherNumericT>
+			Number operator* (const OtherNumericT & other) { return value * other; };
+
+			template <typename OtherNumericT>
+			Number operator/ (const OtherNumericT & other) { return value / other; };
+
+			template <typename OtherNumericT>
+			Number operator%(const OtherNumericT & modulus) { return modulo(modulus); }
+
+			Number max (const Number & other) {
+				return std::max(value, other.value);
+			}
+
+			Number min (const Number & other) {
+				return std::min(value, other.value);
+			}
+
+			template <typename OtherNumericT>
+			Number<OtherNumericT> as() {
+				return value;
 			}
 		};
 
-		/** Generic number class for signed and unsigned integers.
-		 */
 		template <typename NumericT>
-		class Number : public NumberTraits<NumericT>{
-		public:
-			static inline NumericT floor (const NumericT & n)
-			{
-				return n;
-			}
+		inline constexpr Number<NumericT> number(const Number<NumericT> & value) {
+			return value;
+		}
 
-			static inline NumericT ceil (const NumericT & n)
-			{
-				return n;
-			}
-
-			static inline NumericT abs (const NumericT & n)
-			{
-				if (n < (NumericT)0)
-					return -n;
-				else
-					return n;
-			}
-
-			static inline NumericT mod (const NumericT & n, const NumericT & m)
-			{
-				return n % m;
-			}
-
-			static inline bool equivalent(const NumericT & n, const NumericT & m)
-			{
-				return n == m;
-			}
-		};
-
-		/** Specific Number class for single floating point numbers.
-		 */
-		template <>
-		class Number<float>: public NumberTraits<float>{
-		public:
-			typedef float NumericT;
-
-			static inline NumericT floor (const NumericT & n)
-			{
-				return ::floorf(n);
-			}
-
-			static inline NumericT ceil (const NumericT & n)
-			{
-				return ::ceilf(n);
-			}
-
-			static inline NumericT abs (const NumericT & n)
-			{
-				return ::fabsf(n);
-			}
-
-			static inline NumericT cos (const NumericT & n)
-			{
-				return ::cosf(n);
-			}
-
-			static inline NumericT sin (const NumericT & n)
-			{
-				return ::sinf(n);
-			}
-
-			static inline NumericT tan (const NumericT & n)
-			{
-				return ::tanf(n);
-			}
-
-			static inline NumericT acos (const NumericT & n)
-			{
-				return ::acosf(n);
-			}
-
-			static inline NumericT asin (const NumericT & n)
-			{
-				return ::asinf(n);
-			}
-
-			static inline NumericT atan (const NumericT & n)
-			{
-				return ::atanf(n);
-			}
-
-			static inline NumericT pow (const NumericT & n, const NumericT & m)
-			{
-				return ::powf(n, m);
-			}
-
-			static inline NumericT exp (const NumericT & n)
-			{
-				return ::expf(n);
-			}
-
-			static inline NumericT sqrt (const NumericT & n)
-			{
-				return ::sqrtf(n);
-			}
-
-			static inline NumericT mod (const NumericT & n, const NumericT & m)
-			{
-				return ::fmodf(n, m);
-			}
-
-			static inline bool equivalent(const NumericT & n, const NumericT & m)
-			{
-				return Numerics::equivalent(n, m);
-			}
-		};
-
-		/** Specific Number class for double floating point numbers.
-		 */
-		template <>
-		class Number<double>: public NumberTraits<double>{
-		public:
-			typedef double NumericT;
-
-			static inline NumericT floor (const NumericT & n)
-			{
-				return ::floor(n);
-			}
-
-			static inline NumericT ceil (const NumericT & n)
-			{
-				return ::ceil(n);
-			}
-
-			static inline NumericT abs (const NumericT & n)
-			{
-				return ::fabs(n);
-			}
-
-			static inline NumericT cos (const NumericT & n)
-			{
-				return ::cos(n);
-			}
-
-			static inline NumericT sin (const NumericT & n)
-			{
-				return ::sin(n);
-			}
-
-			static inline NumericT tan (const NumericT & n)
-			{
-				return ::tan(n);
-			}
-
-			static inline NumericT acos (const NumericT & n)
-			{
-				return ::acos(n);
-			}
-
-			static inline NumericT asin (const NumericT & n)
-			{
-				return ::asin(n);
-			}
-
-			static inline NumericT atan (const NumericT & n)
-			{
-				return ::atan(n);
-			}
-
-			static inline NumericT pow (const NumericT & n, const NumericT & m)
-			{
-				return ::pow(n, m);
-			}
-
-			static inline NumericT exp (const NumericT & n)
-			{
-				return ::exp(n);
-			}
-
-			static inline NumericT sqrt (const NumericT & n)
-			{
-				return ::sqrt(n);
-			}
-
-			static inline NumericT mod (const NumericT & n, const NumericT & m)
-			{
-				return ::fmod (n, m);
-			}
-
-			static inline bool equivalent(const NumericT & n, const NumericT & m)
-			{
-				return Numerics::equivalent(n, m);
-			}
-		};
-
-		/// Standard set of mathematical functions for RealT.
-		typedef Number<RealT> Math;
-	}
-}
-
-#ifdef ENABLE_TESTING
-namespace Euclid
-{
-	namespace Core
-	{
-		namespace CodeTestAssertions
-		{
-			/// CodeTest helpers for testing floating point numbers.
-			bool equivalent (const float & lhs, const float & rhs);
-
-			/// CodeTest helpers for testing floating point numbers.
-			bool equivalent (const double & lhs, const double & rhs);
+		template <typename NumericT>
+		inline constexpr Number<NumericT> number(const NumericT & value) {
+			return {value};
 		}
 	}
 }
-#endif
-
 #endif

@@ -60,7 +60,7 @@ namespace Euclid
 
 			if (d > sphere.radius())
 				return NO_INTERSECTION;
-			else if (Number<NumericT>::equivalent(d, sphere.radius()))
+			else if (equivalent(d, sphere.radius()))
 				return EDGES_INTERSECT;
 			else
 				return SHAPES_INTERSECT;

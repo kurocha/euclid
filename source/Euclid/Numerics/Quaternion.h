@@ -92,7 +92,7 @@ namespace Euclid
 			Quaternion operator* (const Quaternion & q2) const;
 
 			/// Build a quaternion from an angle-axis rotation.
-			void set_to_angle_axis_rotation (const RealT & angle, const Vec3T & axis);
+			void set_to_angle_axis_rotation (const NumericT & angle, const Vec3T & axis);
 
 			/// Calculate the angle of rotation.
 			NumericT rotation_angle () const;

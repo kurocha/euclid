@@ -13,7 +13,6 @@
 #include "Numerics.h"
 
 #include <algorithm>
-#include "Number.h"
 #include "Vector.h"
 
 // Thanks to the implementation from Python which helped with the implementation
@@ -99,7 +98,7 @@ namespace Euclid {
 			else
 				h = 4.0 + r[1] - r[0];
 
-			h = Number<NumericT>::mod(h / 6.0, 1.0);
+			h = number(h / 6.0).modulo(1.0);
 
 			return {h, s, l};
 		}
@@ -180,7 +179,7 @@ namespace Euclid {
 			else
 				h = 4.0 + r[1] - r[0];
 
-			h = Number<NumericT>::wrap(h / 6.0, 1.0);
+			h = number(h / 6.0).modulo(1.0);
 
 			return {h, s, v};
 		}
@@ -190,7 +189,7 @@ namespace Euclid {
 		{
 			if (color[1] == 0.0) return Vector<3, NumericT>(color[2]);
 
-			unsigned i = Number<NumericT>::floor(color[0] * 6.0);
+			unsigned i = floor(color[0] * 6.0);
 
 			NumericT f = (color[0] * 6.0) - i;
 			NumericT p = color[2] * (1.0 - color[1]);

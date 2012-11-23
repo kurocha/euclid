@@ -26,7 +26,7 @@ namespace Euclid {
 			Vector<D, NumericT> _center;
 			NumericT _radius;
 
-			typedef typename RealType<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
 
 		public:
 			/// Undefined constructor

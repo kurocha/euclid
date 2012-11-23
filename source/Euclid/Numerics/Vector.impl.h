@@ -11,6 +11,8 @@
 #error This header should not be included manually. Include Vector.h instead.
 #else
 
+#include "Number.h"
+
 // memset
 #include <string.h>
 
@@ -228,7 +230,7 @@ namespace Euclid
 		{
 			NumericT r = this->dot(other) / (this->length() * other.length());
 
-			return Number<NumericT>::acos(Number<NumericT>::clamp(r, (NumericT)-1.0, (NumericT)1.0));
+			return std::acos(number(r).clamp(-1, 1));
 		}
 
 		template <dimension E, typename NumericT>
@@ -264,8 +266,10 @@ namespace Euclid
 
 			for (dimension i = E; i > 0; i -= 1) {
 				m /= (*this)[i-1];
-				r[i-1] = Number<NumericT>::floor(k / m);
-				k = Number<NumericT>::mod(k, m);
+
+				r[i-1] = number(k / m).truncate();
+
+				k = number(k).modulo(m);
 			}
 
 			assert(m == 1);
@@ -291,9 +295,9 @@ namespace Euclid
 		}
 
 		template <dimension E, typename NumericT>
-		Vector<E, NumericT> & Vector<E, NumericT>::clamp (const unsigned i, const NumericT & min, const NumericT & max)
+		Vector<E, NumericT> & Vector<E, NumericT>::clamp (dimension i, const NumericT & min, const NumericT & max)
 		{
-			(*this)[i] = Math::clamp((*this)[i], min, max);
+			(*this)[i] = number((*this)[i]).clamp(min, max);
 
 			return *this;
 		}
@@ -302,7 +306,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::clamp (const NumericT & min, const NumericT & max)
 		{
 			for (dimension i = 0; i < E; ++i)
-				(*this)[i] = Number<NumericT>::clamp((*this)[i], min, max);
+				clamp(i, min, max);
 
 			return *this;
 		}
@@ -311,7 +315,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::abs ()
 		{
 			for (dimension i = 0; i < E; ++i) {
-				(*this)[i] = Math::abs((*this)[i]);
+				(*this)[i] = std::abs((*this)[i]);
 			}
 
 			return *this;
@@ -321,7 +325,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::floor ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				(*this)[i] = Number<NumericT>::floor((*this)[i]);
+				(*this)[i] = number((*this)[i]).truncate();
 
 			return *this;
 		}
@@ -330,7 +334,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::ceil ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				(*this)[i] = Number<NumericT>::ceil((*this)[i]);
+				(*this)[i] = number((*this)[i]).truncate(true);
 
 			return *this;
 		}
@@ -339,7 +343,7 @@ namespace Euclid
 		Vector<E, NumericT> & Vector<E, NumericT>::frac ()
 		{
 			for (dimension i = 0; i < E; ++i)
-				(*this)[i] = (*this)[i] - Number<NumericT>::floor((*this)[i]);
+				(*this)[i] = (*this)[i] - number((*this)[i]).truncate();
 
 			return *this;
 		}

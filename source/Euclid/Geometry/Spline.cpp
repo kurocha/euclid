@@ -10,6 +10,7 @@
 
 #include "Spline.h"
 
+#include "Integer.h"
 #include "Triangle.h"
 #include "Line.h"
 
@@ -26,7 +27,7 @@ namespace Euclid {
 		Vector<D> ISpline<D>::tangent_at_time(RealT t) const {
 			// TODO: Need to write a better function !!
 			const RealT f = 0.001;
-			RealT t1 = Math::wrap(t-f, 1.0), t2 = Math::wrap(t+f, 1.0);
+			RealT t1 = number(t-f).wrap(1), t2 = number(t+f).wrap(1);
 
 			assert(t1 >= 0.0 && t1 <= 1.0);
 			assert(t2 >= 0.0 && t2 <= 1.0);
@@ -103,9 +104,10 @@ namespace Euclid {
 
 		template <dimension D>
 		std::vector<RealT> ISpline<D>::times_at_resolution(RealT resolution, unsigned divisions) const {
-			// We must divide at least once per point.
-			int d = (int)Math::ceil(Math::sqrt(this->points().size()) + 1);
-			divisions = (unsigned)Math::max(d, divisions);
+			// We must divide at least once per point, hence the + 1.
+			auto minimum_divisions = (number(this->points().size()).square_root() + 1).truncate(true);
+
+			divisions = number(divisions).max(minimum_divisions);
 
 			return divide_and_append(divisions, resolution);
 		}
@@ -119,14 +121,13 @@ namespace Euclid {
 		template <dimension D>
 		std::size_t ISpline<D>::starting_point(RealT t) const {
 			// The starting point for a given t in [0.0, 1.0]
-			return (unsigned)Math::floor(this->segments() * t);
+			return this->segments() * t;
 		}
 
 		template <dimension D>
 		RealT ISpline<D>::fractional_component(RealT t) const {
 			// The fractional component (ie, in [0.0, 1.0]) of a particular segment.
-			RealT m = this->segments() * t;
-			return m - Math::floor(m);
+			return number(this->segments() * t).fractional_part();
 		}
 
 		template class ISpline<3>;
