@@ -11,6 +11,7 @@
 #define _EUCLID_NUMERICS_NUMBER_H
 
 #include "Numerics.h"
+#include "Angle.h"
 #include "Integer.h"
 #include "Float.h"
 
@@ -20,6 +21,9 @@ namespace Euclid
 {
 	namespace Numerics
 	{
+		template <typename NumericT>
+		class Radians;
+
 		// Private base implementation of a variety of common numerical operations:
 		namespace {
 			template <typename NumericT>
@@ -157,6 +161,18 @@ namespace Euclid
 
 			Number min (const Number & other) {
 				return std::min(value, other.value);
+			}
+
+			Radians<RealT> asin() {
+				return std::asin(value);
+			}
+
+			Radians<RealT> acos() {
+				return std::acos(value);
+			}
+
+			Radians<RealT> atan() {
+				return std::atan(value);
 			}
 
 			template <typename OtherNumericT>

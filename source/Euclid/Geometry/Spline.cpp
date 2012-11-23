@@ -459,7 +459,7 @@ namespace Euclid {
 			Vector<D> t1 (this->tangent(sp));
 			Vector<D> t2 (this->tangent(sp+1));
 
-			return hermite_polynomial(fr, pts[sp], t1, pts[sp+1], t2);
+			return hermite_polynomial_interpolate(fr, pts[sp], t1, pts[sp+1], t2);
 		}
 
 		/// Catmull-Rom tangent function

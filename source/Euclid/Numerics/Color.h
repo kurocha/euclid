@@ -20,18 +20,20 @@
 
 namespace Euclid {
 	namespace Numerics {
-		template <typename AnyT>
-		inline AnyT & max (AnyT & a, AnyT & b, AnyT & c)
-		{
-			return std::max(a, std::max(b, c));
-		}
+		namespace {
+			template <typename AnyT>
+			inline AnyT & max (AnyT & a, AnyT & b, AnyT & c)
+			{
+				return std::max(a, std::max(b, c));
+			}
 
-		template <typename AnyT>
-		inline AnyT & min (AnyT & a, AnyT & b, AnyT & c)
-		{
-			return std::min(a, std::min(b, c));
+			template <typename AnyT>
+			inline AnyT & min (AnyT & a, AnyT & b, AnyT & c)
+			{
+				return std::min(a, std::min(b, c));
+			}
 		}
-
+		
 		/// Conversion functions between RGB and other color systems.
 		/// These functions are duplicated from the fantastic python module colorsys.
 		/// http://en.wikipedia.org/wiki/YIQ
@@ -103,27 +105,29 @@ namespace Euclid {
 			return {h, s, l};
 		}
 
-		template <typename NumericT>
-		inline NumericT _v (const NumericT & m1, const NumericT & m2, NumericT hue)
-		{
-			const NumericT ONE_SIXTH = 1.0/6.0;
-			const NumericT TWO_THIRD = 2.0/3.0;
+		namespace {
+			template <typename NumericT>
+			inline NumericT HSL2RGB_mix (const NumericT & m1, const NumericT & m2, NumericT hue)
+			{
+				const NumericT ONE_SIXTH = 1.0/6.0;
+				const NumericT TWO_THIRD = 2.0/3.0;
 
-			assert(hue >= -1.0 && hue <= 1.0);
-			if (hue < 0.0) hue += 1.0;
+				assert(hue >= -1.0 && hue <= 1.0);
+				if (hue < 0.0) hue += 1.0;
 
-			if (hue < ONE_SIXTH)
-				return m1 + (m2 - m1) * hue * 6.0;
+				if (hue < ONE_SIXTH)
+					return m1 + (m2 - m1) * hue * 6.0;
 
-			if (hue < 0.5)
-				return m2;
+				if (hue < 0.5)
+					return m2;
 
-			if (hue < TWO_THIRD)
-				return m1 + (m2 - m1) * (TWO_THIRD - hue) * 6.0;
+				if (hue < TWO_THIRD)
+					return m1 + (m2 - m1) * (TWO_THIRD - hue) * 6.0;
 
-			return m1;
+				return m1;
+			}
 		}
-
+		
 		template <typename NumericT>
 		Vector<3, NumericT> HSL2RGB (const Vector<3, NumericT> & color)
 		{
@@ -141,9 +145,9 @@ namespace Euclid {
 			NumericT m1 = 2.0 * color[2] - m2;
 
 			return {
-			    _v(m1, m2, color[0]+ONE_THIRD),
-			    _v(m1, m2, color[0]),
-			    _v(m1, m2, color[0]-ONE_THIRD)
+			    HSL2RGB_mix(m1, m2, color[0]+ONE_THIRD),
+			    HSL2RGB_mix(m1, m2, color[0]),
+			    HSL2RGB_mix(m1, m2, color[0]-ONE_THIRD)
 			};
 		}
 
@@ -187,7 +191,7 @@ namespace Euclid {
 		template <typename NumericT>
 		Vector<3, NumericT> HSV2RGB (const Vector<3, NumericT> & color)
 		{
-			if (color[1] == 0.0) return Vector<3, NumericT>(color[2]);
+			if (color[1] == 0.0) return color[2];
 
 			unsigned i = floor(color[0] * 6.0);
 
@@ -206,9 +210,6 @@ namespace Euclid {
 				case 4: return {t, p, v};
 				case 5: return {v, p, q};
 			}
-
-			// Should never get here!
-			return Vector<3, NumericT>(ZERO);
 		}
 	}
 }

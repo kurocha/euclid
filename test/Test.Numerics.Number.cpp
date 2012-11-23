@@ -96,4 +96,12 @@ UnitTest::Suite TestNumericsNumberSuite {
 			examiner->check_equal(number(1296).square_root(), 36);
 		}
 	},
+
+	{"Angles",
+		[](UnitTest::Examiner * examiner) {
+			using namespace Euclid::Numerics;
+
+			examiner->check_equal(R90, R90.sin().asin());
+		}
+	},
 };

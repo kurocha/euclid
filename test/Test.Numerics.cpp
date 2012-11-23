@@ -2,7 +2,7 @@
 #include <UnitTest/UnitTest.h>
 
 #include <Euclid/Numerics/Numerics.h>
-#include <Euclid/Numerics/Angles.h>
+#include <Euclid/Numerics/Angle.h>
 #include <Euclid/Numerics/Integer.h>
 #include <Euclid/Numerics/Float.h>
 #include <Euclid/Numerics/Average.h>
@@ -48,6 +48,8 @@ UnitTest::Suite TestNumericsSuite {
 			examiner->check(equivalent(R180 * 2.0, R360)) << "R360 is correct";
 
 			examiner->check_equal(M_PI_2, R90.value);
+
+			examiner->check_equal(R90.sin(), 1.0);
 		}
 	},
 

@@ -1,15 +1,23 @@
 //
-//  Numerics/Angles.h
+//  Numerics/Angle.h
 //  Euclid
 //
 //  Created by Samuel Williams on 21/11/12.
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
+#ifndef _EUCLID_NUMERICS_ANGLE_H
+#define _EUCLID_NUMERICS_ANGLE_H
+
+#include <Euclid/Numerics/Number.h>
+
 namespace Euclid
 {
 	namespace Numerics
 	{
+		template <typename NumericT>
+		struct Number;
+
 		/// Radians to degrees multiplier
 		const double R2D = (180.0 / M_PI);
 		const double D2R = (M_PI / 180.0);
@@ -54,8 +62,16 @@ namespace Euclid
 				return {value / other.value};
 			}
 
-			FloatT sin() const {
+			Number<FloatT> sin() const {
 				return std::sin(value);
+			}
+
+			Number<FloatT> cos() const {
+				return std::cos(value);
+			}
+
+			Number<FloatT> tan() const {
+				return std::tan(value);
 			}
 		};
 
@@ -97,6 +113,18 @@ namespace Euclid
 			constexpr Degrees operator / (const FloatT & other) {
 				return {value / other.value};
 			}
+
+			Number<FloatT> sin() const {
+				return std::sin(value * R2D);
+			}
+
+			Number<FloatT> cos() const {
+				return std::cos(value * R2D);
+			}
+
+			Number<FloatT> tan() const {
+				return std::tan(value * R2D);
+			}
 		};
 
 		template <typename FloatT>
@@ -122,3 +150,5 @@ namespace Euclid
 		constexpr Radians<> R360 = R180 * 2.0;
 	}
 }
+
+#endif

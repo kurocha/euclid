@@ -45,9 +45,9 @@ namespace Euclid
 			return p*(t*t*t) + q*(t*t) + r * t + s;
 		}
 
-		/// Hermite interpolation polynomial function.
+		/// Hermite polynomial interpolation function.
 		template <typename InterpolateT, typename AnyT>
-		inline AnyT hermite_polynomial (const InterpolateT & t, const AnyT & p0, const AnyT & m0, const AnyT & p1, const AnyT & m1)
+		inline AnyT hermite_polynomial_interpolate (const InterpolateT & t, const AnyT & p0, const AnyT & m0, const AnyT & p1, const AnyT & m1)
 		{
 			InterpolateT t3 = t*t*t, t2 = t*t;
 

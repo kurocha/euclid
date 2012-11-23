@@ -47,12 +47,6 @@ namespace Euclid
 		enum {
 			WIDTH = 0, HEIGHT = 1, DEPTH = 2
 		};
-
-		template <typename TypeT, typename ResultT = TypeT>
-		using enable_if_floating_point = typename std::enable_if<std::is_floating_point<TypeT>::value, ResultT>::type;
-
-		template <typename TypeT, typename ResultT = TypeT>
-		using enable_if_integral = typename std::enable_if<std::is_integral<TypeT>::value, ResultT>::type;
 	}
 }
 
