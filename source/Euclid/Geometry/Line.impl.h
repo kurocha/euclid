@@ -107,7 +107,7 @@ namespace Euclid
 			const VectorT & p1 = _point;
 			VectorT p2 = _point + _direction;
 
-			NumericT d = _direction.length2();
+			NumericT d = _direction.length_squared();
 			NumericT t = 0;
 
 			for (dimension i = 0; i < D; ++i)

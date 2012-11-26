@@ -56,7 +56,7 @@ namespace Euclid {
 			Vec3 tg3 = tg << 0.0;
 			Vec3 orth = {0.0, 0.0, 1.0};
 
-			return tg3.cross(orth).reduce().normalize();
+			return cross_product(tg3, orth).reduce().normalize();
 		}
 
 		template <dimension D>
@@ -127,7 +127,7 @@ namespace Euclid {
 		template <dimension D>
 		RealT ISpline<D>::fractional_component(RealT t) const {
 			// The fractional component (ie, in [0.0, 1.0]) of a particular segment.
-			return number(this->segments() * t).fractional_part();
+			return number(this->segments() * t).fraction();
 		}
 
 		template class ISpline<3>;
@@ -165,8 +165,8 @@ namespace Euclid {
 
 			n1.normalize();
 
-			Vector<D> n2 = t1.cross(n1);
-			return n2.cross(t1).normalize();
+			Vector<D> n2 = cross_product(t1, n1);
+			return cross_product(n2, t1).normalize();
 		}
 
 		template <dimension D>
@@ -263,7 +263,7 @@ namespace Euclid {
 						Vector<D> pt2 = spline->point_at_time(t2);
 
 						Triangle<D> tri (pt1, pt2, pt3);
-						Plane<D> p3 (pt1, tri.normal());
+						Plane<D> p3 (tri);
 						Line<D> line_intersection;
 
 						// There must be an intersection
@@ -479,9 +479,8 @@ namespace Euclid {
 			std::size_t p1 = n, p2 = n-1;
 
 			Vector<D> mu (pts[p1] - pts[p2]);
-			mu.normalize() *= (pts[1] - pts[2]).length();
 
-			return mu;
+			return mu.normalize() * (pts[1] - pts[2]).length();
 		}
 
 		template <dimension D>
@@ -495,9 +494,7 @@ namespace Euclid {
 			Vector<D> mu (pts[p1] - pts[p2]);
 
 			// This weight of 30 is arbitray
-			mu.normalize() *= (pts[1] - pts[2]).length2() / 30.0;
-
-			return mu;
+			return mu.normalize() * (pts[1] - pts[2]).length_squared() / 30.0;
 		}
 
 		/// Simple linear tangent function

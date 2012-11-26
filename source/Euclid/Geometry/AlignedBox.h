@@ -12,6 +12,7 @@
 
 #include "Geometry.h"
 #include "../Numerics/Matrix.h"
+#include "../Numerics/Interpolate.h"
 
 namespace Euclid {
 	namespace Geometry {
@@ -94,6 +95,11 @@ namespace Euclid {
 
 				_min.constrain(_max, t - 1);
 				_max.constrain(c, t + 1);
+
+				for (dimension i = 0; i < D; i += 1) {
+					_min[i] = std::min(_min[i], _max[i]);
+					_max[i] = std::max(_min[i], _max[i]);
+				}
 			}
 
 			// Copy Semantics
@@ -213,13 +219,7 @@ namespace Euclid {
 			}
 
 			/// Return a particular corner of the box, given by an index vector
-			/// The components of d must be either -1 or +1, and this will select the value from either min or max respectively.
-			inline VectorT constrained_corner (const Vector<D, int> & d) const {
-				Vector<D> tmp (_min);
-				tmp.constrain(_max, d);
-				return tmp;
-			}
-
+			/// The components of d must be either false or true, and this will select the value from either min or max respectively.
 			inline VectorT corner (const BoolVectorT & d) const {
 				VectorT result;
 

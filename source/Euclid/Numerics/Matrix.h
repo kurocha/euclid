@@ -13,6 +13,7 @@
 #include "Numerics.h"
 
 #include "Vector.h"
+
 #include <algorithm>
 
 namespace Euclid

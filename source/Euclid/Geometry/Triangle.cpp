@@ -15,6 +15,10 @@
 
 namespace Euclid {
 	namespace Geometry {
+
+		template class Triangle<2, RealT>;
+		template class Triangle<3, RealT>;
+
 // MARK: -
 // MARK: Unit Tests
 

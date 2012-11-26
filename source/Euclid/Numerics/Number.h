@@ -99,7 +99,11 @@ namespace Euclid
 			constexpr Number (const OtherNumericT & value_) : value(value_) {
 			}
 
-			constexpr operator NumericT () {
+			operator NumericT & () {
+				return value;
+			}
+
+			operator const NumericT & () const {
 				return value;
 			}
 
@@ -136,7 +140,7 @@ namespace Euclid
 				return std::sqrt(value);
 			}
 
-			Number fractional_part() const {
+			Number fraction() const {
 				return value - _truncate(value);
 			}
 

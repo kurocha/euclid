@@ -36,8 +36,8 @@ UnitTest::Suite TestNumericsQuaternionSuite {
 
 			examiner->check(r1.equivalent(r2)) << "Represented rotation is same";
 
-			Quat a(R90, Vec3(1, 0, 0).normalized_vector());
-			Quat b(R90, Vec3(0, 1, 0).normalized_vector());
+			Quat a(R90, Vec3(1, 0, 0).normalize());
+			Quat b(R90, Vec3(0, 1, 0).normalize());
 			Quat c = a.rotation_to(b);
 
 			examiner->check(a.vector().equivalent(Vec4(0.707107, 0, 0, 0.707107))) << "Quaternion rotation is correct";
@@ -60,7 +60,7 @@ UnitTest::Suite TestNumericsQuaternionSuite {
 			examiner->check(identity.extract_axis(Y).equivalent(Vec3(0, 1, 0))) << "Y axis is correct";
 			examiner->check(identity.extract_axis(Z).equivalent(Vec3(0, 0, 1))) << "Z axis is correct";
 
-			Quat a(R90, Vec3(1, 0, 0).normalized_vector());
+			Quat a(R90, Vec3(1, 0, 0).normalize());
 
 			examiner->check(a.extract_axis(X).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
 			examiner->check(a.extract_axis(Y).equivalent(Vec3(0, 0, 1))) << "Y axis is correct";
@@ -72,7 +72,7 @@ UnitTest::Suite TestNumericsQuaternionSuite {
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;
 			
-			Quat d(R360 * 0.34, Vec3(0.52, 0.1, -0.9).normalized_vector());
+			Quat d(R360 * 0.34, Vec3(0.52, 0.1, -0.9).normalize());
 			Vec3 va(1, 0, 0), vb(0, 1, 0), vc(0, 0, 1);
 
 			Mat44 t = d.rotating_matrix();

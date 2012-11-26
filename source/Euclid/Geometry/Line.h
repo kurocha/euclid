@@ -213,7 +213,7 @@ namespace Euclid {
 
 			Vector<D> direction () const
 			{
-				return (_end - _start).normalized_vector();
+				return (_end - _start).normalize();
 			}
 		};
 

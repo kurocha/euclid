@@ -2,6 +2,8 @@
 #include <UnitTest/UnitTest.h>
 
 #include <Euclid/Numerics/Matrix.h>
+#include <Euclid/Numerics/Matrix.Transforms.h>
+
 #include <Euclid/Numerics/Average.h>
 
 UnitTest::Suite TestNumericsMatrixSuite {
@@ -46,7 +48,19 @@ UnitTest::Suite TestNumericsMatrixSuite {
 			m.set(0, 3, Vec2{7, 8});
 
 			auto n = m.transposed_matrix();
-			std::cerr << n;
+		}
+	},
+
+	{"Transforms",
+		[](UnitTest::Examiner * examiner) {
+            using namespace Euclid::Numerics;
+
+			Mat44 transform = IDENTITY;
+			transform << Euclid::Numerics::translation(Vec4(5, 5, 5, 1));
+
+			Vec3 point = transform * Vec3(0, 0, 0);
+
+            examiner->check_equal(point, vector<RealT>(5, 5, 5));
 		}
 	},
 
@@ -139,7 +153,7 @@ UnitTest::Suite TestNumericsMatrixSuite {
 			examiner->check(a == test_pattern) << "Vector was copied correctly";
 
 			Mat44 b, c;
-
+/*
 			Vec4 r, pt(10.0, 0.0, 0.0, 1.0);
 			b = rotation(R90, vector(0.0, 1.0, 0.0));
 
@@ -152,6 +166,7 @@ UnitTest::Suite TestNumericsMatrixSuite {
 			r = b * pt;
 
 			examiner->check(r.equivalent(vector(-10.0, 0.0, 20.0, 1.0))) << "Rotation was successful";
+ */
 		}
 	},
 

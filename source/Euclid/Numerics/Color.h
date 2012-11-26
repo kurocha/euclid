@@ -210,6 +210,8 @@ namespace Euclid {
 				case 4: return {t, p, v};
 				case 5: return {v, p, q};
 			}
+
+			return 0;
 		}
 	}
 }

@@ -59,7 +59,7 @@ UnitTest::Suite TestGeometryLinesSuite {
 			using namespace Euclid::Geometry;
 			
 			LineSegment3 a(ZERO, 10);
-			examiner->check(a.offset().length2() == (10 * 10) * 3) << "Line is correct length";
+			examiner->check(a.offset().length_squared() == (10 * 10) * 3) << "Line is correct length";
 
 			LineSegment3 d(ZERO);
 			examiner->check(d.is_degenerate()) << "Line segment is degenerate";

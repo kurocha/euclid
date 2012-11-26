@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <iostream>
+#include <cfloat>
 
 namespace Euclid
 {
@@ -32,29 +33,27 @@ namespace Euclid
 		struct RealTypeTraits<double>{
 			typedef double RealT;
 		};
-		
-		template <typename FloatT>
-		struct FloatAccuracyTraits {
+
+		/// These traits give specific accuracy information around +/- zero. The calculated precision is proportional to the number of integral positions between 0.0 and 0.0+EPSILON (where epsilon is the smallest increment from 10.0^exponent).
+		template <typename FloatT, dimension Exponent>
+		struct EpsilonTraits {};
+
+		template <>
+		struct EpsilonTraits<float, 0> {
+			typedef typename IntegerSizeTraits<sizeof(float)>::UnsignedT UnitT;
+
+			constexpr static double SCALE = 1.0;
+			constexpr static UnitT UNITS = 2;
+			constexpr static float EPSILON = FLT_EPSILON * UNITS;
 		};
 
 		template <>
-		struct FloatAccuracyTraits<float> {
-			typedef float FloatT;
-			
-			typedef IntegerSizeTraits<sizeof(FloatT)> IntegerT;
+		struct EpsilonTraits<double, 0> {
+			typedef typename IntegerSizeTraits<sizeof(double)>::UnsignedT UnitT;
 
-			/// Manually calculated - approximate accuracy of zero point when dealing with trigonometric functions.
-			static const IntegerT::UnsignedT ACCURACY = 897988541;
-		};
-
-		template <>
-		struct FloatAccuracyTraits<double>{
-			typedef double FloatT;
-			
-			typedef IntegerSizeTraits<sizeof(FloatT)> IntegerT;
-
-			/// Manually calculated - approximate accuracy of zero point when dealing with trigonometric functions.
-			static const IntegerT::UnsignedT ACCURACY = 4427486594234968593ULL;
+			constexpr static double SCALE = 1.0;
+			constexpr static UnitT UNITS = 2;
+			constexpr static double EPSILON = DBL_EPSILON * UNITS;
 		};
 
 		template <typename _FloatT>
@@ -62,7 +61,6 @@ namespace Euclid
 			typedef _FloatT FloatT;
 
 			typedef typename IntegerSizeTraits<sizeof(FloatT)>::SignedT IntegralT;
-			static constexpr uint64_t ACCURACY = FloatAccuracyTraits<FloatT>::ACCURACY;
 
 			union Conversion
 			{
@@ -93,27 +91,6 @@ namespace Euclid
 				return conversion.float_value;
 			}
 
-			static bool is_zero (const IntegralT & value, const IntegralT & threshold) {
-				if (value < 0)
-					return (value + threshold) > 0;
-				else
-					return (value - threshold) < 0;
-			}
-
-			static bool is_zero (const FloatT & value, const IntegralT & threshold) {
-				IntegralT p = convert_to_integer(value);
-
-				return is_zero (p, threshold);
-			}
-
-			static bool is_zero (const FloatT & value) {
-				return is_zero(value, ACCURACY);
-			}
-
-			static bool is_zero (const IntegralT & value) {
-				return is_zero(value, ACCURACY);
-			}
-
 			static IntegralT integral_difference(const FloatT & a, const FloatT & b) {
 				// Make lexicographically ordered as a twos-complement int
 				IntegralT i = convert_to_integer(a), j = convert_to_integer(b);
@@ -125,18 +102,21 @@ namespace Euclid
 			}
 
 			// Large MAX_DEVIATIONS may allow NAN to compare equivalent to large floating point numbers and other strange edge cases.
-			template <std::size_t MAX_DEVIATION = ACCURACY>
 			static bool equivalent (const FloatT & a, const FloatT & b)
 			{
 				if (std::isnan(a) || std::isnan(b))
 					return false;
-				
-				auto deviation = integral_difference(a, b);
-				
-				if (deviation <= MAX_DEVIATION)
-					return true;
 
-				return false;
+				using E = EpsilonTraits<FloatT, 0>;
+
+				if (std::fabs(a) < E::SCALE || std::fabs(b) < E::SCALE) {
+					auto epsilon = EpsilonTraits<FloatT, 0>::EPSILON;
+					auto difference = std::fabs(a - b);
+					
+					return difference <= epsilon;
+				} else {
+					return integral_difference(a, b) <= E::UNITS;
+				}
 			}
 		};
 
@@ -147,15 +127,6 @@ namespace Euclid
 
 		inline bool equivalent (const double & a, const double & b) {
 			return FloatEquivalenceTraits<double>::equivalent(a, b);
-		}
-
-		/// Proportionally close to zero.
-		inline bool is_zero (const float & value) {
-			return FloatEquivalenceTraits<float>::is_zero(value);
-		}
-
-		inline bool is_zero (const double & value) {
-			return FloatEquivalenceTraits<double>::is_zero(value);
 		}
 	}
 }

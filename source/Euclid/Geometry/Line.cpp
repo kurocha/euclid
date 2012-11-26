@@ -64,7 +64,7 @@ namespace Euclid {
 			testing("Constructors");
 
 			LineSegment3 a(Vec3(ZERO), Vec3(IDENTITY, 10));
-			check(a.offset().length2() == (10 * 10) * 3) << "Line is correct length";
+			check(a.offset().length_squared() == (10 * 10) * 3) << "Line is correct length";
 
 			LineSegment3 d(ZERO);
 			check(d.is_degenerate()) << "Line segment is degenerate";

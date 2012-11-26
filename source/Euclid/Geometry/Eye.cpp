@@ -7,6 +7,7 @@
 //
 
 #include "Eye.h"
+#include "Vector.Geometry.h"
 
 namespace Euclid
 {
@@ -59,8 +60,8 @@ namespace Euclid
 		template <typename NumericT>
 		Matrix<4, 4, NumericT> Eye<NumericT>::look_at(const Vector<3, NumericT> & origin, const Vector<3, NumericT> & direction, const Vector<3, NumericT> & up)
 		{
-			auto s = direction.cross(up);
-			auto u = s.cross(direction);
+			auto s = cross_product(direction, up);
+			auto u = cross_product(s, direction);
 
 			Matrix<4, 4, NumericT> m = ZERO;
 			m.set(0, 0, s, 4);

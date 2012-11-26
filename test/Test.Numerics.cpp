@@ -8,6 +8,20 @@
 #include <Euclid/Numerics/Average.h>
 #include <Euclid/Numerics/Interpolate.h>
 
+#include <iomanip>
+
+template <typename FloatT>
+void calculate_accuracy() {
+	using namespace Euclid::Numerics;
+
+	using F = FloatEquivalenceTraits<FloatT>;
+
+	auto one = F::convert_to_integer(FloatT(0.0));
+	auto one_plus_epsilon = F::convert_to_integer(FloatT(0.0) + EpsilonTraits<FloatT, 0>::EPSILON);
+
+	std::cout << "Accuracy of float(" << sizeof(FloatT) << ") = " << (one_plus_epsilon - one) << std::endl;
+}
+
 UnitTest::Suite TestNumericsSuite {
 	"Test Numerics",
 
@@ -16,8 +30,8 @@ UnitTest::Suite TestNumericsSuite {
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;
 
-			std::cout << "Accuracy (float): " << FloatEquivalenceTraits<float>::convert_to_integer(0.000001) << std::endl;
-			std::cout << "Accuracy (double): " << FloatEquivalenceTraits<double>::convert_to_integer(0.00000000000000001) << std::endl;
+			calculate_accuracy<float>();
+			calculate_accuracy<double>();
 
 			// Floating point precision is about 7 places.
 			examiner->check(equivalent<float>(0.1, 0.1000000001)) << "Float values are equal";
@@ -73,7 +87,7 @@ UnitTest::Suite TestNumericsSuite {
 			examiner->check_equal(FloatEquivalenceTraits<double>::convert_to_integer(0.0), 0);
 			examiner->check_equal(FloatEquivalenceTraits<double>::convert_to_integer(-0.0), 0);
 
-			examiner->check(FloatEquivalenceTraits<float>::is_zero(-4.37114e-08f));
+			examiner->check(FloatEquivalenceTraits<float>::equivalent(0.0f, -4.37114e-08f));
 
 			typedef FloatEquivalenceTraits<float> F;
 
@@ -84,7 +98,7 @@ UnitTest::Suite TestNumericsSuite {
 			examiner->check_equal(1.5f, float_value);
 
 			// cos(R90) should normally be considered zero:
-			examiner->check(is_zero(std::cos(R90))) << "cos(R90) is zero";
+			examiner->check(R90.cos().equivalent(0)) << "cos(R90) is zero";
 		}
 	},
 

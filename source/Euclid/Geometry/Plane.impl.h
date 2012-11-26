@@ -28,10 +28,10 @@ namespace Euclid
 			if (other.normal() == _normal)
 				return false;
 
-			VectorT u = _normal.cross(other._normal).normalize();
+			VectorT u = cross_product(_normal, other._normal).normalize();
 
 			line.set_direction(u);
-			line.set_point(-((_normal*other._distance) - (other._normal*_distance)).cross(u) / u.length2());
+			line.set_point(-cross_product((_normal*other._distance) - (other._normal*_distance), u) / u.length_squared());
 
 			return true;
 		}

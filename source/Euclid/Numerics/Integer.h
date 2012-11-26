@@ -46,17 +46,17 @@ namespace Euclid
 
 		/// This helper provides integer data-types which are guaranteed to be printed as numbers using `std::ostream`.
 		template <typename AnyT>
-		struct NumericType {
+		struct NumericOutputTraits {
 			typedef AnyT NumericT;
 		};
 
 		template <>
-		struct NumericType<unsigned char>{
+		struct NumericOutputTraits<unsigned char>{
 			typedef std::uint16_t NumericT;
 		};
 
 		template <>
-		struct NumericType<char>{
+		struct NumericOutputTraits<char>{
 			typedef std::int16_t NumericT;
 		};
 
@@ -90,12 +90,6 @@ namespace Euclid
 		template <typename IntegralT>
 		inline bool equivalent (const IntegralT & a, const IntegralT & b) {
 			return a == b;
-		}
-
-		/// Proportionally close to zero.
-		template <typename IntegralT>
-		inline bool is_zero (const IntegralT & value) {
-			return value == 0;
 		}
 	}
 }

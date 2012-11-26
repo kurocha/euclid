@@ -11,27 +11,36 @@
 #define _EUCLID_GEOMETRY_TRIANGLE_H
 
 #include "Geometry.h"
+#include "Vector.Geometry.h"
+#include "Plane.h"
 
 namespace Euclid {
 	namespace Geometry {
 		template <dimension D, typename NumericT>
-		class Triangle : public Shape<D, 3, NumericT>{
+		class Triangle : public Shape<D, 3, NumericT> {
 		public:
-			Triangle (const Vector<D, NumericT> & p1, const Vector<D, NumericT> & p2, const Vector<D, NumericT> & p3);
-
-			Vector<D, NumericT> normal () const;
-
-			/// @todo Improve method of intersection test as per URI in cpp.
-			IntersectionResult intersects_with (const Line<3, NumericT> & line, Vector<D, NumericT> & at) const;
+			template <typename... ArgumentsT>
+			Triangle(ArgumentsT... arguments) : Shape<D, 3, NumericT>(arguments...) {}
 
 			AlignedBox<D, NumericT> bounding_box ();
 		};
 
-		typedef Triangle<3, RealT> Triangle3;
-		typedef Triangle<2, RealT> Triangle2;
+		template <dimension D, typename NumericT>
+		AlignedBox<D, NumericT> Triangle<D, NumericT>::bounding_box ()
+		{
+			AlignedBox<D, NumericT> box(this->_points[0], this->_points[1]);
+
+			box.union_with_point(this->_points[2]);
+			
+			return box;
+		}
+
+		typedef Triangle<2, RealT> Triangle3;
+		typedef Triangle<3, RealT> Triangle2;
+
+		extern template class Triangle<2, RealT>;
+		extern template class Triangle<3, RealT>;
 	}
 }
-
-#include "Triangle.impl.h"
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <Euclid/Numerics/Vector.h>
 #include <Euclid/Numerics/Vector.Distribution.h>
+#include <Euclid/Numerics/Vector.Geometry.h>
 
 #include <set>
 #include <tuple>
@@ -158,9 +159,9 @@ UnitTest::Suite TestNumericsVectorSuite {
 			// Advanced Arithemtic
 			examiner->check(v2.sum() == 3) << "sum";
 			examiner->check(v4.product() == 4) << "product";
-			examiner->check(vector(2.5, 5.5).floor() == vector(2.0, 5.0)) << "floor";
-			examiner->check(vector(2.5, 5.5).ceil() == vector(3.0, 6.0)) << "ceil";
-			examiner->check(vector(2.5, 5.25).frac() == vector(0.5, 0.25)) << "frac";
+			examiner->check(vector(2.5, 5.5).truncate() == vector(2.0, 5.0)) << "floor";
+			examiner->check(vector(2.5, 5.5).truncate(true) == vector(3.0, 6.0)) << "ceil";
+			examiner->check(vector(2.5, 5.25).fraction() == vector(0.5, 0.25)) << "frac";
 		}
 	},
 
@@ -194,11 +195,11 @@ UnitTest::Suite TestNumericsVectorSuite {
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;
 			
-			examiner->check(vector(0.0, 0.0, 2.5).normalize() == vector(0.0, 0.0, 1.0)) << "Normalized correctly";
-			examiner->check(vector(0.0, 0.0, 2.5).normalize(2) == vector(0.0, 0.0, 2.0)) << "Normalized correctly";
+			examiner->check_equal(vector(0.0, 0.0, 2.5).normalize(), vector(0.0, 0.0, 1.0));
+			examiner->check_equal(vector(0.0, 0.0, 2.5).normalize(2), vector(0.0, 0.0, 2.0));
 		}
 	},
-
+/*
 	{"Packing",
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;
@@ -225,7 +226,7 @@ UnitTest::Suite TestNumericsVectorSuite {
 			examiner->check(r1 == 5.5) << "Type conversion successful";
 		}
 	},
-	
+*/	
 	{"Distribution",
 		[](UnitTest::Examiner * examiner) {
 			using namespace Euclid::Numerics;

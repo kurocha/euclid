@@ -76,7 +76,7 @@ namespace Euclid
 		template <typename _NumericT>
 		Quaternion<_NumericT>::Quaternion (const Vec3T & from, const Vec3T & to, _NumericT factor)
 		{
-			Vec3T axis = from.cross(to).normalize();
+			Vec3T axis = cross_product(from, to).normalize();
 			NumericT angle = from.angle_between(to) * factor;
 
 			set_to_angle_axis_rotation(angle, axis);
@@ -84,13 +84,7 @@ namespace Euclid
 
 		// Rotation from A to B
 		template <typename _NumericT>
-		Quaternion<_NumericT>::Quaternion (const Vec3T & from, const Vec3T & to)
-		{
-			Vec3T axis = from.cross(to).normalize();
-			NumericT angle = from.angle_between(to);
-
-			set_to_angle_axis_rotation(angle, axis);
-		}
+		Quaternion<_NumericT>::Quaternion (const Vec3T & from, const Vec3T & to) : Quaternion(from, to, 1.0) {}
 
 		template <typename _NumericT>
 		Quaternion<_NumericT> Quaternion<_NumericT>::from_matrix (const Mat44 & m) {
@@ -102,7 +96,7 @@ namespace Euclid
 			e[Z] = (m[1] - m[4]) / (4 * w);
 			e[W] = w;
 
-			return Quaternion(e.normalized_vector(1));
+			return Quaternion(e.normalize());
 		}
 
 		template <typename _NumericT>
@@ -138,8 +132,8 @@ namespace Euclid
 		{
 			Vec3T qvec = _vector.reduce();
 
-			Vec3T uv = qvec.cross(v);
-			Vec3T uuv = qvec.cross(uv);
+			Vec3T uv = cross_product(qvec, v);
+			Vec3T uuv = cross_product(qvec, uv);
 
 			uv *= _vector[W] * 2;
 			uuv *= 2;
@@ -202,7 +196,7 @@ namespace Euclid
 		{
 			Matrix<4, 4, NumericT> matrix = ZERO;
 
-			assert(Numerics::equivalent(_vector.length2(), (NumericT)1.0) && "Quaternion.rotating_matrix magnitude must be 1");
+			assert(Numerics::equivalent(_vector.length_squared(), (NumericT)1.0) && "Quaternion.rotating_matrix magnitude must be 1");
 
 			NumericT x = _vector[X], y = _vector[Y], z = _vector[Z], w = _vector[W];
 

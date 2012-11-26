@@ -39,22 +39,20 @@ namespace Euclid {
 		}
 
 		RealT PerlinNoise::sample(const Vec3 &v) const {
-			Vec3 t (v);
-			Vec3 o (v);
+			Vec3 t = v.fraction();
+			Vector<3, std::size_t> o = v.truncate();
 
 			RealT d[8];
-			o.floor();
 
 			/* Get noise at 8 lattice points */
 			for (std::size_t lz = 0; lz < 2; ++lz) {
-				d[0 + lz*4] = lattice_noise((std::size_t)o[X], (std::size_t)o[Y], (std::size_t)o[Z] + lz);
-				d[1 + lz*4] = lattice_noise((std::size_t)o[X], (std::size_t)o[Y] + 1, (std::size_t)o[Z] + lz);
-				d[2 + lz*4] = lattice_noise((std::size_t)o[X] + 1, (std::size_t)o[Y] + 1, (std::size_t)o[Z] + lz);
-				d[3 + lz*4] = lattice_noise((std::size_t)o[X] + 1, (std::size_t)o[Y], (std::size_t)o[Z] + lz);
+				d[0 + lz*4] = lattice_noise(o[X], o[Y], o[Z] + lz);
+				d[1 + lz*4] = lattice_noise(o[X], o[Y] + 1, o[Z] + lz);
+				d[2 + lz*4] = lattice_noise(o[X] + 1, o[Y] + 1, o[Z] + lz);
+				d[3 + lz*4] = lattice_noise(o[X] + 1, o[Y], o[Z] + lz);
 			}
 
 			RealT x0, x1, x2, x3, y0, y1;
-			t.frac();
 
 			x0 = linear_interpolate(t[X], d[0], d[3]);
 			x1 = linear_interpolate(t[X], d[1], d[2]);

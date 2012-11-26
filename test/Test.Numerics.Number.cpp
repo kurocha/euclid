@@ -78,7 +78,7 @@ UnitTest::Suite TestNumericsNumberSuite {
 			examiner->check_equal(number(-55).wrap(10), 5);
 			examiner->check_equal(number(55).wrap(10), 5);
 
-			examiner->check_equal(number(1.5).fractional_part(), 0.5);
+			examiner->check_equal(number(1.5).fraction(), 0.5);
 		}
 	},
 

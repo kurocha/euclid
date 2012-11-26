@@ -12,6 +12,7 @@
 
 #include "Geometry.h"
 #include "Line.h"
+#include "Triangle.h"
 
 namespace Euclid {
 	namespace Geometry {
@@ -29,24 +30,16 @@ namespace Euclid {
 				_distance = (-normal).dot(point);
 			}
 		public:
-			Plane ()
-			{
-			}
+			Plane () {}
+
+			Plane (const NumericT & distance, const VectorT & normal) : _distance(distance), _normal(normal) {}
+
+			Plane (const VectorT & point, const VectorT & normal) : _distance((-normal).dot(point)), _normal(normal) {}
 
 			/// Point is a point on the plain, and direction is the normal
-			Plane (const Line<D, NumericT> & line)
-			{
-				convert_from_point_normal_form(line.point(), line.direction());
-			}
+			Plane (const Line<D, NumericT> & line) : Plane(line.point(), line.direction()) {}
 
-			Plane (const VectorT & point, const VectorT & normal)
-			{
-				convert_from_point_normal_form(point, normal);
-			}
-
-			Plane (const NumericT & d, const VectorT & n) : _distance(d), _normal(n)
-			{
-			}
+			Plane (const Triangle<D, NumericT> & triangle) : Plane(triangle[0], surface_normal(triangle)) {}
 
 			const RealT & distance() const { return _distance; }
 			const VectorT & normal() const { return _normal; }
@@ -79,6 +72,11 @@ namespace Euclid {
 				return (_normal.dot(at) + _distance) /* / _normal.length()*/;
 			}
 		};
+
+		template <dimension D, typename NumericT>
+		Vector<D, NumericT> surface_normal (const Plane<D, NumericT> & plane) {
+			return plane.normal();
+		}
 
 		template <dimension D, typename NumericT>
 		std::ostream &operator<< (std::ostream &out, const Plane<D, NumericT> & p);

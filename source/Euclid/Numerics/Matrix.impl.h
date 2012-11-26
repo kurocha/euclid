@@ -14,6 +14,7 @@
 #include <iomanip>
 
 #include "Angle.h"
+#include "Vector.Geometry.h"
 
 #include "Matrix.NEON.h"
 #include "Matrix.SSE.h"
@@ -233,7 +234,7 @@ namespace Euclid
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (is_zero(angle)) return result;
+			if (number(angle).equivalent(0)) return result;
 
 			NumericT s = std::sin(angle);
 			NumericT c = std::cos(angle);
@@ -261,7 +262,7 @@ namespace Euclid
 		{
 			Matrix<N, N, NumericT> t, rotation = Matrix<N, N, NumericT>::rotating_matrix(angle, normal);
 
-			bool at_origin = pt.is_zero();
+			bool at_origin = pt.equivalent(0);
 
 			if (angle != 0) {
 				if (!at_origin) {
@@ -281,12 +282,12 @@ namespace Euclid
 		{
 			NumericT angle = to.angle_between(from);
 
-			if (is_zero(angle)) {
+			if (number(angle).equivalent(0)) {
 				return IDENTITY;
 			} else if (std::abs(angle) == R180) {
-				return Matrix<N, N, NumericT>::rotating_matrix(angle, from.cross(normal).normalize());
+				return Matrix<N, N, NumericT>::rotating_matrix(angle, cross_product(from, normal).normalize());
 			} else {
-				return Matrix<N, N, NumericT>::rotating_matrix(angle, from.cross(to).normalize());
+				return Matrix<N, N, NumericT>::rotating_matrix(angle, cross_product(from, to).normalize());
 			}
 		}
 
@@ -300,7 +301,7 @@ namespace Euclid
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (Numerics::is_zero(radians)) return result;
+			if (number(radians).equivalent(0)) return result;
 
 			result.at(1, 1) = ca;
 			result.at(1, 2) = -sa;
@@ -320,7 +321,7 @@ namespace Euclid
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (Numerics::is_zero(radians)) return result;
+			if (number(radians).equivalent(0)) return result;
 
 			result.at(0, 0) = ca;
 			result.at(2, 2) = ca;
@@ -341,7 +342,7 @@ namespace Euclid
 
 			Matrix<N, N, NumericT> result(IDENTITY);
 
-			if (Numerics::is_zero(radians)) return result;
+			if (number(radians).equivalent(0)) return result;
 
 			result.at(0, 0) = ca;
 			result.at(1, 1) = ca;

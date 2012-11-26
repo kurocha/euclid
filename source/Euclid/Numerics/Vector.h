@@ -11,8 +11,8 @@
 #define _EUCLID_NUMERICS_VECTOR_H
 
 #include "Numerics.h"
-#include "Integer.h"
-#include "Float.h"
+#include "Number.h"
+#include "Interpolate.h"
 
 #include <type_traits>
 #include <array>
@@ -21,118 +21,27 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		template <dimension E, typename NumericT>
-		class Vector;
-
-// MARK: -
-// MARK: Vector Math
-
-		/** Vector conversion traits. Default specialization.
-		 */
-		template <dimension E, typename NumericT>
-		class VectorConversionTraits {
-		};
-
-		template <typename NumericT>
-		class VectorConversionTraits<1, NumericT>{
-		public:
-			operator NumericT () const;
-		};
-
-		/** Vector traits for specific template parameters. Default specialization.
-		 */
-		template <dimension E, typename NumericT>
-		class VectorTraits {
-		};
-
-		template <typename NumericT>
-		class VectorTraits<2, NumericT>{
-		private:
-			typedef Vector<2, NumericT> VectorT;
-
-		public:
-			/// Returns an orthogonal 2D vector.
-			Vector<2, NumericT> normal () const;
-
-			NumericT aspect_ratio () const;
-			Vector<2, NumericT> shrink_to_fit_aspect_ratio(NumericT n) const;
-			Vector<2, NumericT> shrink_to_fit_aspect_ratio(const Vector<2, NumericT> & other) const;
-
-			Vector<2, NumericT> expand_to_fit_aspect_ratio(NumericT n) const;
-			Vector<2, NumericT> expand_to_fit_aspect_ratio(const Vector<2, NumericT> & other) const;
-		};
-
-		/// Calculates the surface normal of a triangle given by three points.
-		template <typename NumericT>
-		Vector<3, NumericT> surface_normal (const Vector<3, NumericT> & a, const Vector<3, NumericT> & b, const Vector<3, NumericT> & c);
-
-		/** 3-space Vector traits specialization.
-
-		 3-space vectors nave a number of special traits. This allows the calculation of cross products and angles.
-		 */
-		template <typename NumericT>
-		class VectorTraits<3, NumericT>{
-		private:
-			typedef Vector<3, NumericT> VectorT;
-
-		public:
-			/// Calculate the cross product of this vector with another.
-			Vector<3, NumericT> cross (const Vector<3, NumericT> & other) const;
-
-			/// Assuming you have two unit vectors, you can compute the surface normal using this method.
-			Vector<3, NumericT> normal (const Vector<3, NumericT> & other) const;
-
-			/// Given three points, you can calculate the surface normal.
-			/// @sa surface_normal
-			Vector<3, NumericT> normal (const Vector<3, NumericT> & a, const Vector<3, NumericT> & b) const;
-		};
-
-		/// 4-space cross product.
-		template <typename NumericT>
-		Vector<4, NumericT> cross_product (const Vector<4, NumericT> & u, const Vector<4, NumericT> & v,
-		                                   const Vector<4, NumericT> & w);
-
-		/** 4-space vector traits specialization.
-
-		 4-space vectors have a number of special traits. This allows the calculation of the 4-space cross product.
-
-		 @sa cross_product
-		 */
-		template <typename NumericT>
-		class VectorTraits<4, NumericT>{
-		public:
-			/// Calculate the 4-space cross product.
-			Vector<4, NumericT> cross (const Vector<4, NumericT> & v, const Vector<4, NumericT> & w);
-		};
-
 // MARK: -
 // MARK: Vector
 
 		/** A fixed-size numeric vector.
 
-		 This class provides a flexible interface to an n-component vector of the specified type. There are numerous constructors and methods to make working
-		 with vectors easy.
+		 This class provides a flexible interface to an n-component vector of the specified type. There are numerous constructors and methods to make working with vectors easy.
 
-		 There are two kinds of comparisons that Vector supports: Geometric comparisons and numeric comparisons. It is important to understand the difference
-		 when using the two.
+		 There are two kinds of comparisons that Vector supports: Geometric comparisons and numeric comparisons. It is important to understand the difference when using the two.
 
-		 Geometric comparisons use the functions less_than(), less_than_or_equal(), greater_than(), greater_than_or_equal() to compare the geometric differences between
-		 two vectors.
+		 Geometric comparisons use the functions less_than(), less_than_or_equal(), greater_than(), greater_than_or_equal() to compare the geometric differences between two vectors.
 
 		 @image html "Vector Comparisons.png"
 
 		 Given a 2-space point <tt>pt</tt> at the origin, the diagram above shows when a relative point would return true with the given function.
 
-		 Numeric comparisons use the functions operator<(), operator<=(), operator>(), operator>=() to compare the numeric position of two vectors. This
-		 operation is actually very simple when you consider a vector in this case to be just a compond number. For example, the coordinate <tt><3, 5></tt> can
-		 be though of as the number 35. The numeric comparisons essentially just compare vectors in this way, for example <tt><3, 5></tt> is less than
-		 <tt><4, 2></tt> because <tt>35 < 42</tt>. However, this comparison also works in the general sense: <tt><55, 29></tt> is bigger than <tt><4, 50></tt>.
+		 Numeric comparisons use the functions operator<(), operator<=(), operator>(), operator>=() to compare the numeric position of two vectors. This operation is actually very simple when you consider a vector in this case to be just a compond number. For example, the coordinate <tt><3, 5></tt> can be though of as the number 35. The numeric comparisons essentially just compare vectors in this way, for example <tt><3, 5></tt> is less than <tt><4, 2></tt> because <tt>35 < 42</tt>. However, this comparison also works in the general sense: <tt><55, 29></tt> is bigger than <tt><4, 50></tt>.
 
-		 The purpose of this comparison is ordering. It is possible to order a sequence of points in size. Thus, it is possible to store points in containers
-		 that rely on strict ordering behaviour such as <tt>std::set</tt> and <tt>std::map</tt>.
+		 The purpose of this comparison is ordering. It is possible to order a sequence of points in size. Thus, it is possible to store points in containers that rely on strict ordering behaviour such as <tt>std::set</tt> and <tt>std::map</tt>.
 		 */
 		template <dimension E, typename NumericT = RealT>
-		class Vector : public std::array<NumericT, E>, public VectorTraits<E, NumericT>, public VectorConversionTraits<E, NumericT> {
+		class Vector : public std::array<NumericT, E> {
 			static_assert(std::is_arithmetic<NumericT>::value, "Vector only supports numeric data-types!");
 
 		public:
@@ -174,14 +83,6 @@ namespace Euclid
 				std::copy(other, other+count, this->begin() + offset);
 			}
 
-			/// Check if the value of this instance is zero.
-			bool is_zero () const {
-				for (auto item : *this)
-					if (!Numerics::is_zero(item)) return false;
-
-				return true;
-			}
-
 			/// Check for equivalence, which is typically relaxed for floating point numbers:
 			bool equivalent(const Vector<E, NumericT> & other) const {
 				for (dimension i = 0; i < E; ++i) {
@@ -194,49 +95,102 @@ namespace Euclid
 
 			/// Geometric comparison.
 			/// @returns true if all components are numerically lesser than the others.
-			template <typename OtherT>
-			bool less_than (const OtherT & other) const;
+			bool less_than (const Vector & other) const
+			{
+				for (dimension i = 0; i < E; ++i)
+					if ((*this)[i] >= other[i])
+						return false;
+
+				return true;
+			}
 
 			/// Geometric comparison.
 			/// @returns true if all components are numerically greater than the others.
-			template <typename OtherT>
-			bool greater_than (const OtherT & other) const;
+			bool greater_than (const Vector & other) const
+			{
+				for (dimension i = 0; i < E; ++i)
+					if ((*this)[i] <= other[i])
+						return false;
+
+				return true;
+			}
 
 			/// Geometric comparison.
 			/// @returns true if all components are numerically lesser than or equal to the others.
-			template <typename OtherT>
-			bool less_than_or_equal (const OtherT & other) const;
+			bool less_than_or_equal (const Vector & other) const
+			{
+				for (dimension i = 0; i < E; ++i)
+					if ((*this)[i] > other[i])
+						return false;
 
+				return true;
+			}
+			
 			/// Geometric comparison.
 			/// @returns true if all components are numerically greater than or equal to the others.
-			template <typename OtherT>
-			bool greater_than_or_equal (const OtherT & other) const;
+			bool greater_than_or_equal (const Vector & other) const
+			{
+				for (dimension i = 0; i < E; ++i)
+					if ((*this)[i] < other[i])
+						return false;
+
+				return true;
+			}
+
+			/// Calculate the dot product of two vectors.
+			Number<NumericT> dot (const Vector & other) const
+			{
+				NumericT result = 0;
+
+				for (dimension i = 0; i < E; ++i) {
+					result += (*this)[i] * other[i];
+				}
+
+				return result;
+			}
 
 			/// Return the length of the vector squared.
 			/// This method avoids calculating the square root, therefore is faster when you only need to compare the relative lengths of vectors.
-			NumericT length2 () const
+			Number<NumericT> length_squared () const
 			{
 				return this->dot(*this);
 			}
 
 			/// Return the length of the vector.
-			RealT length () const
+			Number<RealT> length () const
 			{
-				return std::sqrt((RealT)this->length2());
+				return this->length_squared().square_root();
 			}
 
-			/// Calculate the dot product of two vectors.
-			template <typename OtherT>
-			NumericT dot (const OtherT & other) const;
-
 			/// Calculates the angle between this vector and another.
-			template <typename OtherT>
-			NumericT angle_between (const OtherT & other) const;
+			Number<NumericT> angle_between (const Vector & other) const
+			{
+				NumericT r = this->dot(other) / (this->length() * other.length());
+
+				return number(r).clamp(-1, 1).acos();
+			}
 
 			/// Calculate the sum of all components of the vector.
-			NumericT sum () const;
+			Number<NumericT> sum () const
+			{
+				NumericT result = 0;
+
+				for (dimension i = 0; i < E; ++i)
+					result += (*this)[i];
+
+				return result;
+			}
+
 			/// Calculate the product of all components of the vector.
-			NumericT product () const;
+			Number<NumericT> product () const
+			{
+				NumericT result = 1;
+				
+				for (dimension i = 0; i < E; ++i)
+					result *= (*this)[i];
+				
+				return result;
+			}
 
 			/// Reflect a vector around a given normal.
 			/// Be aware that the vector returned still points in the same direction. You generally want to reverse this if you are bouncing a ball against a
@@ -247,67 +201,153 @@ namespace Euclid
 			}
 
 			/// Distribute an index into a given space.
-			/// For example, when considering a size vector <tt><10, 15></tt>, we have defined a space which is 10 units wide and 15 units high. Therefore, an
-			/// index in the range 0 to 9 will be in the first row, and 10 to 19 will be in the second row.
+			/// For example, when considering a size vector <tt><10, 15></tt>, we have defined a space which is 10 units wide and 15 units high. Therefore, an index in the range 0 to 9 will be in the first row, and 10 to 19 will be in the second row.
 			/// @sa index
-			Vector distribute (NumericT index) const;
+			Vector distribute (NumericT k) const
+			{
+				Vector r(ZERO);
+				
+				NumericT m = this->product();
+
+				assert(m);
+
+				for (dimension i = E; i > 0; i -= 1) {
+					m /= (*this)[i-1];
+
+					r[i-1] = number(k / m).truncate();
+
+					k = number(k).modulo(m);
+				}
+
+				assert(m == 1);
+
+				return r;
+			}
 
 			/// Given a size vector (this) and a coordinate, return an index.
 			/// @sa distribute
-			NumericT index (const Vector & coord) const;
+			NumericT index (const Vector & coord) const
+			{
+				NumericT idx = 0;
+				NumericT m = 1;
 
-			/// Clamp a specific component of the vector between given values.
-			/// @sa Number::clamp
-			Vector & clamp (dimension i, const NumericT & min = 0.0, const NumericT & max = 1.0);
+				//		x(1) + y(sx) + z(sx*sy)
+				for (dimension i = 0; i < E; i += 1) {
+					idx += coord[i] * m;
+					m *= (*this)[i];
+				}
+				
+				return idx;
+			}
+
 			/// Clamp all components of the vector between given values.
-			/// @sa Number::clamp
-			Vector & clamp (const NumericT & min = 0.0, const NumericT & max = 1.0);
+			Vector clamp (const NumericT & min = 0, const NumericT & max = 1) {
+				Vector result;
 
-			/// Set the vector components to the absolute value.
-			Vector & abs ();
-			/// Set the vector components to the floor value.
-			Vector & floor ();
-			/// Set the vector components to the ceil value.
-			Vector & ceil ();
-			/// Set the vector components to the fractional value.
-			/// For example, <tt><5.2, 4.89></tt> becomes <tt><0.2, 0.89></tt>
-			Vector & frac ();
+				for (dimension i = 0; i < E; ++i)
+					result[i] = number((*this)[i]).clamp(min, max);
+
+				return result;
+			}
+
+			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
+			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints) {
+				const Vector & a = *this;
+
+				Vector result;
+
+				for (std::size_t i = 0; i < E; i += 1) {
+					NumericT minimum = a[i], maximum = b[i];
+
+					if (minimum > maximum) std::swap(minimum, maximum);
+
+					result[i] = linear_interpolate(constraints[i], minimum, maximum);
+				}
+
+				return result;
+			}
+
+			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
+			Vector constrain(const Vector & b, bool minimum = true) {
+				const Vector & a = *this;
+
+				Vector result;
+
+				for (std::size_t i = 0; i < E; i += 1) {
+					if (minimum)
+						result[i] = std::min(a[i], b[i]);
+					else
+						result[i] = std::max(a[i], b[i]);
+				}
+
+				return result;
+			}
+
+			/// Calculate the absolute value of the vector:
+			Vector absolute () const {
+				Vector result;
+
+				for (dimension i = 0; i < E; ++i)
+					result[i] = number((*this)[i]).absolute();
+
+				return result;
+			}
+
+			/// Truncate the values of the vector:
+			Vector truncate (bool up = false) const {
+				Vector result;
+
+				for (dimension i = 0; i < E; ++i)
+					result[i] = number((*this)[i]).truncate(up);
+
+				return result;
+			}
+
+			Vector fraction() const {
+				return *this - truncate();
+			}
 
 			/// Normalize the vector to the given length. Defaults to 1.
-			Vector & normalize (const NumericT & to_length = 1);
+			Vector normalize (NumericT & length, const NumericT & desired_length = 1) const {
+				if (!Numerics::equivalent(length, desired_length)) {
+					NumericT factor = desired_length / length;
+					
+					return (*this) * factor;
+				}
+				
+				return (*this);
+			}
 
-			/// Return a copy of the vector that is normalized
-			Vector normalized_vector (const NumericT & to_length = 1) const;
+			/// Normalize the vector to the given length. Defaults to 1.
+			Vector normalize (const NumericT & desired_length = 1) const {
+				auto length = this->length();
 
-			/// Constrain this vector with another, choosing the smaller or larger value.
-			/// Compare each component of this and another vector. If limits[i] is -1, we choose the smaller of the two values. If limits[i] is +1, we choose
-			/// the larger of the two values. We finally multiple the result by the absolute value of limits[i].
-			template <typename OtherT>
-			void constrain (const Vector<E, NumericT> & with, const OtherT & limits);
+				if (length.equivalent(0)) return *this;
 
-			/// Calculate the negated vector in-place.
-			Vector & negate ();
+				return normalize(length, desired_length);
+			}
+
 			/// Calculate the negated vector and return it as a copy.
-			Vector operator- () const;
-			/// Calculate the inverse vector in-place.
-			Vector & inverse ();
+			Vector operator- () const {
+				Vector result;
+
+				for (std::size_t i = 0; i < E; i += 1) {
+					result[i] = -(*this)[i];
+				}
+
+				return result;
+			}
+
 			/// Calculate the inverse vector and return it as a copy.
-			Vector operator! () const;
+			Vector operator! () const {
+				Vector result;
 
-			/// Linearly interpolate between this and another vector.
-			Vector lerp (const NumericT & t, Vector other) const;
+				for (std::size_t i = 0; i < E; i += 1) {
+					result[i] = !(*this)[i];
+				}
 
-			/// Increment this vector within the space defined by max.
-			/// @sa index
-			bool increment (const Vector & max);
-
-			/// Pack the vector into a single variable.
-			template <typename PackedT>
-			void pack (unsigned bits, PackedT & p) const;
-
-			/// Unpack elements of a vector from a single variable
-			template <typename PackedT>
-			void unpack (unsigned bits, const PackedT & p);
+				return result;
+			}
 
 			/// Returns a vector with F components, by default one less than the current size.
 			template <dimension F = E - 1>
@@ -374,9 +414,9 @@ namespace Euclid
 		}
 
 // MARK: -
-// MARK: Binary Operators
+// MARK: Operators
 
-#define OPERATOR(OP, OPE) \
+#define EUCLID_NUMERICS_VECTOR_OPERATOR(OP, OPE) \
 	template <dimension E, typename NumericT, typename AnyT> \
 	inline Vector<E, NumericT> operator OP (const Vector<E, NumericT> & lhs, const AnyT & n) \
 	{ \
@@ -384,20 +424,19 @@ namespace Euclid
 		return tmp OPE n; \
 	}
 
-		OPERATOR(+, +=)
-		OPERATOR(-, -=)
-		OPERATOR(*, *=)
-		OPERATOR(/, /=)
-		OPERATOR(%, %=)
-		OPERATOR(&, &=)
-		OPERATOR(|, |=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(+, +=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(-, -=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(*, *=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(/, /=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(%, %=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(&, &=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(|, |=)
 
-#undef OPERATOR
+#undef EUCLID_NUMERICS_VECTOR_OPERATOR
 
 // MARK: -
-// MARK: Unary Operators
 
-#define OPERATOR(OP) \
+#define EUCLID_NUMERICS_VECTOR_OPERATOR(OP) \
 	template <dimension E, typename NumericT, typename OtherNumericT> \
 	Vector<E, NumericT> & operator OP (Vector<E, NumericT> & lhs, const Vector<E, OtherNumericT> & n) \
 	{ \
@@ -406,17 +445,17 @@ namespace Euclid
 		return lhs; \
 	}
 
-		OPERATOR(+=)
-		OPERATOR(-=)
-		OPERATOR(*=)
-		OPERATOR(/=)
-		OPERATOR(&=)
-		OPERATOR(|=)
-		OPERATOR(%=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(+=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(-=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(*=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(/=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(&=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(|=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(%=)
 
-#undef OPERATOR
+#undef EUCLID_NUMERICS_VECTOR_OPERATOR
 
-#define OPERATOR(OP) \
+#define EUCLID_NUMERICS_VECTOR_OPERATOR(OP) \
 	template <dimension E, typename NumericT, typename OtherNumericT> \
 	Vector<E, NumericT> & operator OP (Vector<E, NumericT> & lhs, const OtherNumericT & n) \
 	{ \
@@ -425,15 +464,15 @@ namespace Euclid
 		return lhs; \
 	}
 
-		OPERATOR(+=)
-		OPERATOR(-=)
-		OPERATOR(*=)
-		OPERATOR(/=)
-		OPERATOR(&=)
-		OPERATOR(|=)
-		OPERATOR(%=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(+=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(-=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(*=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(/=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(&=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(|=)
+		EUCLID_NUMERICS_VECTOR_OPERATOR(%=)
 
-#undef OPERATOR
+#undef EUCLID_NUMERICS_VECTOR_OPERATOR
 
 // MARK: -
 // MARK: IO Operators
@@ -444,7 +483,7 @@ namespace Euclid
 		{
 			for (dimension i = 0; i < E; ++i) {
 				// We use this helper to ensure that char and unsigned char are printed correctly.
-				out << (typename NumericType<NumericT>::NumericT)(vec[i]) << ((i + 1) != E ? " " : "");
+				out << (typename NumericOutputTraits<NumericT>::NumericT)(vec[i]) << ((i + 1) != E ? " " : "");
 			}
 
 			return out;
@@ -478,10 +517,7 @@ namespace Euclid
 		extern template class Vector<2, RealT>;
 		extern template class Vector<3, RealT>;
 		extern template class Vector<4, RealT>;
-
 	}
 }
-
-#include "Vector.impl.h"
 
 #endif
