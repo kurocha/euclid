@@ -60,12 +60,12 @@ namespace Euclid
 			}
 
 			/// Calculate the angle of rotation.
-			Radians<NumericT> rotation_angle () const {
+			Radians<NumericT> angle () const {
 				return number((*this)[W]).acos() * 2.0;
 			}
 
 			/// Calculate the axis of rotation.
-			Vector<3, NumericT> rotation_axis () const {
+			Vector<3, NumericT> axis () const {
 				return this->reduce().normalize();
 			}
 
