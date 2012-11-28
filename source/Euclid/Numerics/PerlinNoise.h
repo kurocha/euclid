@@ -7,8 +7,8 @@
 //
 //
 
-#ifndef _EUCLID_IMAGING_PERLINNOISE_H
-#define _EUCLID_IMAGING_PERLINNOISE_H
+#ifndef _EUCLID_IMAGING_PERLIN_NOISE_H
+#define _EUCLID_IMAGING_PERLIN_NOISE_H
 
 #include "Numerics.h"
 #include "Vector.h"

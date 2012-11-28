@@ -12,8 +12,8 @@
 #include "Version.h"
 #include <assert.h>
 
-namespace Euclid {
-
+namespace Euclid
+{
 }
 
 #endif

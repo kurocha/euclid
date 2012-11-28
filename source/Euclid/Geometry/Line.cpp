@@ -51,8 +51,8 @@ namespace Euclid {
 
 			check(r.equivalent(Vec3(-10, 0, 0))) << "Transformed vertex is correct";
 
-			//void rotate (const VectorT & rotation_normal, const NumericRealT & angle);
-			//LineT rotated_line (const VectorT & rotation_normal, const NumericRealT & angle) const;
+			//void rotate (const VectorT & rotation_normal, const RealT & angle);
+			//LineT rotated_line (const VectorT & rotation_normal, const RealT & angle) const;
 
 			Line3 q = a.rotated_line(norm, R90);
 
@@ -63,7 +63,7 @@ namespace Euclid {
 		{
 			testing("Constructors");
 
-			LineSegment3 a(Vec3(ZERO), Vec3(IDENTITY, 10));
+			LineSegment3 a(0, 10);
 			check(a.offset().length_squared() == (10 * 10) * 3) << "Line is correct length";
 
 			LineSegment3 d(ZERO);
@@ -71,8 +71,8 @@ namespace Euclid {
 
 			Line3 la(IDENTITY, 1);
 			LineSegment3 e(la, 10, 30);
-			check(e.offset().equivalent(Vec3(IDENTITY, 20))) << "LineSegment is correct size";
-			check(e.start().equivalent(Vec3(IDENTITY, 10))) << "LineSegment starts at correct point";
+			check(e.offset().equivalent(20)) << "LineSegment is correct size";
+			check(e.start().equivalent(10)) << "LineSegment starts at correct point";
 
 			testing("Intersections");
 

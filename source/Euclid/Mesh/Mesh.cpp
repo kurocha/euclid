@@ -9,6 +9,7 @@
 
 #include "Mesh.h"
 
+#include "../Numerics/Matrix.Multiply.h"
 #include "Triangle.h"
 #include "Line.h"
 

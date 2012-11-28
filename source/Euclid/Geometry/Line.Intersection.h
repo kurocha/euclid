@@ -1,5 +1,5 @@
 //
-//  Geometry/Line.impl.h
+//  Geometry/Line.Intersection.h
 // This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 16/11/08.
@@ -17,105 +17,6 @@ namespace Euclid
 {
 	namespace Geometry
 	{
-// MARK: -
-// MARK: class LineTranslationTraits
-
-		template <typename NumericT>
-		typename LineTranslationTraits<3, NumericT>::MatrixT LineTranslationTraits<3, NumericT>::transformation_to_mate_with_line (const LineT & other, const VectorT & normal) const
-		{
-			const LineT * t = static_cast<const LineT*>(this);
-
-			// Optimization
-			if (t->direction() == other.direction())
-				return translation_to_mate_with_point(other.point());
-			else {
-				MatrixT translation_to_origin = Mat44::translating_matrix(-t->point());
-				MatrixT translation_from_origin = Mat44::translating_matrix(t->point());
-				return translation_to_mate_with_point(other.point()) * translation_from_origin * rotation_to_mate_with_direction(other.direction(), normal) * translation_to_origin;
-			}
-		}
-
-		template <typename NumericT>
-		typename LineTranslationTraits<3, NumericT>::MatrixT LineTranslationTraits<3, NumericT>::translation_to_mate_with_point (const VectorT & point) const
-		{
-			const LineT * t = static_cast<const LineT*>(this);
-
-			return MatrixT::translating_matrix(point - t->point());
-		}
-
-		template <typename NumericT>
-		typename LineTranslationTraits<3, NumericT>::MatrixT LineTranslationTraits<3, NumericT>::rotation_to_mate_with_direction (const VectorT & direction, const VectorT & normal) const
-		{
-			const LineT * t = static_cast<const LineT*>(this);
-
-			return MatrixT::rotating_matrix(direction, t->direction(), normal);
-		}
-
-		template <typename NumericT>
-		void LineTranslationTraits<3, NumericT>::rotate (const VectorT & rotation_normal, const NumericRealT & angle)
-		{
-			LineT * t = static_cast<LineT*>(this);
-
-			MatrixT rotation = MatrixT::rotating_matrix(angle, rotation_normal);
-
-			t->set_direction(rotation * t->direction());
-		}
-
-		template <typename NumericT>
-		typename LineTranslationTraits<3, NumericT>::LineT LineTranslationTraits<3, NumericT>::rotated_line (const VectorT & rotation_normal, const NumericRealT & angle) const
-		{
-			const LineT * t = static_cast<const LineT*>(this);
-
-			LineT result(*t);
-
-			result.rotate (rotation_normal, angle);
-
-			return result;
-		}
-
-// MARK: -
-// MARK: class Line
-
-		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line ()
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const Zero &) : _point(0), _direction(0)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const Identity &, const NumericT & n) : _point(0), _direction(n)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const VectorT & direction) : _point(ZERO), _direction(direction)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		Line<D, NumericT>::Line (const VectorT & point, const VectorT & direction) : _point(point), _direction(direction)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		NumericT Line<D, NumericT>::time_for_closest_point (const VectorT & p3) const
-		{
-			const VectorT & p1 = _point;
-			VectorT p2 = _point + _direction;
-
-			NumericT d = _direction.length_squared();
-			NumericT t = 0;
-
-			for (dimension i = 0; i < D; ++i)
-				t += (p3[i] - p1[i]) * (p2[i] - p1[i]);
-
-			return t / d;
-		}
-
 		template <typename NumericT>
 		bool line_intersection_test (const Line<2, NumericT> & lhs, const Line<2, NumericT> & rhs, NumericT & left_time, NumericT & right_time)
 		{
@@ -194,7 +95,7 @@ namespace Euclid
 			t2 = (NumericT)1;
 
 			for (dimension i = 0; i < D; i += 1) {
-				if (!ray_slabs_intersection(_point[i], _direction[i], a.min()[i], a.max()[i], t1, t2)) return false;
+				if (!ray_slabs_intersection(point[i], direction[i], a.min()[i], a.max()[i], t1, t2)) return false;
 			}
 
 			return true;
@@ -208,36 +109,6 @@ namespace Euclid
 		template <dimension D, typename NumericT>
 		inline Line<D, NumericT> operator- (const Line<D, NumericT> &l, const Vector<D, NumericT> &v) {
 			return Line<D, NumericT>(l.point() - v, l.direction());
-		}
-
-// MARK: -
-// MARK: class LineSegment
-
-		template <dimension D, typename NumericT>
-		LineSegment<D, NumericT>::LineSegment ()
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		LineSegment<D, NumericT>::LineSegment (const Zero &) : _start(ZERO), _end(ZERO)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		LineSegment<D, NumericT>::LineSegment (const Identity &, const NumericT & n) : _start(ZERO), _end(IDENTITY, n)
-		{
-		}
-
-		template <dimension D, typename NumericT>
-		LineSegment<D, NumericT>::LineSegment (const Line<D, NumericT> & line, const NumericT & start_time, const NumericT & end_time)
-		{
-			_start = line.point_at_time(start_time);
-			_end = line.point_at_time(end_time);
-		}
-
-		template <dimension D, typename NumericT>
-		LineSegment<D, NumericT>::LineSegment (const VectorT & start, const VectorT & end) : _start(start), _end(end)
-		{
 		}
 
 		template <dimension D, typename NumericT>

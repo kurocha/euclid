@@ -11,6 +11,7 @@
 #define _EUCLID_NUMERICS_QUATERNION_H
 
 #include "Numerics.h"
+#include "Transforms.h"
 #include "Vector.h"
 #include "Matrix.h"
 
@@ -24,104 +25,128 @@ namespace Euclid
 
 		 Quaternions are a specialization of a 4-component Vector. It provides some additional operators for convenience.
 		 */
-		template <typename _NumericT = RealT>
-		class Quaternion {
-		protected:
-			Vector<4, _NumericT> _vector;
+		template <typename NumericT = RealT>
+		class Quaternion : public Vector<4, NumericT> {
 		public:
-			typedef _NumericT NumericT;
-			typedef Vector<4, _NumericT> Vec4T;
-			typedef Vector<3, _NumericT> Vec3T;
-			typedef Matrix<4, 4, _NumericT> MatrixT;
-
 			/// Undefined constructor.
-			Quaternion () {
-			}
+			Quaternion () = default;
 
 			/// Identity constructor.
-			Quaternion (const Identity &);
+			Quaternion (const Identity &) : Vector<4, NumericT>{0, 0, 0, 1} {}
 
-			/// Construct from 4-component Vector.
-			Quaternion (const Vec4T & other);
+			Quaternion (const Vector<4, NumericT> & value) : Vector<4, NumericT>(value) {}
 
-			/// Assignment constructor.
-			Quaternion & operator= (const Vec4T & other);
+			/// Angle axis constructor.
+			Quaternion (const Radians<NumericT> & angle, const Vector<3, NumericT> & axis) {
+				auto half_angle = angle / 2.0;
 
-			/// Equality
-			bool operator== (const Quaternion & other) {
-				return vector() == other.vector();
+				(*this) = (axis * half_angle.sin()).expand(half_angle.cos());
 			}
 
-			/// Angle Axis constructor.
-			Quaternion (const NumericT & angle, const Vec3T & axis);
+			template <dimension N, typename AngleNumericT, typename AxisNumericT>
+			Quaternion(const AngleAxisRotation<N, AngleNumericT, AxisNumericT> & rotation) : Quaternion(rotation.angle, rotation.axis)
+			{
+			}
 
-			/// Rotation from one vector to another.
-			Quaternion (const Vec3T & from, const Vec3T & to);
-			/// Rotation from one vector to another. Multiply the rotation angle by factor.
-			Quaternion (const Vec3T & from, const Vec3T & to, NumericT factor);
-
-			/// Point constructor.
-			Quaternion (const Vec3T & point);
-
-			/// Get the rotation from a matrix
-			static Quaternion from_matrix (const Mat44 & m);
-
-			/// Calculate the rotation from Euler angles
-			static Quaternion from_euler(Vec3T angles);
-
-			static Quaternion from_1ijk(Vec4T);
-
-			/// Proxy function for convenience
-			const NumericT & operator[] (dimension i) const;
-			/// Proxy function for convenience
-			NumericT & operator[] (dimension i);
-
-			/// Apply the rotation to a vector.
-			Vec3T rotate (const Vec3T &) const;
-
-			/// Multiplication function
-			Quaternion multiply_with (const Quaternion & other) const;
-
-			/// Convenience operator for rotate function.
-			Vec3T operator* (const Vec3T & other) const;
-
-			/// Multiply a quaternion in-place.
-			Quaternion & operator*= (const Quaternion & q1);
-
-			/// Multiply a quaternion rotation by another - essentially add the two rotations together.
-			Quaternion operator* (const Quaternion & q2) const;
-
-			/// Build a quaternion from an angle-axis rotation.
-			void set_to_angle_axis_rotation (const NumericT & angle, const Vec3T & axis);
+			template <dimension AXIS, typename AngleNumericT>
+			Quaternion(const FixedAxisRotation<AXIS, AngleNumericT> rotation) : Quaternion(rotation.angle, rotation.template axis<3>()) {
+				
+			}
 
 			/// Calculate the angle of rotation.
-			NumericT rotation_angle () const;
+			Radians<NumericT> rotation_angle () const {
+				return number((*this)[W]).acos() * 2.0;
+			}
 
 			/// Calculate the axis of rotation.
-			Vec3T rotation_axis () const;
+			Vector<3, NumericT> rotation_axis () const {
+				return this->reduce().normalize();
+			}
 
-			/// Return a matrix that represents the rotation.
-			MatrixT rotating_matrix () const;
+			template <dimension N>
+			Matrix<N, N, NumericT> rotation_matrix () const {
+				static_assert(N == 3 || N == 4, "Matrix must be 3x3 or 4x4 to contain quaternion rotation!");
+
+				assert(this->length_squared().equivalent(1) && "Quaternion.rotating_matrix magnitude must be 1");
+
+				Matrix<N, N, NumericT> m = IDENTITY;
+
+				NumericT x = (*this)[X], y = (*this)[Y], z = (*this)[Z], w = (*this)[W];
+
+				m.at(0, 0) = 1.0 - 2.0 * (y*y + z*z);
+				m.at(0, 1) =       2.0 * (x*y - w*z);
+				m.at(0, 2) =       2.0 * (x*z + w*y);
+
+				m.at(1, 0) =       2.0 * (x*y + w*z);
+				m.at(1, 1) = 1.0 - 2.0 * (x*x + z*z);
+				m.at(1, 2) =       2.0 * (y*z - w*x);
+
+				m.at(2, 0) =       2.0 * (x*z - w*y);
+				m.at(2, 1) =       2.0 * (y*z + w*x);
+				m.at(2, 2) = 1.0 - 2.0 * (x*x + y*y);
+
+				return m;
+			}
 
 			/// Return a quaternion that rotates from this rotation to another.
-			Quaternion rotation_to (const Quaternion & other) const;
+			Quaternion rotation_to (const Quaternion & other) const {
+				return this->conjugate() * other;
+			}
 
 			/// Conjugate the current quaternion in place.
-			void conjugate ();
+			Quaternion conjugate () const {
+				Quaternion copy(*this);
 
-			/// Return the conjugated quaternion.
-			Quaternion conjugated_quaternion () const;
+				copy[X] *= -1;
+				copy[Y] *= -1;
+				copy[Z] *= -1;
 
-			/// Extract axis information
-			Vec3T extract_axis (std::size_t a) const;
+				return copy;
+			}
 
-			Vector<4, NumericT> & vector ();
-			const Vector<4, NumericT> & vector () const;
+			/// Rotate a point:
+			Vector<3, NumericT> operator* (const Vector<3, NumericT> & v) const {
+				auto qvec = this->reduce();
 
-			static Quaternion spherical_linear_interpolate (_NumericT t, const Quaternion & v0, const Quaternion & v1);
+				auto uv = cross_product(qvec, v);
+				auto uuv = cross_product(qvec, uv);
+
+				uv *= (*this)[W] * 2;
+				uuv *= 2;
+
+				return v + uv + uuv;
+			}
 		};
 
-		typedef Quaternion<RealT> Quat;
+		template <typename NumericT>
+		Quaternion<NumericT> quaternion (const Vector<4, NumericT> values) {
+			return values;
+		}
+		
+		template <typename NumericT>
+		Quaternion<NumericT> quaternion (const Matrix<4, 4, NumericT> & m) {
+			auto w = number(1.0 + m[0] + m[5] + m[10]).sqrt() / 2;
+
+			Vector<4, NumericT> q;
+			q[X] = (m[6] - m[9]) / (4 * w);
+			q[Y] = (m[8] - m[2]) / (4 * w);
+			q[Z] = (m[1] - m[4]) / (4 * w);
+			q[W] = w;
+
+			return q.normalize();
+		}
+
+		template <typename NumericT>
+		Quaternion<NumericT> quaternion(const Vector<3, Radians<NumericT>> & angles)
+		{
+			Quaternion<NumericT> x_rotation(angles[X], {1.0, 0.0, 0.0}),
+				y_rotation(angles[Y], {0.0, 1.0, 0.0}),
+				z_rotation(angles[Z], {0.0, 0.0, 1.0});
+
+			return x_rotation * y_rotation * z_rotation;
+		}
+
+		typedef Quaternion<> Quat;
 	}
 }
 

@@ -8,6 +8,7 @@
 
 #include "Eye.h"
 #include "Vector.Geometry.h"
+#include "Matrix.Multiply.h"
 
 namespace Euclid
 {
@@ -38,7 +39,7 @@ namespace Euclid
 			// Reverse the viewport transformation from normalized device coordinates back into object space
 			Eye<NumericT> result;
 
-			result.origin = {inverse_view_matrix.at(3, 0), inverse_view_matrix.at(3, 1), inverse_view_matrix.at(3, 2)};
+			result.origin = vector(inverse_view_matrix.at(3, 0), inverse_view_matrix.at(3, 1), inverse_view_matrix.at(3, 2));
 
 			auto p1 = (inverse_view_matrix * (inverse_projection_matrix * (normalized_point << 1.0)));
 
@@ -48,7 +49,7 @@ namespace Euclid
 			p1 /= p1[W];
 			p2 /= p2[W];
 
-			result.forward = Line<3, NumericT>(p1.reduce(), (p2 - p1).reduce().normalize());
+			result.forward = Line<3, NumericT>{p1.reduce(), (p2 - p1).reduce().normalize()};
 
 			// Calculate up direction
 			Vector<3, NumericT> eye_up = {0.0, 1.0, 0.0};
@@ -69,9 +70,9 @@ namespace Euclid
 			m.set(2, 0, -direction, 4);
 			m.at(3, 3) = 1;
 
-			auto t = Matrix<4, 4, NumericT>::translating_matrix(-origin);
+			Matrix<4, 4, NumericT> result = translate(-origin);
 
-			return m.transposed_matrix() * t;
+			return m.transpose() * result;
 		}
 		
 		template <typename NumericT>

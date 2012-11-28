@@ -6,21 +6,27 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#ifndef _EUCLID_NUMERICS_RATIOS_H
-#define _EUCLID_NUMERICS_RATIOS_H
+#ifndef _EUCLID_NUMERICS_VECTOR_RATIOS_H
+#define _EUCLID_NUMERICS_VECTOR_RATIOS_H
 
-#include <Vector.h>
-#include "Number.h>
+#include "Vector.h"
+#include "Number.h"
 
 namespace Euclid {
 	namespace Numerics {
 		template <typename NumericT>
 		struct Ratios : public Vector<2, NumericT> {
+			template <typename... ArgumentsT>
+			Ratios(ArgumentsT... arguments) : Vector<2, NumericT>{arguments...} {
+				
+			}
+
 			Number<NumericT> aspect_ratio () const
 			{
 				return (*this)[WIDTH] / (*this)[HEIGHT];
 			}
 
+			/// Calculate a vector that is smaller than the current vector in one dimension such that it has the given aspect ratio.
 			Ratios shrink_to_fit_aspect_ratio(const NumericT & aspect_ratio) const
 			{
 				Vector<2, NumericT> result;
@@ -42,7 +48,8 @@ namespace Euclid {
 			{
 				return this->shrink_to_fit_aspect_ratio(other.aspect_ratio());
 			}
-
+			
+			/// Calculate a vector that is larger than the current vector in one dimension such that it has the given aspect ratio.
 			Ratios expand_to_fit_aspect_ratio(const NumericT & aspect_ratio) const
 			{
 				Ratios result;

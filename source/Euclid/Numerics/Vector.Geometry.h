@@ -9,6 +9,8 @@
 #ifndef _EUCLID_NUMERICS_VECTOR_GEOMETRY_H
 #define _EUCLID_NUMERICS_VECTOR_GEOMETRY_H
 
+#include "Vector.h"
+
 namespace Euclid {
 	namespace Numerics {
 		/// The 3-dimentional cross product:

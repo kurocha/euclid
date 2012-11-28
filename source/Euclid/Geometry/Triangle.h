@@ -17,23 +17,21 @@
 namespace Euclid {
 	namespace Geometry {
 		template <dimension D, typename NumericT>
-		class Triangle : public Shape<D, 3, NumericT> {
-		public:
+		struct Triangle : public Shape<D, 3, NumericT> {
 			template <typename... ArgumentsT>
-			Triangle(ArgumentsT... arguments) : Shape<D, 3, NumericT>(arguments...) {}
+			Triangle(ArgumentsT... arguments) : Shape<D, 3, NumericT>(arguments...)
+			{
+			}
 
-			AlignedBox<D, NumericT> bounding_box ();
+			AlignedBox<D, NumericT> bounding_box ()
+			{
+				AlignedBox<D, NumericT> box(this->points[0], this->points[1]);
+
+				box.union_with_point(this->points[2]);
+
+				return box;
+			}
 		};
-
-		template <dimension D, typename NumericT>
-		AlignedBox<D, NumericT> Triangle<D, NumericT>::bounding_box ()
-		{
-			AlignedBox<D, NumericT> box(this->_points[0], this->_points[1]);
-
-			box.union_with_point(this->_points[2]);
-			
-			return box;
-		}
 
 		typedef Triangle<2, RealT> Triangle3;
 		typedef Triangle<3, RealT> Triangle2;

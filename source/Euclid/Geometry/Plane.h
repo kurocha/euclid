@@ -30,7 +30,9 @@ namespace Euclid {
 				_distance = (-normal).dot(point);
 			}
 		public:
-			Plane () {}
+			Plane ()
+			{
+			}
 
 			Plane (const NumericT & distance, const VectorT & normal) : _distance(distance), _normal(normal) {}
 
@@ -39,7 +41,7 @@ namespace Euclid {
 			/// Point is a point on the plain, and direction is the normal
 			Plane (const Line<D, NumericT> & line) : Plane(line.point(), line.direction()) {}
 
-			Plane (const Triangle<D, NumericT> & triangle) : Plane(triangle[0], surface_normal(triangle)) {}
+			Plane (const Triangle<D, NumericT> & triangle) : Plane(triangle.points[0], surface_normal(triangle)) {}
 
 			const RealT & distance() const { return _distance; }
 			const VectorT & normal() const { return _normal; }
@@ -47,7 +49,10 @@ namespace Euclid {
 			void set_distance(const RealT & r) { _distance = r; }
 			void set_normal(const VectorT & n) { _normal = n; }
 
-			bool is_parallel(const Plane & other) const;
+			bool is_parallel(const Plane & other) const
+			{
+				return _normal.equivalent(other._normal) || _normal.equivalent(-other._normal);
+			}
 
 			bool intersects_with (const Plane & plane, Line<3, NumericT> & line) const;
 			bool intersects_with (const Line<3, NumericT> & line, VectorT & at) const;
@@ -61,7 +66,7 @@ namespace Euclid {
 				return at;
 			}
 
-			IntersectionResult intersects_with (const Sphere<D, NumericT> & sphere) const;
+			Intersection intersects_with (const Sphere<D, NumericT> & sphere) const;
 
 			/// Can be used to test sphere intersection
 			NumericT distance_to_point (const VectorT &at) const
@@ -86,6 +91,6 @@ namespace Euclid {
 	}
 }
 
-#include "Plane.impl.h"
+#include "Plane.Intersection.h"
 
 #endif

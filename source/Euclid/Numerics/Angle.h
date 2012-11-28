@@ -9,7 +9,8 @@
 #ifndef _EUCLID_NUMERICS_ANGLE_H
 #define _EUCLID_NUMERICS_ANGLE_H
 
-#include <Euclid/Numerics/Number.h>
+#include "Number.h"
+#include "Float.h"
 
 namespace Euclid
 {
@@ -29,7 +30,8 @@ namespace Euclid
 		struct Degrees;
 
 		template <typename FloatT>
-		struct Radians {
+		struct Radians
+		{
 			FloatT value;
 
 			constexpr Radians (const FloatT & _value) : value(_value) {}
@@ -38,28 +40,38 @@ namespace Euclid
 				return {value * R2D};
 			}
 
+			constexpr operator Radians<float> () const {
+				return {value};
+			}
+
 			constexpr operator FloatT () const {
 				return value;
 			}
 
-			constexpr Radians operator + (const Radians & other) {
+			constexpr Radians operator + (const Radians & other) const {
 				return {value + other.value};
 			}
 
-			constexpr Radians operator - (const Radians & other) {
+			constexpr Radians operator - (const Radians & other) const {
 				return {value - other.value};
 			}
 
-			constexpr Radians operator * (const FloatT & other) {
+			template <typename OtherT>
+			constexpr Radians operator * (const OtherT & other) const {
 				return {value * other};
 			}
 
-			constexpr Radians operator / (const Radians & other) {
+			constexpr Radians operator / (const Radians & other) const {
 				return {value / other.value};
 			}
 
-			constexpr Radians operator / (const FloatT & other) {
-				return {value / other.value};
+			template <typename OtherT>
+			constexpr Radians operator / (const OtherT & other) const {
+				return {value / other};
+			}
+
+			constexpr Radians operator- () const {
+				return {-value};
 			}
 
 			Number<FloatT> sin() const {
@@ -73,6 +85,15 @@ namespace Euclid
 			Number<FloatT> tan() const {
 				return std::tan(value);
 			}
+
+			Radians offset_to (const Radians & other) const {
+				auto x = this->value, y = other.value;
+				return std::atan2(std::sin(x-y), std::cos(x-y));
+			}
+
+			bool equivalent(const Radians & other) const {
+				return Numerics::equivalent<FloatT>(this->offset_to(other).value, 0);
+			}
 		};
 
 		template <typename FloatT>
@@ -81,7 +102,8 @@ namespace Euclid
 		}
 
 		template <typename FloatT>
-		struct Degrees {
+		struct Degrees
+		{
 			FloatT value;
 
 			constexpr Degrees (const FloatT & _value) : value(_value) {}
@@ -109,7 +131,7 @@ namespace Euclid
 			constexpr Degrees operator / (const Degrees & other) {
 				return {value / other.value};
 			}
-
+			
 			constexpr Degrees operator / (const FloatT & other) {
 				return {value / other.value};
 			}

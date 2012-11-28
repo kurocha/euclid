@@ -14,81 +14,67 @@
 #include "../Numerics/Vector.h"
 
 namespace Euclid {
-	/**
-	 Geometry groups a set of mathematical constructs which model geometrical phenomenon, such as lines, spheres and boxes. These classes try to be as = 0
-	 as possible, therefore, most classes provide template elements for the number of dimensions, and the type of number to use.
-	 */
+	/// Basic geometric constructs.
 	namespace Geometry {
 		using namespace Numerics;
 
-		/**
-		 A general abstraction of a shape in D-space with P points. Used as a base class for several shapes. Provides access to points and some general
-		 functions.
-		 */
+		/// A general abstraction of a shape in D-space with P points. Used as a base class for several shapes. Provides access to points and some general functions.
 		template <dimension D, dimension P, typename NumericT>
-		class Shape {
-		public:
+		struct Shape {
 			typedef Vector<D, NumericT> VectorT;
+			
+			Vector<D, NumericT> points[P];
 
-		protected:
-			Vector<D, NumericT> _points[P];
+			Shape () = default;
 
-		public:
 			template <typename... ArgumentsT>
-			Shape (ArgumentsT... arguments) : _points{(VectorT)arguments...} {
+			Shape (ArgumentsT... arguments) : points{(VectorT)arguments...}
+			{
 				static_assert(sizeof...(ArgumentsT) == P, "Incorrect number of points!");
 			}
 
 			VectorT center () const
 			{
-				VectorT total(_points[0]);
+				VectorT total(points[0]);
 				for (dimension i = 1; i < P; i++)
-					total += _points[i];
+					total += points[i];
 
 				return total / (NumericT)P;
-			}
-
-			const VectorT & operator[] (dimension i) const
-			{
-				return _points[i];
-			}
-
-			VectorT & operator[] (dimension i)
-			{
-				return _points[i];
 			}
 		};
 
 		/// Surface normal for any 2-dimensional shape:
 		template <dimension P, typename NumericT>
-		Vector<3, NumericT> surface_normal (const Shape<2, P, NumericT> & shape) {
+		Vector<3, NumericT> surface_normal (const Shape<2, P, NumericT> & shape)
+		{
 			return {0, 0, 1};
 		}
 
 		/// Surface normal for 3-dimensional triangles:
 		template <typename NumericT>
-		Vector<3, NumericT> surface_normal (const Shape<3, 3, NumericT> & shape) {
-			return surface_normal(shape[0], shape[1], shape[2]);
+		Vector<3, NumericT> surface_normal (const Shape<3, 3, NumericT> & shape)
+		{
+			return surface_normal(shape.points[0], shape.points[1], shape.points[2]);
 		}
 
-		/**
-		 An intersection test generally has three kinds of results which are distinct. There was no intersection, the edges touched, or the shapes overlapped.
-		 */
-		enum IntersectionResult {
+		/// An intersection test generally has three kinds of results which are distinct. There was no intersection, the edges touched, or the shapes overlapped.
+		enum Intersection
+		{
 			/// There is no geometric intersection.
-			NO_INTERSECTION = 0,
+			DISJOINT = 0,
 
 			/// Edges of the shapes touch, but the shapes themselves do not overlap.
-			EDGES_INTERSECT = 16,
+			TOUCH = 16,
 
 			/// The shapes intersect.
-			SHAPES_INTERSECT = 32,
+			OVERLAP = 32,
 
 			/// The shape being tested is completely embedded.
-			SHAPE_EMBEDDED = 64
+			ENCLOSED = 64
 		};
 
-		enum Direction {
+		enum Direction
+		{
 			LEFT   = 1 << 0, // - x-axis
 			RIGHT  = 1 << 1, // + x-axis
 			BOTTOM = 1 << 2, // - y-axis

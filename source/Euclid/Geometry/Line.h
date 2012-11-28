@@ -16,93 +16,67 @@
 namespace Euclid {
 	namespace Geometry {
 		template <dimension D, typename NumericT>
-		class LineTranslationTraits {
-		};
-
-		template <typename NumericT>
-		class LineTranslationTraits<3, NumericT>{
-		public:
-			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
-			typedef Matrix<4, 4, NumericRealT> MatrixT;
-			typedef Vector<3, NumericRealT> VectorT;
-			typedef Line<3, NumericT> LineT;
-
-			MatrixT transformation_to_mate_with_line (const LineT & other, const VectorT & normal) const;
-			MatrixT translation_to_mate_with_point (const VectorT & point) const;
-			MatrixT rotation_to_mate_with_direction (const VectorT & direction, const VectorT & normal) const;
-
-			void rotate (const VectorT & rotation_normal, const NumericRealT & angle);
-			LineT rotated_line (const VectorT & rotation_normal, const NumericRealT & angle) const;
-		};
-
-		template <dimension D, typename NumericT>
-		class Line : public LineTranslationTraits<D, NumericT>{
+		class Line {
 		protected:
-			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 			typedef Vector<D, NumericT> VectorT;
 
 			VectorT _point;
 			VectorT _direction;
 
 		public:
-			Line ();
-			Line (const Zero &);
-			Line (const Identity &, const NumericT & n = 1);
+			Line () = default;
 
-			Line (const VectorT & direction);
-			Line (const VectorT & point, const VectorT & direction);
-
-			const VectorT & point () const
+			Line (const VectorT & direction) : _point(ZERO), _direction(direction)
 			{
-				return _point;
 			}
 
-			const VectorT & direction () const
+			Line (const VectorT & point, const VectorT & direction) : _point(point), _direction(direction)
 			{
-				return _direction;
 			}
 
-			void set_point (const VectorT & point)
-			{
-				_point = point;
-			}
+			const VectorT & point () const { return _point; }
+			const VectorT & direction () const { return _direction; }
 
-			void set_direction (const VectorT & direction)
-			{
-				_direction = direction;
-			}
+			void set_point (const VectorT & point) { _point = point; }
+			void set_direction (const VectorT & direction) { _direction = direction; }
 
-			VectorT point_at_time (const NumericT & t) const
-			{
-				return point() + (direction() * t);
+			VectorT point_at_time (const NumericT & t) const {
+				return _point + (_direction * t);
 			}
 
 			/// Returns the time on the line where a point is closest to the given point.
-			NumericT time_for_closest_point (const VectorT & p3) const;
+			NumericT time_for_closest_point (const VectorT & p3) const {
+				auto p1 = _point;
+				auto p2 = _point + _direction;
 
-			VectorT point_for_closest_point (const VectorT & p) const
-			{
+				auto d = _direction.length_squared();
+				NumericT t = 0;
+
+				for (dimension i = 0; i < D; ++i)
+					t += (p3[i] - p1[i]) * (p2[i] - p1[i]);
+
+				return t / d;
+			}
+
+			VectorT point_for_closest_point (const VectorT & p) const {
 				return point_at_time(time_for_closest_point(p));
 			}
 
-			NumericRealT shortest_distance_to_point (const VectorT &p) const
-			{
+			RealT shortest_distance_to_point (const VectorT &p) const {
 				return (p - point_for_closest_point(p)).length();
 			}
 
 			// Calculates the factor for line equations
-			NumericRealT factor (const NumericRealT & v, std::size_t i) const
-			{
-				return (v + _point[i]) / (NumericRealT)_direction[i];
+			RealT factor (const RealT & v, dimension i) const {
+				return RealT(v + _point[i]) / RealT(_direction[i]);
 			}
 
-			Line<D-1, NumericT> reduce () const
-			{
+			Line<D-1, NumericT> reduce() const {
 				return Line<D-1, NumericT>(point().reduce(), direction().reduce());
 			}
 
-			bool equivalent (const Line<D, NumericT> & other)
-			{
+			bool equivalent (const Line<D, NumericT> & other) {
 				// Are we pointing in the same direction
 				if (!_direction.equivalent(other._direction))
 					return false;
@@ -146,7 +120,7 @@ namespace Euclid {
 		template <dimension D, typename NumericT>
 		class LineSegment {
 		public:
-			typedef typename RealTypeTraits<NumericT>::RealT NumericRealT;
+			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 			typedef Vector<D, NumericT> VectorT;
 
 		protected:
@@ -154,26 +128,30 @@ namespace Euclid {
 			VectorT _end;
 
 		public:
-			LineSegment ();
-			LineSegment (const Zero &);
-			LineSegment (const Identity &, const NumericT & n = 1);
+			LineSegment () = default;
 
-			LineSegment (const Line<D, NumericT> & line, const NumericT & start_time, const NumericT & end_time);
-			LineSegment (const VectorT & start, const VectorT & end);
-
-			VectorT point_at_time(const RealT & t) const
+			LineSegment (const VectorT & end) : _start(ZERO), _end(end)
 			{
+			}
+
+			LineSegment (const VectorT & start, const VectorT & end) : _start(start), _end(end)
+			{
+			}
+
+			LineSegment (const Line<D, NumericT> & line, const NumericT & start_time, const NumericT & end_time) : _start(line.point_at_time(start_time)), _end(line.point_at_time(end_time))
+			{
+			}
+
+			VectorT point_at_time(const RealT & t) const {
 				return _start + (offset() * t);
 			}
 
-			Line<D, NumericT> to_line () const
-			{
+			Line<D, NumericT> to_line () const {
 				return Line<D, NumericT>(start(), offset().normalize());
 			}
 
 			/// Is this segment zero-length?
-			bool is_degenerate ()
-			{
+			bool is_degenerate () {
 				return _start.equivalent(_end);
 			}
 
@@ -181,38 +159,31 @@ namespace Euclid {
 			bool intersects_with (const LineSegment<D, NumericT> & other, NumericT & this_time, NumericT & other_time) const;
 			bool intersects_with (const LineSegment<D, NumericT> & other, LineSegment<D, NumericT> & overlap) const;
 
-			const VectorT & start () const
-			{
+			const VectorT & start () const {
 				return _start;
 			}
 
-			const VectorT & end () const
-			{
+			const VectorT & end () const {
 				return _end;
 			}
 
-			VectorT & start ()
-			{
+			VectorT & start () {
 				return _start;
 			}
 
-			VectorT & end ()
-			{
+			VectorT & end () {
 				return _end;
 			}
 
-			VectorT center ()
-			{
+			VectorT center () {
 				return (_start + _end) / 2.0;
 			}
 
-			VectorT offset () const
-			{
+			VectorT offset () const {
 				return _end - _start;
 			}
 
-			Vector<D> direction () const
-			{
+			Vector<D> direction () const {
 				return (_end - _start).normalize();
 			}
 		};
@@ -222,6 +193,6 @@ namespace Euclid {
 	}
 }
 
-#include "Line.impl.h"
+#include "Line.Intersection.h"
 
 #endif

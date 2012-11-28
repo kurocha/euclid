@@ -12,12 +12,10 @@
 
 #include "Numerics.h"
 
-namespace Euclid
-{
-	namespace Numerics
-	{
-		/** This class can assist in the calculation of mathematical averages.
-		 */
+namespace Euclid {
+	namespace Numerics {
+
+		/// This class can assist in the calculation of mathematical averages.
 		template <typename NumericT>
 		class Average {
 		protected:
@@ -87,6 +85,7 @@ namespace Euclid
 				add_samples(other);
 			}
 		};
+		
 	}
 }
 

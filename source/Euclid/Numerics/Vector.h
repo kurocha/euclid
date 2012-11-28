@@ -24,27 +24,11 @@ namespace Euclid
 // MARK: -
 // MARK: Vector
 
-		/** A fixed-size numeric vector.
-
-		 This class provides a flexible interface to an n-component vector of the specified type. There are numerous constructors and methods to make working with vectors easy.
-
-		 There are two kinds of comparisons that Vector supports: Geometric comparisons and numeric comparisons. It is important to understand the difference when using the two.
-
-		 Geometric comparisons use the functions less_than(), less_than_or_equal(), greater_than(), greater_than_or_equal() to compare the geometric differences between two vectors.
-
-		 @image html "Vector Comparisons.png"
-
-		 Given a 2-space point <tt>pt</tt> at the origin, the diagram above shows when a relative point would return true with the given function.
-
-		 Numeric comparisons use the functions operator<(), operator<=(), operator>(), operator>=() to compare the numeric position of two vectors. This operation is actually very simple when you consider a vector in this case to be just a compond number. For example, the coordinate <tt><3, 5></tt> can be though of as the number 35. The numeric comparisons essentially just compare vectors in this way, for example <tt><3, 5></tt> is less than <tt><4, 2></tt> because <tt>35 < 42</tt>. However, this comparison also works in the general sense: <tt><55, 29></tt> is bigger than <tt><4, 50></tt>.
-
-		 The purpose of this comparison is ordering. It is possible to order a sequence of points in size. Thus, it is possible to store points in containers that rely on strict ordering behaviour such as <tt>std::set</tt> and <tt>std::map</tt>.
-		 */
+		/// A fixed-size numeric vector.
 		template <dimension E, typename NumericT = RealT>
-		class Vector : public std::array<NumericT, E> {
+		struct alignas(16) Vector : public std::array<NumericT, E> {
 			static_assert(std::is_arithmetic<NumericT>::value, "Vector only supports numeric data-types!");
 
-		public:
 			/// The type of the vector elements.
 			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 
@@ -60,31 +44,28 @@ namespace Euclid
 			{
 			}
 
+			template <typename... TailT>
+			Vector (const NumericT & head, const TailT... tail) : std::array<NumericT, E>{{head, (NumericT)tail...}}
+			{
+			}
+
 			template <dimension F, typename OtherNumericT>
 			Vector (const Vector<F, OtherNumericT> & other)
 			{
 				auto next = std::copy(other.begin(), other.begin() + std::min(F, E), this->begin());
 				std::fill(next, this->end(), 0);
 			}
-
-			template <typename... TailT>
-			Vector (const NumericT & head, const TailT&&... tail) : std::array<NumericT, E>{{head, (NumericT)tail...}}
-			{
-			}
-
-			Vector (std::initializer_list<NumericT> list)
-			{
-				auto next = std::copy(list.begin(), list.begin() + std::min(list.size(), E), this->begin());
-				std::fill(next, this->end(), 0);
-			}
 			
 			/// Copy count elements of raw data into the vector.
-			void set (const NumericT * other, unsigned count = E, unsigned offset = 0) {
+			template <typename OtherNumericT>
+			void set (const OtherNumericT * other, unsigned count = E, unsigned offset = 0)
+			{
 				std::copy(other, other+count, this->begin() + offset);
 			}
 
 			/// Check for equivalence, which is typically relaxed for floating point numbers:
-			bool equivalent(const Vector<E, NumericT> & other) const {
+			bool equivalent(const Vector<E, NumericT> & other) const
+			{
 				for (dimension i = 0; i < E; ++i) {
 					if (!Numerics::equivalent(this->data()[i], other[i]))
 						return false;
@@ -163,7 +144,7 @@ namespace Euclid
 			}
 
 			/// Calculates the angle between this vector and another.
-			Number<NumericT> angle_between (const Vector & other) const
+			Radians<NumericT> angle_between (const Vector & other) const
 			{
 				NumericT r = this->dot(other) / (this->length() * other.length());
 
@@ -226,7 +207,7 @@ namespace Euclid
 
 			/// Given a size vector (this) and a coordinate, return an index.
 			/// @sa distribute
-			NumericT index (const Vector & coord) const
+			Number<NumericT> index (const Vector & coord) const
 			{
 				NumericT idx = 0;
 				NumericT m = 1;
@@ -241,7 +222,8 @@ namespace Euclid
 			}
 
 			/// Clamp all components of the vector between given values.
-			Vector clamp (const NumericT & min = 0, const NumericT & max = 1) {
+			Vector clamp (const NumericT & min = 0, const NumericT & max = 1)
+			{
 				Vector result;
 
 				for (dimension i = 0; i < E; ++i)
@@ -251,7 +233,8 @@ namespace Euclid
 			}
 
 			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
-			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints) {
+			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints)
+			{
 				const Vector & a = *this;
 
 				Vector result;
@@ -268,7 +251,8 @@ namespace Euclid
 			}
 
 			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
-			Vector constrain(const Vector & b, bool minimum = true) {
+			Vector constrain(const Vector & b, bool minimum = true)
+			{
 				const Vector & a = *this;
 
 				Vector result;
@@ -284,7 +268,8 @@ namespace Euclid
 			}
 
 			/// Calculate the absolute value of the vector:
-			Vector absolute () const {
+			Vector absolute () const
+			{
 				Vector result;
 
 				for (dimension i = 0; i < E; ++i)
@@ -294,7 +279,8 @@ namespace Euclid
 			}
 
 			/// Truncate the values of the vector:
-			Vector truncate (bool up = false) const {
+			Vector truncate (bool up = false) const
+			{
 				Vector result;
 
 				for (dimension i = 0; i < E; ++i)
@@ -303,12 +289,14 @@ namespace Euclid
 				return result;
 			}
 
-			Vector fraction() const {
+			Vector fraction() const
+			{
 				return *this - truncate();
 			}
 
 			/// Normalize the vector to the given length. Defaults to 1.
-			Vector normalize (NumericT & length, const NumericT & desired_length = 1) const {
+			Vector normalize (NumericT & length, const NumericT & desired_length = 1) const
+			{
 				if (!Numerics::equivalent(length, desired_length)) {
 					NumericT factor = desired_length / length;
 					
@@ -319,7 +307,8 @@ namespace Euclid
 			}
 
 			/// Normalize the vector to the given length. Defaults to 1.
-			Vector normalize (const NumericT & desired_length = 1) const {
+			Vector normalize (const NumericT & desired_length = 1) const
+			{
 				auto length = this->length();
 
 				if (length.equivalent(0)) return *this;
@@ -328,7 +317,8 @@ namespace Euclid
 			}
 
 			/// Calculate the negated vector and return it as a copy.
-			Vector operator- () const {
+			Vector operator- () const
+			{
 				Vector result;
 
 				for (std::size_t i = 0; i < E; i += 1) {
@@ -339,7 +329,8 @@ namespace Euclid
 			}
 
 			/// Calculate the inverse vector and return it as a copy.
-			Vector operator! () const {
+			Vector operator! () const
+			{
 				Vector result;
 
 				for (std::size_t i = 0; i < E; i += 1) {
@@ -351,7 +342,8 @@ namespace Euclid
 
 			/// Returns a vector with F components, by default one less than the current size.
 			template <dimension F = E - 1>
-			Vector<F, NumericT> reduce() const {
+			Vector<F, NumericT> reduce() const
+			{
 				static_assert(F <= E, "Cannot reduce size of vector to larger size");
 
 				Vector<F, NumericT> result;
@@ -362,7 +354,8 @@ namespace Euclid
 			}
 
 			template <typename... ArgumentsT>
-			Vector<E+sizeof...(ArgumentsT), NumericT> expand(ArgumentsT... arguments) const {
+			Vector<E+sizeof...(ArgumentsT), NumericT> expand(ArgumentsT... arguments) const
+			{
 				Vector<E+sizeof...(ArgumentsT), NumericT> result;
 
 				auto next = std::copy(this->begin(), this->end(), result.begin());
@@ -373,7 +366,8 @@ namespace Euclid
 				return result;
 			}
 
-			Vector<E+1, NumericT> operator<<(const NumericT & tail) const {
+			Vector<E+1, NumericT> operator<<(const NumericT & tail) const
+			{
 				Vector<E+1, NumericT> result;
 
 				auto next = std::copy(this->begin(), this->end(), result.begin());
@@ -473,32 +467,6 @@ namespace Euclid
 		EUCLID_NUMERICS_VECTOR_OPERATOR(%=)
 
 #undef EUCLID_NUMERICS_VECTOR_OPERATOR
-
-// MARK: -
-// MARK: IO Operators
-
-		/// Write a vector to an std::ostream
-		template <dimension E, typename NumericT>
-		std::ostream & operator<<(std::ostream & out, const Vector<E, NumericT> & vec)
-		{
-			for (dimension i = 0; i < E; ++i) {
-				// We use this helper to ensure that char and unsigned char are printed correctly.
-				out << (typename NumericOutputTraits<NumericT>::NumericT)(vec[i]) << ((i + 1) != E ? " " : "");
-			}
-
-			return out;
-		}
-
-		/// Read a vector from a std::istream
-		template <dimension E, typename NumericT>
-		std::istream & operator>> (std::istream & in, Vector<E, NumericT> & vec)
-		{
-			for (dimension i = 0; i < E; ++i) {
-				in >> vec[i];
-			}
-
-			return in;
-		}
 
 		template <dimension N>
 		bool equivalent (const Vector<N, float> a, const Vector<N, float> b)

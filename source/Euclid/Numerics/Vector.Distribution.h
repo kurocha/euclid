@@ -17,9 +17,8 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		
 		template <unsigned E, typename NumericT = RealT>
-		class uniform_vector_distribution {
+		class UniformVectorDistribution {
 		public:
 			typedef Vector<E, NumericT> VectorT;
 			
@@ -27,7 +26,7 @@ namespace Euclid
 			VectorT _offset, _scale;
 
 		public:
-			uniform_vector_distribution(const VectorT & offset, const VectorT & scale) : _offset(offset), _scale(scale) {
+			UniformVectorDistribution(const VectorT & offset, const VectorT & scale) : _offset(offset), _scale(scale) {
 			}
 
 			template <typename RandomT>

@@ -11,7 +11,6 @@
 #define _EUCLID_NUMERICS_NUMBER_H
 
 #include "Numerics.h"
-#include "Angle.h"
 #include "Integer.h"
 #include "Float.h"
 
@@ -73,127 +72,157 @@ namespace Euclid
 			}
 		}
 
-		/** Functionality common to all numeric types.
-		 */
+		/// Functionality common to all numeric types.
 		template <typename NumericT>
-		struct Number {
+		struct Number
+		{
 			static_assert(std::is_arithmetic<NumericT>::value, "Number can only work with arithmetic data-types!");
 			typedef typename RealTypeTraits<NumericT>::RealT RealT;
 
 			template <typename ValueT>
-			static ValueT value_of(const ValueT & value) {
+			static ValueT value_of(const ValueT & value)
+			{
 				return value;
 			}
 
 			template <typename ValueT>
-			static ValueT value_of(const Number<ValueT> & number) {
+			static ValueT value_of(const Number<ValueT> & number)
+			{
 				return number.value;
 			}
 
 			NumericT value;
 
-			constexpr Number (const NumericT & value_) : value(value_) {
+			constexpr Number (const NumericT & value_) : value(value_)
+			{
 			}
 
 			template <typename OtherNumericT>
-			constexpr Number (const OtherNumericT & value_) : value(value_) {
+			constexpr Number (const OtherNumericT & value_) : value(value_)
+			{
 			}
 
-			operator NumericT & () {
+			operator NumericT & ()
+			{
 				return value;
 			}
 
-			operator const NumericT & () const {
+			operator const NumericT & () const
+			{
 				return value;
 			}
 
-			constexpr Number clamp (const Number & lower = 0, const Number & upper = 1) const {
+			constexpr Number clamp (const Number & lower = 0, const Number & upper = 1) const
+			{
 				return value < lower.value ? lower : (value > upper.value ? upper : *this);
 			}
 
-			constexpr Number absolute() {
+			constexpr Number absolute()
+			{
 				return value * (value < 0 ? -1 : 1);
 			}
 
-			Number truncate(bool up = false) {
+			Number truncate(bool up = false)
+			{
 				return _truncate(value, up);
 			}
 
-			Number modulo(const Number & modulus) {
+			Number modulo(const Number & modulus)
+			{
 				return _modulo(value, (NumericT)modulus);
 			}
 
-			Number wrap(const Number & modulus) {
+			Number wrap(const Number & modulus)
+			{
 				return modulo(modulus) + (value < 0 ? modulus : (Number)0);
 			}
 
 			template <typename ExponentT>
-			Number raise(const ExponentT & exponent) {
+			Number raise(const ExponentT & exponent)
+			{
 				return _raise(value, value_of(exponent));
 			}
 
-			bool equivalent(const Number & other) {
+			bool equivalent(const Number & other)
+			{
 				return Numerics::equivalent(value, other.value);
 			}
 
-			Number<RealT> square_root() const {
+			Number<RealT> square_root() const
+			{
 				return std::sqrt(value);
 			}
 
-			Number fraction() const {
+			Number fraction() const
+			{
 				return value - _truncate(value);
 			}
 
 			template <typename OtherNumericT>
-			Number operator+ (const OtherNumericT & other) { return value + other; };
+			Number operator+ (const OtherNumericT & other)
+			{
+				return value + other;
+			}
 
 			template <typename OtherNumericT>
-			Number operator- (const OtherNumericT & other) { return value - other; };
+			Number operator- (const OtherNumericT & other)
+			{
+				return value - other;
+			}
 
 			template <typename OtherNumericT>
-			Number operator* (const OtherNumericT & other) { return value * other; };
+			Number operator* (const OtherNumericT & other)
+			{
+				return value * other;
+			}
 
 			template <typename OtherNumericT>
-			Number operator/ (const OtherNumericT & other) { return value / other; };
+			Number operator/ (const OtherNumericT & other)
+			{
+				return value / other;
+			}
 
 			template <typename OtherNumericT>
-			Number operator%(const OtherNumericT & modulus) { return modulo(modulus); }
+			Number operator%(const OtherNumericT & modulus)
+			{
+				return modulo(modulus);
+			}
 
-			Number max (const Number & other) {
+			Number max (const Number & other)
+			{
 				return std::max(value, other.value);
 			}
 
-			Number min (const Number & other) {
+			Number min (const Number & other)
+			{
 				return std::min(value, other.value);
 			}
 
-			Radians<RealT> asin() {
-				return std::asin(value);
-			}
-
-			Radians<RealT> acos() {
-				return std::acos(value);
-			}
-
-			Radians<RealT> atan() {
-				return std::atan(value);
-			}
+			Radians<RealT> asin();
+			Radians<RealT> acos();
+			Radians<RealT> atan();
 
 			template <typename OtherNumericT>
-			Number<OtherNumericT> as() {
+			Number<OtherNumericT> as()
+			{
 				return value;
 			}
 		};
 
 		template <typename NumericT>
-		inline constexpr Number<NumericT> number(const Number<NumericT> & value) {
+		inline constexpr Number<NumericT> number(const Number<NumericT> & value)
+		{
 			return value;
 		}
 
 		template <typename NumericT>
-		inline constexpr Number<NumericT> number(const NumericT & value) {
+		inline constexpr Number<NumericT> number(const NumericT & value)
+		{
 			return {value};
 		}
 	}
 }
+
+#include "Number.Angles.h"
+
 #endif

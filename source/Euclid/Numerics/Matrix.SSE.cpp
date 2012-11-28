@@ -16,9 +16,9 @@ namespace Euclid {
 	namespace Numerics {
 		// This is an optimised specialization for SSE2:
 		void multiply(Matrix<4, 4, float> & result, const Matrix<4, 4, float> & left, const Matrix<4, 4, float> & right) {
-			const float * a = left.value();
-			const float * b = right.value();
-			float * r = result.value();
+			const float * a = left.data();
+			const float * b = right.data();
+			float * r = result.data();
 
 			__m128 a_line, b_line, r_line;
 			

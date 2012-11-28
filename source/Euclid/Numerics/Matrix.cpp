@@ -13,19 +13,8 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		Mat44 rotation (const RealT & radians, const Vec3 & around_normal, const Vec3 & around_point)
-		{
-			return Mat44::rotating_matrix(radians, around_normal, around_point);
-		}
-
-		Mat44 rotation (const RealT & radians, const Vec3 & around_normal)
-		{
-			return Mat44::rotating_matrix(radians, around_normal);
-		}
-
-		Mat44 rotation (const Vec3 & from_unit_vector, const Vec3 & to_unit_vector, const Vec3 & around_normal)
-		{
-			return Mat44::rotating_matrix(from_unit_vector, to_unit_vector, around_normal);
-		}
+		template class Matrix<4, 4, RealT>;
+		template class Matrix<3, 3, RealT>;
+		template class Matrix<2, 2, RealT>;
 	}
 }

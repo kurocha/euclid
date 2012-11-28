@@ -51,12 +51,12 @@ namespace Euclid
 		};
 
 		template <>
-		struct NumericOutputTraits<unsigned char>{
+		struct NumericOutputTraits<unsigned char> {
 			typedef std::uint16_t NumericT;
 		};
 
 		template <>
-		struct NumericOutputTraits<char>{
+		struct NumericOutputTraits<char> {
 			typedef std::int16_t NumericT;
 		};
 
@@ -88,8 +88,23 @@ namespace Euclid
 
 		/// Proportional equivalence of floating point numbers.
 		template <typename IntegralT>
-		inline bool equivalent (const IntegralT & a, const IntegralT & b) {
+		inline bool equivalent (const IntegralT & a, const IntegralT & b)
+		{
 			return a == b;
+		}
+
+		// If we increase row by 1, the offset will increase by sz (number of elements per row i.e. number of columns)
+		// If we increase col by 1, the offset will increase by 1
+		inline std::size_t row_major_offset(std::size_t row, std::size_t column, std::size_t size)
+		{
+			return column + (row * size);
+		}
+
+		// If we increase col by 1, the offset will increase by sz (number of elements per column i.e. number of rows)
+		// If we increase row by 1, the offset will increase by 1
+		inline std::size_t column_major_offset(std::size_t row, std::size_t column, std::size_t size)
+		{
+			return row + (column * size);
 		}
 	}
 }

@@ -369,13 +369,6 @@ namespace Euclid {
 			bool subtract_edge (const AlignedBox & other, dimension axis, const BoxEdge & edge, const NumericT & offset = 0);
 		};
 
-		template <dimension D, typename NumericT>
-		std::ostream &operator<<(std::ostream &o, const AlignedBox<D, NumericT> &space) {
-			o << "(" << space.min() << " -> " << space.max() << ")";
-
-			return o;
-		}
-
 		typedef AlignedBox<2, RealT> AlignedBox2;
 		typedef AlignedBox<3, RealT> AlignedBox3;
 		typedef AlignedBox<2, int> AlignedBox2i;

@@ -16,7 +16,6 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		/// @todo Add tests for these functions.
 		/// Linear interpolate between two values
 		template <typename InterpolateT, typename AnyT>
 		inline AnyT linear_interpolate (const InterpolateT & t, const AnyT & a, const AnyT & b)

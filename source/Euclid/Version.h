@@ -9,7 +9,8 @@
 #ifndef _EUCLID_VERSION_H
 #define _EUCLID_VERSION_H
 
-namespace Euclid {
+namespace Euclid
+{
 	const unsigned VERSION[] = {0, 1, 0};
 }
 

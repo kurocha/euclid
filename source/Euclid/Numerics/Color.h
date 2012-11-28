@@ -76,7 +76,7 @@ namespace Euclid {
 			NumericT l = (minc + maxc) / 2.0;
 
 			if (minc == maxc)
-				return {0.0, 0.0, l};
+				return vector(0.0, 0.0, l);
 
 			// Saturation
 			NumericT s;
@@ -102,7 +102,7 @@ namespace Euclid {
 
 			h = number(h / 6.0).modulo(1.0);
 
-			return {h, s, l};
+			return vector(h, s, l);
 		}
 
 		namespace {
@@ -164,7 +164,7 @@ namespace Euclid {
 			NumericT v = maxc;
 
 			if (minc == maxc)
-				return {0.0, 0.0, v};
+				return vector(0.0, 0.0, v);
 
 			// Saturation
 			NumericT s = (maxc-minc) / maxc;
@@ -185,7 +185,7 @@ namespace Euclid {
 
 			h = number(h / 6.0).modulo(1.0);
 
-			return {h, s, v};
+			return vector(h, s, v);
 		}
 
 		template <typename NumericT>
@@ -203,12 +203,12 @@ namespace Euclid {
 
 			i = i % 6;
 			switch (i % 6) {
-				case 0: return {v, t, p};
-				case 1: return {q, v, p};
-				case 2: return {p, v, t};
-				case 3: return {p, q, v};
-				case 4: return {t, p, v};
-				case 5: return {v, p, q};
+				case 0: return vector(v, t, p);
+				case 1: return vector(q, v, p);
+				case 2: return vector(p, v, t);
+				case 3: return vector(p, q, v);
+				case 4: return vector(t, p, v);
+				case 5: return vector(v, p, q);
 			}
 
 			return 0;

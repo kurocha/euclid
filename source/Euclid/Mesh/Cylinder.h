@@ -11,7 +11,8 @@
 #define _EUCLID_GEOMETRY_GENERATE_CYLINDER_H
 
 #include "Basic.h"
-#include "../Spline.h"
+#include "../Geometry/Spline.h"
+#include "../Numerics/Matrix.Multiply.h"
 
 namespace Euclid {
 	namespace Geometry {
@@ -39,13 +40,13 @@ namespace Euclid {
 			void cylinder(MeshT & mesh, const RealT &base_radius, const RealT &top_radius, const RealT &height, const std::size_t &slices, const std::size_t &stacks, bool cap_start, bool cap_end) {
 				mesh.layout = TRIANGLES;
 
-				Vec3 base = {0, base_radius, 0};
-				Vec3 top = {height, top_radius, 0};
+				Vec3 base{0, base_radius, 0};
+				Vec3 top{height, top_radius, 0};
 				Vec3 center = {1, 0, 0};
 
 				assert((base_radius != 0.0 || top_radius != 0.0) && "Both base_radius and top_radius are zero!");
 
-				auto rotation = Mat44::rotating_matrix(-R360 / slices, center);
+				Mat44 rotation = Numerics::rotate<3, float>(float(-R360 / slices), center);
 
 				// N stacks has n+1 divisions, one for the start, one for the end
 				std::size_t divisions = stacks + 1;
