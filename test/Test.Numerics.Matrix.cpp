@@ -26,19 +26,21 @@ namespace Euclid
 			"Euclid::Numerics::Matrix",
 
 			{"Identities",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					Mat44 a, I(IDENTITY);
 					load_test_pattern(a);
 
-					examiner->check(a == a * I) << "Matricies are equivalent after multiplication by identity";
-					examiner->check(I * a == a) << "Matricies are equivalent after multiplication by identity";
+					examiner << "Matricies are equivalent after multiplication by identity" << std::endl;
+					examiner.check(a == a * I);
+					examiner << "Matricies are equivalent after multiplication by identity" << std::endl;
+					examiner.check(I * a == a);
 				}
 			},
 
 			{"Transpose",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					Matrix<2, 3, int> m;
@@ -46,34 +48,34 @@ namespace Euclid
 
 					auto mt = m.transpose();
 
-					examiner->check_equal(m.at(0, 0), mt.at(0, 0));
-					examiner->check_equal(m.at(1, 1), mt.at(1, 1));
-					examiner->check_equal(m.at(0, 1), mt.at(1, 0));
-					examiner->check_equal(m.at(1, 0), mt.at(0, 1));
+					examiner.check_equal(m.at(0, 0), mt.at(0, 0));
+					examiner.check_equal(m.at(1, 1), mt.at(1, 1));
+					examiner.check_equal(m.at(0, 1), mt.at(1, 0));
+					examiner.check_equal(m.at(1, 0), mt.at(0, 1));
 				}
 			},
 
 			{"Transforms",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					Mat44 transform = translate(Vec4(5, 5, 5, 1));
 
 					Vec3 point = transform * Vec3(0, 0, 0);
 
-					examiner->check_equal(point, vector<RealT>(5, 5, 5));
+					examiner.check_equal(point, vector<RealT>(5, 5, 5));
 				}
 			},
 
 			{"Rotations",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					// These tests assume column basis, column major order (traditional mathematical notation):
 					Mat44 xa = rotate(R90, Vec3(1.0, 0.0, 0.0));
 					Mat44 xb = rotate<X>(R90);
 
-					examiner->check(xa.equivalent(xb));
+					examiner.check(xa.equivalent(xb));
 
 					Mat44 xc(IDENTITY);
 
@@ -82,12 +84,13 @@ namespace Euclid
 					xc.at(2, 1) = 1;
 					xc.at(2, 2) = 0;
 
-					examiner->check(xa.equivalent(xc)) << "Matrix rotation is correct";
+					examiner << "Matrix rotation is correct" << std::endl;
+					examiner.check(xa.equivalent(xc));
 
 					Mat44 ya = rotate(R90, Vec3(0.0, 1.0, 0.0));
 					Mat44 yb = rotate<Y>(R90);
 
-					examiner->check(ya.equivalent(yb));
+					examiner.check(ya.equivalent(yb));
 
 					Mat44 yc(IDENTITY);
 
@@ -96,12 +99,13 @@ namespace Euclid
 					yc.at(2, 0) = -1;
 					yc.at(2, 2) = 0;
 
-					examiner->check(ya.equivalent(yc)) << "Matrix rotation is correct";
+					examiner << "Matrix rotation is correct" << std::endl;
+					examiner.check(ya.equivalent(yc));
 
 					Mat44 za = rotate(R90, Vec3(0.0, 0.0, 1.0));
 					Mat44 zb = rotate<Z>(R90);
 
-					examiner->check(za.equivalent(zb));
+					examiner.check(za.equivalent(zb));
 
 					Mat44 zc(IDENTITY);
 
@@ -110,26 +114,28 @@ namespace Euclid
 					zc.at(1, 0) = 1;
 					zc.at(1, 1) = 0;
 
-					examiner->check(za.equivalent(zc)) << "Matrix rotation is correct";
+					examiner << "Matrix rotation is correct" << std::endl;
+					examiner.check(za.equivalent(zc));
 
 					auto matrix_product = xa * ya * za;
 
 					RealT sample_data[16] = {0, 0, 1, 0, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1};
 					Mat44 sample; sample.set(sample_data);
 
-					examiner->check(matrix_product.equivalent(sample));
+					examiner.check(matrix_product.equivalent(sample));
 
 					// Check that the rotation between two vectors is correct:
 					Mat44 rk = rotate(Vec3(1.0, 0.0, 0.0), Vec3(0.0, 1.0, 0.0), Vec3(0.0, 0.0, 1.0));
 
 					Vec3 pk = rk * Vec3(1.0, 0.0, 0.0);
 
-					examiner->check(pk.equivalent(Vec3(0.0, 1.0, 0.0))) << "Rotation between vectors is correct";
+					examiner << "Rotation between vectors is correct" << std::endl;
+					examiner.check(pk.equivalent(Vec3(0.0, 1.0, 0.0)));
 				}
 			},
 
 			{"Vectors",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					Mat44 a(ZERO);
@@ -138,7 +144,8 @@ namespace Euclid
 
 					a.set(0, 0, vec_ident, 5);
 
-					examiner->check(a == mat_ident) << "Vector was copied correctly";
+					examiner << "Vector was copied correctly" << std::endl;
+					examiner.check(a == mat_ident);
 
 					Vec4 c1(0, 1, 2, 3), c2(4, 5, 6, 7), c3(8, 10, 12, 14), c4(9, 11, 13, 15);
 					a = ZERO;
@@ -151,7 +158,8 @@ namespace Euclid
 					Mat44 test_pattern;
 					load_test_pattern(test_pattern);
 
-					examiner->check(a == test_pattern) << "Vector was copied correctly";
+					examiner << "Vector was copied correctly" << std::endl;
+					examiner.check(a == test_pattern);
 
 					Mat44 b;
 
@@ -160,18 +168,20 @@ namespace Euclid
 
 					r = b * pt;
 
-					examiner->check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
+					examiner << "Rotation was successful" << std::endl;
+					examiner.check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0)));
 
 					b = rotate(R180, vector(0.0, 1.0, 0.0)).around_origin(vector(0.0, 10.0, 10.0));
 
 					r = b * pt;
 
-					examiner->check(r.equivalent(vector(-10.0, 0.0, -20.0, 1.0))) << "Rotation was successful";
+					examiner << "Rotation was successful" << std::endl;
+					examiner.check(r.equivalent(vector(-10.0, 0.0, -20.0, 1.0)));
 				}
 			},
 
 			{"Transforms",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					Mat44 a = rotate(R90, Vec3(1.0, 0.0, 0.0)) << translate(Vec3(1.0, 2.0, 3.0));
@@ -180,12 +190,12 @@ namespace Euclid
 
 					r = a * pt;
 
-					examiner->check(r.equivalent(Vec4(1.0, -3.0, 2.0, 1.0)));
+					examiner.check(r.equivalent(Vec4(1.0, -3.0, 2.0, 1.0)));
 				}
 			},
 
 			{"Eigenvalues",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
 
 					std::vector<Vec2> points = {
@@ -199,7 +209,7 @@ namespace Euclid
 						average += point;
 					}
 
-					examiner->check_equal(average.value(), Vec2{12, 36.235294342});
+					examiner.check_equal(average.value(), Vec2{12, 36.235294342});
 
 					for (std::size_t i = 0; i < points.size(); i += 1) {
 						auto point = points[i];
@@ -210,10 +220,10 @@ namespace Euclid
 
 					Mat22 result = A * A.transpose();
 
-					examiner->check_equal(result[0], 408);
-					examiner->check_equal(result[1], 1236);
-					examiner->check_equal(result[2], 1236);
-					examiner->check_equal(result[3], 3983.05908203125);
+					examiner.check_equal(result[0], 408);
+					examiner.check_equal(result[1], 1236);
+					examiner.check_equal(result[2], 1236);
+					examiner.check_equal(result[3], 3983.05908203125);
 
 					// 408 - l, 1236
 					// 1236, 3983 - l

@@ -11,7 +11,7 @@ namespace Euclid
 			"Euclid::Geometry::Sphere",
 
 			{"Sphere-Sphere Intersection",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Geometry;
 
 					Sphere<2> a({-10, 0}, 10);
@@ -19,16 +19,20 @@ namespace Euclid
 					Sphere<2> c({20, 0}, 10);
 
 					Vec2 d;
-					examiner->check(a.intersects_with(b, d) == Intersection::OVERLAP) << "Spheres overlap";
-					examiner->check(d.length() == 10.0) << "Spheres displaced by the distance between their centers";
+					examiner << "Spheres overlap" << std::endl;
+					examiner.check(a.intersects_with(b, d) == Intersection::OVERLAP);
+					examiner << "Spheres displaced by the distance between their centers" << std::endl;
+					examiner.check(d.length() == 10.0);
 
-					examiner->check(b.intersects_with(c, d) == Intersection::TOUCH) << "Sphere's edges overlap";
-					examiner->check(d.length() == 20.0) << "Spheres displaced by the distance between their centers";
+					examiner << "Sphere's edges overlap" << std::endl;
+					examiner.check(b.intersects_with(c, d) == Intersection::TOUCH);
+					examiner << "Spheres displaced by the distance between their centers" << std::endl;
+					examiner.check(d.length() == 20.0);
 				}
 			},
 
 			{"Sphere-Point Intersection",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Geometry;
 
 					Sphere2 a({-10, 0}, 10);
@@ -36,14 +40,16 @@ namespace Euclid
 
 					Vec2 d;
 
-					examiner->check(b.intersects_with(Vec2{5.0, 0.0}, d) == Intersection::OVERLAP) << "Point lies within sphere";
-					examiner->check(a.intersects_with(Vec2{5.0, 0.0}, d) == Intersection::DISJOINT) << "Point lies outside of sphere";
+					examiner << "Point lies within sphere" << std::endl;
+					examiner.check(b.intersects_with(Vec2{5.0, 0.0}, d) == Intersection::OVERLAP);
+					examiner << "Point lies outside of sphere" << std::endl;
+					examiner.check(a.intersects_with(Vec2{5.0, 0.0}, d) == Intersection::DISJOINT);
 				}
 			},
 
 
 			{"Sphere-Line Intersection",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Geometry;
 
 					Sphere<2> b(Vec2{0, 0}, 10);
@@ -52,12 +58,17 @@ namespace Euclid
 					LineSegment<2> segmentA({-50, 0}, {50, 0});
 					LineSegment<2> segmentB({-50, -10}, {50, -10});
 
-					examiner->check(b.intersects_with(segmentA, t1, t2) == Intersection::OVERLAP) << "Line and sphere overlap at two points";
-					examiner->check(segmentA.point_at_time(t1).equivalent(Vec2{-10.0, 0})) << "Line intersects surface of sphere";
-					examiner->check(segmentA.point_at_time(t2).equivalent(Vec2{10.0, 0})) << "Line intersects surface of sphere";
+					examiner << "Line and sphere overlap at two points" << std::endl;
+					examiner.check(b.intersects_with(segmentA, t1, t2) == Intersection::OVERLAP);
+					examiner << "Line intersects surface of sphere" << std::endl;
+					examiner.check(segmentA.point_at_time(t1).equivalent(Vec2{-10.0, 0}));
+					examiner << "Line intersects surface of sphere" << std::endl;
+					examiner.check(segmentA.point_at_time(t2).equivalent(Vec2{10.0, 0}));
 
-					examiner->check(b.intersects_with(segmentB, t1, t2) == Intersection::TOUCH) << "Line and sphere touch at one point";
-					examiner->check(segmentB.point_at_time(t1).equivalent(Vec2{0, -10.0})) << "Line intersects surface of sphere";
+					examiner << "Line and sphere touch at one point" << std::endl;
+					examiner.check(b.intersects_with(segmentB, t1, t2) == Intersection::TOUCH);
+					examiner << "Line intersects surface of sphere" << std::endl;
+					examiner.check(segmentB.point_at_time(t1).equivalent(Vec2{0, -10.0}));
 				}
 			},
 		};

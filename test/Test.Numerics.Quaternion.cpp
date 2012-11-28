@@ -14,21 +14,24 @@ namespace Euclid
 			"Euclid::Numerics::Quaternion",
 
 			{"Construction",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					// Angle axis
 					Quaternion<double> q(R90, {1.0, 0.0, 0.0});
-					examiner->check(q.rotation_axis().equivalent({1.0, 0.0, 0.0})) << "Rotation axis is correct";
-					examiner->check(equivalent(R90, q.rotation_angle())) << "Rotation angle is correct";
+					examiner << "Rotation axis is correct" << std::endl;
+					examiner.check(q.axis().equivalent({1.0, 0.0, 0.0}));
+					examiner << "Rotation angle is correct" << std::endl;
+					examiner.check(equivalent(R90, q.angle()));
 
 					Matrix<4, 4, double> a = rotate(R90, vector(1.0, 0.0, 0.0));
 					Matrix<4, 4, double> b = q;
 					
-					examiner->check(a.equivalent(b)) << "Rotation matrix from quaternion is correct";
+					examiner << "Rotation matrix from quaternion is correct" << std::endl;
+					examiner.check(a.equivalent(b));
 				}
 			},
 
 			{"Multiplication",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					Quat q = rotate(R90, vector(1.0, 0.0, 0.0));
 					Mat44 m = rotate(R90, vector(1.0, 0.0, 0.0));
 
@@ -39,54 +42,66 @@ namespace Euclid
 					r1 = q * si;
 					r2 = m * si;
 
-					examiner->check(r1.equivalent(r2)) << "Represented rotation is same";
+					examiner << "Represented rotation is same" << std::endl;
+					examiner.check(r1.equivalent(r2));
 
 					Quat a(R90, Vec3(1, 0, 0).normalize());
 					Quat b(R90, Vec3(0, 1, 0).normalize());
 					Quat c = a.rotation_to(b);
 
-					examiner->check(a.equivalent(Vec4(0.707107, 0, 0, 0.707107))) << "Quaternion rotation is correct";
-					examiner->check(b.equivalent(Vec4(0, 0.707107, 0, 0.707107))) << "Quaternion rotation is correct";
-					examiner->check(c.equivalent(Vec4(-0.5, 0.5, -0.5, 0.5))) << "Quaternion rotation is correct";
+					examiner << "Quaternion rotation is correct" << std::endl;
+					examiner.check(a.equivalent(Vec4(0.707107, 0, 0, 0.707107)));
+					examiner << "Quaternion rotation is correct" << std::endl;
+					examiner.check(b.equivalent(Vec4(0, 0.707107, 0, 0.707107)));
+					examiner << "Quaternion rotation is correct" << std::endl;
+					examiner.check(c.equivalent(Vec4(-0.5, 0.5, -0.5, 0.5)));
 
-					examiner->check(a.conjugate().equivalent(Vec4(-0.707107, 0, 0, 0.707107))) << "Quaternion conjugate is correct";
+					examiner << "Quaternion conjugate is correct" << std::endl;
+					examiner.check(a.conjugate().equivalent(Vec4(-0.707107, 0, 0, 0.707107)));
 
-					examiner->check((a * c).equivalent(b)) << "Rotations are equivalent";
+					examiner << "Rotations are equivalent" << std::endl;
+					examiner.check((a * c).equivalent(b));
 				}
 			},
 
 			{"Rotation Matrix",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					Quat identity(IDENTITY);
 					Mat44 m1 = identity;
 
-					examiner->check((m1 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
-					examiner->check((m1 * Vec3(0, 1, 0)).equivalent(Vec3(0, 1, 0))) << "Y axis is correct";
-					examiner->check((m1 * Vec3(0, 0, 1)).equivalent(Vec3(0, 0, 1))) << "Z axis is correct";
+					examiner << "X axis is correct" << std::endl;
+					examiner.check((m1 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0)));
+					examiner << "Y axis is correct" << std::endl;
+					examiner.check((m1 * Vec3(0, 1, 0)).equivalent(Vec3(0, 1, 0)));
+					examiner << "Z axis is correct" << std::endl;
+					examiner.check((m1 * Vec3(0, 0, 1)).equivalent(Vec3(0, 0, 1)));
 
 					Quat a(R90, Vec3(1, 0, 0).normalize());
 					Mat44 m2 = a;
 
-					examiner->check((m2 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
-					examiner->check((m2 * Vec3(0, 1, 0)).equivalent(Vec3(0, 0, 1))) << "Y axis is correct";
-					examiner->check((m2 * Vec3(0, 0, 1)).equivalent(Vec3(0, -1, 0))) << "Z axis is correct";
+					examiner << "X axis is correct" << std::endl;
+					examiner.check((m2 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0)));
+					examiner << "Y axis is correct" << std::endl;
+					examiner.check((m2 * Vec3(0, 1, 0)).equivalent(Vec3(0, 0, 1)));
+					examiner << "Z axis is correct" << std::endl;
+					examiner.check((m2 * Vec3(0, 0, 1)).equivalent(Vec3(0, -1, 0)));
 				}
 			},
 			
 			{"Transforms",
-				[](UnitTest::Examiner * examiner) {
+				[](UnitTest::Examiner & examiner) {
 					Quat q1 = rotate(R90, Vec3(1, 0, 0));
 
-					examiner->check(q1.rotation_angle().equivalent(R90));
-					examiner->check(q1.rotation_axis().equivalent({1, 0, 0}));
+					examiner.check(q1.angle().equivalent(R90));
+					examiner.check(q1.axis().equivalent({1, 0, 0}));
 
 					Quat q2 = rotate<X>(R90);
 
-					examiner->check(q1.equivalent(q2));
+					examiner.check(q1.equivalent(q2));
 
 					Quat q3 = rotate(R90, Vec3(1, 0, 0)) << rotate(-R90, Vec3(1, 0, 0));
 
-					examiner->check(q3.equivalent(Quat(IDENTITY)));
+					examiner.check(q3.equivalent(Quat(IDENTITY)));
 				}
 			},
 		};
