@@ -18,11 +18,6 @@
 
 namespace Euclid {
 	namespace Geometry {
-		template <typename ElementT, dimension N>
-		std::size_t array_count(const ElementT(&)[N]) {
-			return N;
-		}
-
 		struct VertexP3N3M2 {
 			Vec3 position;
 			Vec3 normal;

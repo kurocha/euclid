@@ -18,6 +18,8 @@ namespace Euclid {
 	namespace Geometry {
 		template <dimension D, typename NumericT>
 		class Plane {
+			static_assert(D >= 3, "Planes only exist in 3-dimensional space or higher!");
+			
 		protected:
 			typedef Vector<D, NumericT> VectorT;
 
@@ -61,7 +63,7 @@ namespace Euclid {
 			VectorT closest_point (const VectorT & point) const {
 				Vec3 at;
 
-				intersects_with(Line<3, NumericT>(point, _normal), at);
+				intersects_with(Line<D, NumericT>(point, _normal), at);
 
 				return at;
 			}
@@ -86,11 +88,12 @@ namespace Euclid {
 		template <dimension D, typename NumericT>
 		std::ostream &operator<< (std::ostream &out, const Plane<D, NumericT> & p);
 
-		typedef Plane<2, RealT> Plane2;
 		typedef Plane<3, RealT> Plane3;
+
+		extern template class Plane<3, RealT>;
 	}
 }
 
-#include "Plane.Intersection.h"
+#include "Plane.hpp"
 
 #endif

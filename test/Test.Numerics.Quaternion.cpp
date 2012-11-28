@@ -27,7 +27,7 @@ namespace Euclid
 
 			{"Multiplication",
 				[](UnitTest::Examiner * examiner) {
-					Quat q(R90, vector(1.0, 0.0, 0.0));
+					Quat q = rotate(R90, vector(1.0, 0.0, 0.0));
 					Mat44 m = rotate(R90, vector(1.0, 0.0, 0.0));
 
 					Vec3 si(15.14, -12.5, 4.55);
@@ -81,6 +81,10 @@ namespace Euclid
 					Quat q2 = rotate<X>(R90);
 
 					examiner->check(q1.equivalent(q2));
+
+					auto q3 = Quat(IDENTITY) << rotate(R90, Vec3(1, 0, 0)) << rotate(-R90, Vec3(1, 0, 0));
+
+					examiner->check(q3.equivalent(Quat(IDENTITY)));
 				}
 			},
 		};

@@ -64,8 +64,8 @@ namespace Euclid
 			}
 
 			// Transform Constructors:
-			template <dimension N>
-			Matrix(const Translation<N, NumericT> & translation) : Matrix(IDENTITY)
+			template <dimension N, typename AxisNumericT>
+			Matrix(const Translation<N, AxisNumericT> & translation) : Matrix(IDENTITY)
 			{
 				for (dimension i = 0; i < std::min(R, N); i += 1) {
 					at(i, C-1) = translation.offset[i];
@@ -108,12 +108,12 @@ namespace Euclid
 
 			template <dimension N, typename AngleNumericT, typename AxisNumericT>
 			Matrix(const OffsetAngleAxisRotation<N, AngleNumericT, AxisNumericT> & offset_rotation) : Matrix(IDENTITY) {
-				if (offset_rotation.offset.equivalent(0)) {
+				if (offset_rotation.origin.equivalent(0)) {
 					(*this) = offset_rotation.rotation;
 				} else {
-					(*this) << Matrix(translate(-offset_rotation.offset));
+					(*this) << translate(-offset_rotation.origin);
 					(*this) << offset_rotation.rotation;
-					(*this) << Matrix(translate(offset_rotation.offset));
+					(*this) << translate(offset_rotation.origin);
 				}
 			}
 

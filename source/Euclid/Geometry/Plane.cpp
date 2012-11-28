@@ -9,23 +9,8 @@
 
 #include "Plane.h"
 
-#include "Line.h"
-#include "Triangle.h"
-
-#include <iostream>
-
 namespace Euclid {
 	namespace Geometry {
-// MARK: -
-// MARK: Unit Tests
-
-#ifdef ENABLE_TESTING
-		UNIT_TEST(Plane)
-		{
-			testing("Intersection");
-
-
-		}
-#endif
+		template class Plane<3, RealT>;
 	}
 }

@@ -1,5 +1,5 @@
 //
-//  Geometry/Plane.impl.h
+//  Geometry/Plane.Intersection.h
 // This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 2/12/08.
@@ -7,9 +7,12 @@
 //
 //
 
-#ifndef _EUCLID_GEOMETRY_PLANE_H
-#error This header should not be included manually. Include Plane.h instead.
-#endif
+#ifndef _EUCLID_GEOMETRY_PLANE_INTERSECTION_H
+#define _EUCLID_GEOMETRY_PLANE_INTERSECTION_H
+
+#include "Plane.h"
+#include "Sphere.h"
+#include "../Numerics/Vector.Geometry.h"
 
 namespace Euclid
 {
@@ -18,6 +21,8 @@ namespace Euclid
 		template <dimension D, typename NumericT>
 		bool Plane<D, NumericT>::intersects_with (const Plane<D, NumericT> & other, Line<3, NumericT> & line) const
 		{
+			using Numerics::cross_product;
+			
 			/* Planes are parallel? */
 			if (other.normal() == _normal)
 				return false;
@@ -61,3 +66,5 @@ namespace Euclid
 		}
 	}
 }
+
+#endif

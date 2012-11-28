@@ -31,6 +31,23 @@ namespace Euclid {
 		Quaternion<NumericT> operator* (const Quaternion<NumericT> & q1, const Quaternion<NumericT> & q2) {
 			return multiply(q1, q2);
 		}
+
+		template <typename NumericT, typename TransformT>
+		Quaternion<NumericT> & operator<< (Quaternion<NumericT> & current, const TransformT & transform)
+		{
+			Quaternion<NumericT> step = transform;
+
+			return (current = current * step);
+		}
+
+		template <typename NumericT, typename TransformT>
+		Quaternion<NumericT> operator<< (const Quaternion<NumericT> & current, const TransformT & transform)
+		{
+			Quaternion<NumericT> step = transform;
+
+			return current * step;
+		}
+
 	}
 }
 

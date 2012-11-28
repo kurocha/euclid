@@ -111,6 +111,9 @@ namespace Euclid {
 		typedef Line<2> Line2;
 		typedef Line<3> Line3;
 
+		extern template class Line<2, RealT>;
+		extern template class Line<3, RealT>;
+
 		template <dimension D, typename NumericT>
 		inline Line<D, NumericT> operator+ (const Line<D, NumericT> & l, const Vector<D, NumericT> & v);
 
@@ -190,9 +193,12 @@ namespace Euclid {
 
 		typedef LineSegment<2> LineSegment2;
 		typedef LineSegment<3> LineSegment3;
+
+		extern template class LineSegment<2, RealT>;
+		extern template class LineSegment<3, RealT>;
 	}
 }
 
-#include "Line.Intersection.h"
+#include "Line.hpp"
 
 #endif

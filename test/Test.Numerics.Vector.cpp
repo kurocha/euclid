@@ -70,6 +70,14 @@ namespace Euclid
 				}
 			},
 
+			{"Cross Product",
+				[](UnitTest::Examiner * examiner) {
+					Vec3 a{1, 0, 0}, b{0, 1, 0};
+
+					examiner->check(cross_product(a, b).equivalent({0, 0, 1}));
+				}
+			},
+
 			{"Geometric Comparisons",
 				[](UnitTest::Examiner * examiner) {
 					examiner->check(vector(4, 5).less_than(vector(6, 6))) << "Vector comparison correct";

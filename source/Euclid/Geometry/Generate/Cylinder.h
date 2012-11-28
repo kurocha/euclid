@@ -11,8 +11,8 @@
 #define _EUCLID_GEOMETRY_GENERATE_CYLINDER_H
 
 #include "Basic.h"
-#include "../Geometry/Spline.h"
-#include "../Numerics/Matrix.Multiply.h"
+#include "../Spline.h"
+#include "../../Numerics/Matrix.Multiply.h"
 
 namespace Euclid {
 	namespace Geometry {

@@ -106,6 +106,12 @@ namespace Euclid
 		{
 			return row + (column * size);
 		}
+
+		/// @returns the number of elements in a statically defined array.
+		template <typename ElementT, dimension N>
+		std::size_t array_count(const ElementT(&)[N]) {
+			return N;
+		}
 	}
 }
 

@@ -54,6 +54,6 @@ namespace Euclid {
 	}
 }
 
-#include "Frustrum.impl.h"
+#include "Frustrum.hpp"
 
 #endif

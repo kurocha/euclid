@@ -28,13 +28,7 @@ namespace Euclid {
 			POSITIVE_EDGE = 3
 		};
 
-		/** An Axis Aligned Bounding Box.
-
-		 This class provides many different kinds of functionality.
-
-		 @sa Line
-		 @sa LineSegment
-		 */
+		/// An Axis Aligned Bounding Box.
 		template <dimension D, typename NumericT>
 		class AlignedBox {
 		public:
@@ -385,6 +379,6 @@ namespace Euclid {
 	}
 }
 
-#include "AlignedBox.impl.h"
+#include "AlignedBox.hpp"
 
 #endif

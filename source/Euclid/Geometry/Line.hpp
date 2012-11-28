@@ -11,6 +11,7 @@
 #error This header should not be included manually. Include Line.h instead.
 #endif
 
+#include "AlignedBox.h"
 #include "Intersection.h"
 
 namespace Euclid
@@ -95,7 +96,7 @@ namespace Euclid
 			t2 = (NumericT)1;
 
 			for (dimension i = 0; i < D; i += 1) {
-				if (!ray_slabs_intersection(point[i], direction[i], a.min()[i], a.max()[i], t1, t2)) return false;
+				if (!ray_slabs_intersection(_point[i], _direction[i], a.min()[i], a.max()[i], t1, t2)) return false;
 			}
 
 			return true;
@@ -196,12 +197,6 @@ namespace Euclid
 				// No collision occurred.
 				return false;
 			}
-		}
-
-		template <dimension D, typename NumericT>
-		bool LineSegment<D, NumericT>::intersects_with (const LineSegment<D, NumericT> & other, LineSegment<D, NumericT> & overlap) const
-		{
-			return line_intersection_test(*this, other, overlap);
 		}
 
 		template <dimension D, typename NumericT>

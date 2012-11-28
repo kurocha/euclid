@@ -28,7 +28,7 @@ namespace Euclid {
 					5, 1, 7, 3
 				};
 
-				const Vec3u K(IDENTITY, 2);
+				const Vec3u K = 2;
 				const std::size_t SIZE = sizeof(CUBE_3X2) / sizeof(std::size_t);
 
 				mesh.vertices.resize(SIZE);

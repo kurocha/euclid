@@ -122,6 +122,13 @@ namespace Euclid {
 			return (current = current * step);
 		}
 
+		template <dimension R, dimension C, typename NumericT, typename TransformT>
+		Matrix<R, C, NumericT> operator<< (const Matrix<R, C, NumericT> & current, const TransformT & transform)
+		{
+			Matrix<R, C, NumericT> step = transform;
+
+			return current * step;
+		}
 	}
 }
 

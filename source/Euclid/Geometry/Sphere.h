@@ -100,6 +100,6 @@ namespace Euclid {
 	}
 }
 
-#include "Sphere.Intersection.h"
+#include "Sphere.hpp"
 
 #endif

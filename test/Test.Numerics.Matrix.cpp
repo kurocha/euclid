@@ -154,20 +154,19 @@ namespace Euclid
 					examiner->check(a == test_pattern) << "Vector was copied correctly";
 
 					Mat44 b, c;
-					/*
-					 Vec4 r, pt(10.0, 0.0, 0.0, 1.0);
-					 b = rotation(R90, vector(0.0, 1.0, 0.0));
 
-					 r = b * pt;
+					Vec4 r, pt(10.0, 0.0, 0.0, 1.0);
+					b = rotate(R90, vector(0.0, 1.0, 0.0));
 
-					 examiner->check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
+					r = b * pt;
 
-					 b = rotation(R180, vector(0.0, 1.0, 0.0), vector(0.0, 10.0, 10.0));
+					examiner->check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
 
-					 r = b * pt;
+					b = rotate(R180, vector(0.0, 1.0, 0.0), vector(0.0, 10.0, 10.0));
 
-					 examiner->check(r.equivalent(vector(-10.0, 0.0, 20.0, 1.0))) << "Rotation was successful";
-					 */
+					r = b * pt;
+
+					examiner->check(r.equivalent(vector(-10.0, 0.0, -20.0, 1.0))) << "Rotation was successful";
 				}
 			},
 

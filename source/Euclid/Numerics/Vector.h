@@ -382,21 +382,21 @@ namespace Euclid
 
 		/// Short hand notation for 1-space vector type.
 		typedef Vector<1, RealT> Vec1;
-		typedef Vector<1, unsigned> Vec1u;
+		typedef Vector<1, std::size_t> Vec1u;
 		typedef Vector<1, int> Vec1i;
 		/// Short hand notation for 2-space vector type.
 		typedef Vector<2, RealT> Vec2;
-		typedef Vector<2, unsigned> Vec2u;
+		typedef Vector<2, std::size_t> Vec2u;
 		typedef Vector<2, int> Vec2i;
 		typedef Vector<2, bool> Vec2b;
 		/// Short hand notation for 3-space vector type.
 		typedef Vector<3, RealT> Vec3;
-		typedef Vector<3, unsigned> Vec3u;
+		typedef Vector<3, std::size_t> Vec3u;
 		typedef Vector<3, int> Vec3i;
 		typedef Vector<3, bool> Vec3b;
 		/// Short hand notation for 4-space vector type.
 		typedef Vector<4, RealT> Vec4;
-		typedef Vector<4, unsigned> Vec4u;
+		typedef Vector<4, std::size_t> Vec4u;
 		typedef Vector<4, int> Vec4i;
 		typedef Vector<4, bool> Vec4b;
 
