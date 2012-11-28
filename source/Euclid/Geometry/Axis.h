@@ -31,7 +31,7 @@ namespace Euclid {
 			Axis() {
 			}
 
-			Axis(Identity & identity) : _translation(ZERO), _rotation(IDENTITY) {
+			Axis(const Identity & identity) : _translation(ZERO), _rotation(IDENTITY) {
 			}
 
 			Axis(Vec3T translation, QuaternionT rotation) : _translation(translation), _rotation(rotation) {
