@@ -44,17 +44,17 @@ namespace Euclid
 
 		template <dimension D, typename NumericT>
 		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order) {
-			subtract_in_order(other, order, Vector<D, SubtractResolution>(SUBTRACT_SMALLEST, SUBTRACT_SMALLEST, SUBTRACT_SMALLEST));
+			subtract_in_order(other, order, Vector<D, unsigned>(SUBTRACT_SMALLEST));
 		}
 
 		template <dimension D, typename NumericT>
-		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, SubtractResolution> & cuts)
+		void AlignedBox<D, NumericT>::subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, unsigned> & cuts)
 		{
 			// This function is fairly complex, for a good reason - it does a fairly complex geometric operation.
 			// This operation can be summarised as subtracting one box from another. The reason why this is complex is because there are many edge cases to
 			// consider, and this function works for boxes in n dimensions.
 
-			Vector<D, dimension> k(IDENTITY, 2);
+			Vector<D, dimension> k(2);
 
 			// Total number of corners for a given D.
 			const std::size_t CORNERS = 1 << D;

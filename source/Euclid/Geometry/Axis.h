@@ -41,37 +41,24 @@ namespace Euclid {
 			const QuaternionT rotation() { return _rotation; }
 
 			MatrixT to_origin() const {
-				MatrixT transform = IDENTITY;
-
-				transform = transform * _rotation.conjugated_quaternion().rotating_matrix();
-				transform = transform * MatrixT::translating_matrix(-_translation);
-
-				return transform;
+				return _rotation << translate(-_translation);
 			}
 
 			MatrixT from_origin() const {
-				MatrixT transform = IDENTITY;
-
-				transform = transform * MatrixT::translating_matrix(_translation);
-				transform = transform * _rotation.rotating_matrix();
-
-				//return transform.translated_matrix(_translation);
-				return transform;
+				return translate(-_translation) << _rotation;
 			}
 
 			MatrixT mate_with(const Axis & axis) const {
-				MatrixT transform = to_origin();
-				return axis.from_origin() * transform;
+				return axis.from_origin() << to_origin();
 			}
 
 			MatrixT mate_with(const Axis & axis, const MatrixT & intermediate_transform) const {
-				MatrixT transform = to_origin();
-				transform = intermediate_transform * transform;
-				transform = axis.from_origin() * transform;
-
-				return transform;
+				return to_origin() << intermediate_transform << axis.from_origin();
 			}
 		};
+
+		extern template class Axis<float>;
+		extern template class Axis<double>;
 	}
 }
 

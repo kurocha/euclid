@@ -153,7 +153,7 @@ namespace Euclid
 
 					examiner->check(a == test_pattern) << "Vector was copied correctly";
 
-					Mat44 b, c;
+					Mat44 b;
 
 					Vec4 r, pt(10.0, 0.0, 0.0, 1.0);
 					b = rotate(R90, vector(0.0, 1.0, 0.0));
@@ -162,7 +162,7 @@ namespace Euclid
 
 					examiner->check(r.equivalent(vector(0.0, 0.0, -10.0, 1.0))) << "Rotation was successful";
 
-					b = rotate(R180, vector(0.0, 1.0, 0.0), vector(0.0, 10.0, 10.0));
+					b = rotate(R180, vector(0.0, 1.0, 0.0)).around_origin(vector(0.0, 10.0, 10.0));
 
 					r = b * pt;
 
@@ -174,8 +174,7 @@ namespace Euclid
 				[](UnitTest::Examiner * examiner) {
 					using namespace Euclid::Numerics;
 
-					Mat44 a(IDENTITY);
-					a << rotate(R90, Vec3(1.0, 0.0, 0.0)) << translate(Vec3(1.0, 2.0, 3.0));
+					Mat44 a = rotate(R90, Vec3(1.0, 0.0, 0.0)) << translate(Vec3(1.0, 2.0, 3.0));
 
 					Vec4 r, pt(0.0, 0.0, 0.0, 1.0);
 

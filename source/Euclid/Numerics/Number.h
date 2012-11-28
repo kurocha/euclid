@@ -223,6 +223,6 @@ namespace Euclid
 	}
 }
 
-#include "Number.Angles.h"
+#include "Number.hpp"
 
 #endif

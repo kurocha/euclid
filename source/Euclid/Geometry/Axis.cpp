@@ -10,5 +10,7 @@
 
 namespace Euclid {
 	namespace Geometry {
+		template class Axis<float>;
+		template class Axis<double>;
 	}
 }

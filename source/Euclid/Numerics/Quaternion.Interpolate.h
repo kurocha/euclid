@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#ifndef _EUCLID_NUMERICS_QUATERNION_MULTIPLY_H
-#define _EUCLID_NUMERICS_QUATERNION_MULTIPLY_H
+#ifndef _EUCLID_NUMERICS_QUATERNION_INTERPOLATE_H
+#define _EUCLID_NUMERICS_QUATERNION_INTERPOLATE_H
 
 #include "Quaternion.h"
 

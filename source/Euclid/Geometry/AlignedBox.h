@@ -350,7 +350,7 @@ namespace Euclid {
 
 			// Ordered subtraction methods
 			void subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order);
-			void subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, SubtractResolution> & cuts);
+			void subtract_in_order (const AlignedBox & other, const Vector<D, dimension> & order, const Vector<D, unsigned> & cuts);
 
 			// Translation based subtraction methods
 			// These methods assume that only the edges specified by the orientation may overlap. For a more general

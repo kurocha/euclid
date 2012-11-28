@@ -21,6 +21,9 @@ namespace Euclid
 	namespace Numerics
 	{
 
+		template <typename NumericT>
+		class Quaternion;
+
 // MARK: -
 // MARK: Matrix Class
 
@@ -51,6 +54,9 @@ namespace Euclid
 			}
 
 			Matrix (const Matrix & other) : std::array<NumericT, R*C>(other) {}
+
+			template <typename QuaternionNumericT>
+			Matrix (const Quaternion<QuaternionNumericT> & rotation);
 
 			template <typename... TailT>
 			Matrix (const NumericT & head, const TailT&&... tail) : std::array<NumericT, R*C>{{head, (NumericT)tail...}} {}
@@ -111,9 +117,7 @@ namespace Euclid
 				if (offset_rotation.origin.equivalent(0)) {
 					(*this) = offset_rotation.rotation;
 				} else {
-					(*this) << translate(-offset_rotation.origin);
-					(*this) << offset_rotation.rotation;
-					(*this) << translate(offset_rotation.origin);
+					(*this) = translate(-offset_rotation.origin) << offset_rotation.rotation << translate(offset_rotation.origin);
 				}
 			}
 
@@ -160,6 +164,12 @@ namespace Euclid
 					at(0, 1) = -sa;
 					at(1, 0) = sa;
 				}
+			}
+
+			template <typename A, typename B>
+			Matrix (const Transforms<A, B> & transforms) : Matrix(IDENTITY)
+			{
+				transforms.apply(*this);
 			}
 
 			// Getters and setters
@@ -229,6 +239,12 @@ namespace Euclid
 
 				return true;
 			}
+
+			template <typename RightT>
+			Transforms<Matrix, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 // MARK: -
@@ -246,5 +262,8 @@ namespace Euclid
 		extern template class Matrix<2, 2, RealT>;
 	}
 }
+
+#include "Matrix.hpp"
+#include "Matrix.Multiply.h"
 
 #endif

@@ -20,8 +20,10 @@ namespace Euclid
 					examiner->check(q.rotation_axis().equivalent({1.0, 0.0, 0.0})) << "Rotation axis is correct";
 					examiner->check(equivalent(R90, q.rotation_angle())) << "Rotation angle is correct";
 
-					Matrix<4, 4, double> m = rotate(R90, vector(1.0, 0.0, 0.0));
-					examiner->check(q.rotation_matrix<4>().equivalent(m)) << "Rotation matrix from quaternion is correct";
+					Matrix<4, 4, double> a = rotate(R90, vector(1.0, 0.0, 0.0));
+					Matrix<4, 4, double> b = q;
+					
+					examiner->check(a.equivalent(b)) << "Rotation matrix from quaternion is correct";
 				}
 			},
 
@@ -56,14 +58,14 @@ namespace Euclid
 			{"Rotation Matrix",
 				[](UnitTest::Examiner * examiner) {
 					Quat identity(IDENTITY);
-					auto m1 = identity.rotation_matrix<4>();
+					Mat44 m1 = identity;
 
 					examiner->check((m1 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
 					examiner->check((m1 * Vec3(0, 1, 0)).equivalent(Vec3(0, 1, 0))) << "Y axis is correct";
 					examiner->check((m1 * Vec3(0, 0, 1)).equivalent(Vec3(0, 0, 1))) << "Z axis is correct";
 
 					Quat a(R90, Vec3(1, 0, 0).normalize());
-					auto m2 = a.rotation_matrix<4>();
+					Mat44 m2 = a;
 
 					examiner->check((m2 * Vec3(1, 0, 0)).equivalent(Vec3(1, 0, 0))) << "X axis is correct";
 					examiner->check((m2 * Vec3(0, 1, 0)).equivalent(Vec3(0, 0, 1))) << "Y axis is correct";
@@ -82,7 +84,7 @@ namespace Euclid
 
 					examiner->check(q1.equivalent(q2));
 
-					auto q3 = Quat(IDENTITY) << rotate(R90, Vec3(1, 0, 0)) << rotate(-R90, Vec3(1, 0, 0));
+					Quat q3 = rotate(R90, Vec3(1, 0, 0)) << rotate(-R90, Vec3(1, 0, 0));
 
 					examiner->check(q3.equivalent(Quat(IDENTITY)));
 				}

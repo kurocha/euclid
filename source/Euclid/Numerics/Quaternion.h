@@ -53,6 +53,12 @@ namespace Euclid
 				
 			}
 
+			template <typename A, typename B>
+			Quaternion (const Transforms<A, B> & transforms) : Quaternion(IDENTITY)
+			{
+				transforms.apply(*this);
+			}
+
 			/// Calculate the angle of rotation.
 			Radians<NumericT> rotation_angle () const {
 				return number((*this)[W]).acos() * 2.0;
@@ -61,31 +67,6 @@ namespace Euclid
 			/// Calculate the axis of rotation.
 			Vector<3, NumericT> rotation_axis () const {
 				return this->reduce().normalize();
-			}
-
-			template <dimension N>
-			Matrix<N, N, NumericT> rotation_matrix () const {
-				static_assert(N == 3 || N == 4, "Matrix must be 3x3 or 4x4 to contain quaternion rotation!");
-
-				assert(this->length_squared().equivalent(1) && "Quaternion.rotating_matrix magnitude must be 1");
-
-				Matrix<N, N, NumericT> m = IDENTITY;
-
-				NumericT x = (*this)[X], y = (*this)[Y], z = (*this)[Z], w = (*this)[W];
-
-				m.at(0, 0) = 1.0 - 2.0 * (y*y + z*z);
-				m.at(0, 1) =       2.0 * (x*y - w*z);
-				m.at(0, 2) =       2.0 * (x*z + w*y);
-
-				m.at(1, 0) =       2.0 * (x*y + w*z);
-				m.at(1, 1) = 1.0 - 2.0 * (x*x + z*z);
-				m.at(1, 2) =       2.0 * (y*z - w*x);
-
-				m.at(2, 0) =       2.0 * (x*z - w*y);
-				m.at(2, 1) =       2.0 * (y*z + w*x);
-				m.at(2, 2) = 1.0 - 2.0 * (x*x + y*y);
-
-				return m;
 			}
 
 			/// Return a quaternion that rotates from this rotation to another.
@@ -115,6 +96,12 @@ namespace Euclid
 				uuv *= 2;
 
 				return v + uv + uuv;
+			}
+
+			template <typename RightT>
+			Transforms<Quaternion, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
 			}
 		};
 
@@ -149,5 +136,7 @@ namespace Euclid
 		typedef Quaternion<> Quat;
 	}
 }
+
+#include "Quaternion.Multiply.h"
 
 #endif

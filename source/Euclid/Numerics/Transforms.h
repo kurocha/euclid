@@ -14,6 +14,37 @@
 
 namespace Euclid {
 	namespace Numerics {
+		template <typename LeftT, typename RightT>
+		struct Transforms {
+			const LeftT & left;
+			const RightT & right;
+
+		protected:
+			template <typename ApplyT, typename TransformT>
+			void apply(ApplyT & to, const TransformT & transform) const
+			{
+				//if (!transform.identity())
+				to *= ApplyT(transform);
+			}
+
+			template <typename ApplyT, typename A, typename B>
+			void apply(ApplyT & to, const Transforms<A, B> & transforms) const
+			{
+				apply(to, transforms.left);
+				apply(to, transforms.right);
+			}
+
+		public:
+			template <typename ApplyT>
+			void apply (ApplyT & to) const {
+				apply(to, *this);
+			}
+		};
+
+		template <typename A, typename B, typename RightT>
+		Transforms<Transforms<A, B>, RightT> operator<< (const Transforms<A, B> & list, const RightT & right) {
+			return {list, right};
+		}
 
 		// MARK: -
 		// MARK: Translation
@@ -24,6 +55,12 @@ namespace Euclid {
 			Vector<E, NumericT> offset;
 
 			bool identity () const { return offset.sum() == 1; }
+
+			template <typename RightT>
+			Transforms<Translation, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 		template <dimension E, typename NumericT>
@@ -39,6 +76,12 @@ namespace Euclid {
 			Vector<E, NumericT> factor;
 
 			bool identity () const { return factor == 1; }
+
+			template <typename RightT>
+			Transforms<Scale, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 		template <dimension E, typename NumericT>
@@ -51,6 +94,12 @@ namespace Euclid {
 			NumericT factor;
 
 			bool identity () const { return factor == 1; }
+
+			template <typename RightT>
+			Transforms<UniformScale, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 		template <dimension E, typename NumericT>
@@ -77,6 +126,12 @@ namespace Euclid {
 
 				return result;
 			}
+
+			template <typename RightT>
+			Transforms<FixedAxisRotation, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 		/// Rotation around a fixed axis: rotation<X>(R90)
@@ -88,6 +143,9 @@ namespace Euclid {
 		// MARK: -
 		// MARK: Angle Axis Rotation
 
+		template <dimension E, typename AngleNumericT, typename AxisNumericT>
+		struct OffsetAngleAxisRotation;
+
 		/// Fairly standard angle-axis transform:
 		template <dimension E, typename AngleNumericT, typename AxisNumericT>
 		struct AngleAxisRotation {
@@ -97,7 +155,17 @@ namespace Euclid {
 			/// The axis to rotate around:
 			Vector<E, AxisNumericT> axis;
 
+			OffsetAngleAxisRotation<E, AngleNumericT, AxisNumericT> around_origin(const Vector<E, AxisNumericT> & origin) {
+				return {*this, origin};
+			}
+
 			bool identity () const { return angle == 0; }
+
+			template <typename RightT>
+			Transforms<AngleAxisRotation, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
 		};
 
 		template <dimension E, typename AngleNumericT, typename AxisNumericT>
@@ -124,12 +192,13 @@ namespace Euclid {
 			Vector<E, AxisNumericT> origin;
 
 			bool identity () const { return rotation.identity(); }
-		};
 
-		template <dimension E, typename AngleNumericT, typename AxisNumericT>
-		OffsetAngleAxisRotation<E, AngleNumericT, AxisNumericT> rotate(const Radians<AngleNumericT> & angle, const Vector<E, AxisNumericT> & axis, const Vector<E, AxisNumericT> & origin) {
-			return {{angle, axis}, origin};
-		}
+			template <typename RightT>
+			Transforms<OffsetAngleAxisRotation, RightT> operator<< (const RightT & right) const
+			{
+				return {*this, right};
+			}
+		};
 	}
 }
 
