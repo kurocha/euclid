@@ -4,7 +4,7 @@ add_executable("euclid-test-runner") do
 		linkflags ["-lUnitTest", "-lEuclid"]
 	end
 	
-	def sources
+	def sources(environment)
 		Pathname.glob(root + "**/*.cpp")
 	end
 end
