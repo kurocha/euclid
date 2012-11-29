@@ -34,10 +34,10 @@ namespace Euclid
 					/// This transform should move any points from origin-space to axis-space
 					auto p2 = a2.from_origin() * Vec3(0);
 
-					examiner << "Point is transformed to origin correctly." << std::endl;
+					examiner << "Point is transformed to origin." << std::endl;
 					examiner.check(p1.equivalent(0));
 
-					examiner << "Point is transformed from origin correctly." << std::endl;
+					examiner << "Point is transformed from origin." << std::endl;
 					examiner.check(p2.equivalent({1, 2, 3}));
 
 					auto p3 = a2.to_origin() * Vec3(2, 2, 3);
@@ -52,22 +52,29 @@ namespace Euclid
 					auto a1 = Axis<RealT>({10, 10, 10}, IDENTITY);
 					auto a2 = Axis<RealT>({-5, -5, -5}, rotate<Z>(R90));
 
-					auto m = a1.mate_with(a2);
+					auto m1 = a1.mate_with(a2);
 
-					auto p1 = m * Vec3(10, 10, 10);
+					auto p1 = m1 * Vec3(10, 10, 10);
 
-					examiner << "Point is translated correctly" << std::endl;
+					examiner << "Point is translated." << std::endl;
 					examiner.check(p1.equivalent({-5, -5, -5}));
 
-					auto p2 = m * Vec3(10, 10, 15);
+					auto p2 = m1 * Vec3(10, 10, 15);
 
-					examiner << "Point is translated correctly" << std::endl;
+					examiner << "Point is translated." << std::endl;
 					examiner.check(p2.equivalent({-5, -5, 0}));
 
-					auto p3 = m * Vec3(10, 15, 10);
+					auto p3 = m1 * Vec3(10, 15, 10);
 
-					examiner << "Point is translated and rotated correctly" << std::endl;
+					examiner << "Point is translated and rotated." << std::endl;
 					examiner.check(p3.equivalent({-10, -5, -5}));
+
+					auto m2 = a1.mate_with(a2, translate(Vec3{1, 1, 1}));
+
+					auto p4 = m2 * Vec3(10, 10, 10);
+
+					examiner << "Point is transformed with intermediate translation." << std::endl;
+					examiner.check(p4.equivalent({-6, -4, -4}));
 				}
 			},
 		};

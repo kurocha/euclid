@@ -53,7 +53,7 @@ namespace Euclid {
 			}
 
 			MatrixT mate_with(const Axis & axis, const MatrixT & intermediate_transform) const {
-				return to_origin() << intermediate_transform << axis.from_origin();
+				return axis.from_origin() << intermediate_transform << to_origin();
 			}
 		};
 
