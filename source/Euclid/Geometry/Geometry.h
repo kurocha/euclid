@@ -12,6 +12,7 @@
 
 #include "../Euclid.h"
 #include "../Numerics/Vector.h"
+#include "../Numerics/Vector.Geometry.h"
 
 namespace Euclid {
 	/// Basic geometric constructs.
@@ -21,26 +22,31 @@ namespace Euclid {
 		/// A general abstraction of a shape in D-space with P points. Used as a base class for several shapes. Provides access to points and some general functions.
 		template <dimension D, dimension P, typename NumericT>
 		struct Shape {
+		protected:
+			Vector<D, NumericT> _points[P];
+
+		public:
 			typedef Vector<D, NumericT> VectorT;
-			
-			Vector<D, NumericT> points[P];
 
 			Shape () = default;
 
 			template <typename... ArgumentsT>
-			Shape (ArgumentsT... arguments) : points{(VectorT)arguments...}
+			Shape (ArgumentsT... arguments) : _points{(VectorT)arguments...}
 			{
 				static_assert(sizeof...(ArgumentsT) == P, "Incorrect number of points!");
 			}
 
 			VectorT center () const
 			{
-				VectorT total(points[0]);
+				VectorT total(_points[0]);
 				for (dimension i = 1; i < P; i++)
-					total += points[i];
+					total += _points[i];
 
 				return total / (NumericT)P;
 			}
+
+			VectorT & operator[] (std::size_t i) { return _points[i]; }
+			const VectorT & operator[] (std::size_t i) const { return _points[i]; }
 		};
 
 		/// Surface normal for any 2-dimensional shape:
@@ -54,7 +60,7 @@ namespace Euclid {
 		template <typename NumericT>
 		Vector<3, NumericT> surface_normal (const Shape<3, 3, NumericT> & shape)
 		{
-			return surface_normal(shape.points[0], shape.points[1], shape.points[2]);
+			return surface_normal(shape[0], shape[1], shape[2]);
 		}
 
 		/// An intersection test generally has three kinds of results which are distinct. There was no intersection, the edges touched, or the shapes overlapped.

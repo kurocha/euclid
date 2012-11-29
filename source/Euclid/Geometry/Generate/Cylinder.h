@@ -12,7 +12,6 @@
 
 #include "Basic.h"
 #include "../Spline.h"
-#include "../../Numerics/Matrix.Multiply.h"
 
 namespace Euclid {
 	namespace Geometry {

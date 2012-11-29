@@ -11,13 +11,13 @@
 #define _EUCLID_GEOMETRY_TRIANGLE_H
 
 #include "Geometry.h"
-#include "Vector.Geometry.h"
 #include "Plane.h"
 
 namespace Euclid {
 	namespace Geometry {
 		template <dimension D, typename NumericT>
-		struct Triangle : public Shape<D, 3, NumericT> {
+		class Triangle : public Shape<D, 3, NumericT> {
+		public:
 			template <typename... ArgumentsT>
 			Triangle(ArgumentsT... arguments) : Shape<D, 3, NumericT>(arguments...)
 			{
@@ -25,9 +25,9 @@ namespace Euclid {
 
 			AlignedBox<D, NumericT> bounding_box ()
 			{
-				AlignedBox<D, NumericT> box(this->points[0], this->points[1]);
+				AlignedBox<D, NumericT> box((*this)[0], (*this)[1]);
 
-				box.union_with_point(this->points[2]);
+				box.union_with_point((*this)[2]);
 
 				return box;
 			}

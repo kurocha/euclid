@@ -10,7 +10,7 @@
 #ifndef _EUCLID_GEOMETRY_GENERATE_BASIC_H
 #define _EUCLID_GEOMETRY_GENERATE_BASIC_H
 
-#include "Mesh.h"
+#include "../Mesh.h"
 
 namespace Euclid {
 	namespace Geometry {

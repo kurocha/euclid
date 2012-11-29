@@ -5,7 +5,7 @@ add_library 'Euclid' do
 	end
 	
 	def headers
-		Pathname.glob(root + 'Euclid/**/*.h')
+		Pathname.glob(root + 'Euclid/**/*.{h,hpp}')
 	end
 	
 	def files

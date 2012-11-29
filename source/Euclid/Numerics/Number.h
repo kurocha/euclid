@@ -21,7 +21,7 @@ namespace Euclid
 	namespace Numerics
 	{
 		template <typename NumericT>
-		class Radians;
+		struct Radians;
 
 		// Private base implementation of a variety of common numerical operations:
 		namespace {

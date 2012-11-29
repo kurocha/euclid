@@ -43,7 +43,7 @@ namespace Euclid {
 			/// Point is a point on the plain, and direction is the normal
 			Plane (const Line<D, NumericT> & line) : Plane(line.point(), line.direction()) {}
 
-			Plane (const Triangle<D, NumericT> & triangle) : Plane(triangle.points[0], surface_normal(triangle)) {}
+			Plane (const Triangle<D, NumericT> & triangle) : Plane(triangle[0], surface_normal(triangle)) {}
 
 			const RealT & distance() const { return _distance; }
 			const VectorT & normal() const { return _normal; }

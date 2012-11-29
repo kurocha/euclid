@@ -10,7 +10,6 @@
 
 #include "Spline.h"
 
-#include "Integer.h"
 #include "Triangle.h"
 #include "Line.h"
 

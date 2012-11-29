@@ -7,8 +7,7 @@
 //
 
 #include "Eye.h"
-#include "Vector.Geometry.h"
-#include "Matrix.Multiply.h"
+#include "../Numerics/Matrix.Multiply.h"
 
 namespace Euclid
 {

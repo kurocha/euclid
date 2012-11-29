@@ -20,10 +20,10 @@ namespace Euclid
 					typedef Shape<2, 4, int> ShapeT;
 
 					ShapeT s;
-					s.points[0] = {-5, -5};
-					s.points[1] = {5, -5};
-					s.points[2] = {5, 5};
-					s.points[3] = {-5, 5};
+					s[0] = {-5, -5};
+					s[1] = {5, -5};
+					s[2] = {5, 5};
+					s[3] = {-5, 5};
 
 					examiner.check_equal(s.center(), Vec2i(0));
 				}

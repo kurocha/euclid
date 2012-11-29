@@ -26,7 +26,8 @@ namespace Euclid
 
 		/// A fixed-size numeric vector.
 		template <dimension E, typename NumericT = RealT>
-		struct alignas(16) Vector : public std::array<NumericT, E> {
+		class alignas(16) Vector : public std::array<NumericT, E> {
+		public:
 			static_assert(std::is_arithmetic<NumericT>::value, "Vector only supports numeric data-types!");
 
 			/// The type of the vector elements.
