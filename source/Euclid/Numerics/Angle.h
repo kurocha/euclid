@@ -9,6 +9,7 @@
 #ifndef _EUCLID_NUMERICS_ANGLE_H
 #define _EUCLID_NUMERICS_ANGLE_H
 
+#include "Numerics.h"
 #include "Number.h"
 #include "Float.h"
 
@@ -19,9 +20,12 @@ namespace Euclid
 		template <typename NumericT>
 		struct Number;
 
-		/// Radians to degrees multiplier
-		const double R2D = (180.0 / M_PI);
-		const double D2R = (M_PI / 180.0);
+		namespace Constants
+		{
+			/// Radians to degrees multiplier
+			const double R2D = (180.0 / M_PI);
+			const double D2R = (M_PI / 180.0);
+		}
 
 		template <typename FloatT = double>
 		struct Radians;
@@ -154,22 +158,25 @@ namespace Euclid
 			return value;
 		}
 
-		/// 10 degree rotation
-		constexpr Radians<> R10 = M_PI_2 / 9.0;
-		/// 30 degree rotation
-		constexpr Radians<> R30 = M_PI_2 / 3.0;
-		/// 45 degree rotation
-		constexpr Radians<> R45 = M_PI_4;
-		/// 60 degree rotation
-		constexpr Radians<> R60 = R30 * 2.0;
-		/// 90 degree rotation
-		constexpr Radians<> R90 {M_PI_2};
-		/// 180 degree rotation
-		constexpr Radians<> R180 = M_PI;
-		/// 270 degree rotation
-		constexpr Radians<> R270 = R90 * 3.0;
-		/// 360 degree rotation
-		constexpr Radians<> R360 = R180 * 2.0;
+		namespace Constants
+		{
+			/// 10 degree rotation
+			constexpr Radians<> R10 = M_PI_2 / 9.0;
+			/// 30 degree rotation
+			constexpr Radians<> R30 = M_PI_2 / 3.0;
+			/// 45 degree rotation
+			constexpr Radians<> R45 = M_PI_4;
+			/// 60 degree rotation
+			constexpr Radians<> R60 = R30 * 2.0;
+			/// 90 degree rotation
+			constexpr Radians<> R90 {M_PI_2};
+			/// 180 degree rotation
+			constexpr Radians<> R180 = M_PI;
+			/// 270 degree rotation
+			constexpr Radians<> R270 = R90 * 3.0;
+			/// 360 degree rotation
+			constexpr Radians<> R360 = R180 * 2.0;
+		}
 	}
 }
 
