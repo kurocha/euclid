@@ -21,7 +21,8 @@ namespace Euclid
 	/// Mathematics and functionality directly associated with numbers.
 	namespace Numerics
 	{
-		namespace Constants {
+		namespace Constants
+		{
 			/// Default floating point type
 			typedef float RealT;
 

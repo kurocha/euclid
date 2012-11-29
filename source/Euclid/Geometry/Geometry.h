@@ -63,32 +63,37 @@ namespace Euclid {
 			return surface_normal(shape[0], shape[1], shape[2]);
 		}
 
-		/// An intersection test generally has three kinds of results which are distinct. There was no intersection, the edges touched, or the shapes overlapped.
-		enum Intersection
+		namespace Constants
 		{
-			/// There is no geometric intersection.
-			DISJOINT = 0,
+			/// An intersection test generally has three kinds of results which are distinct. There was no intersection, the edges touched, or the shapes overlapped.
+			enum Intersection
+			{
+				/// There is no geometric intersection.
+				DISJOINT = 0,
 
-			/// Edges of the shapes touch, but the shapes themselves do not overlap.
-			TOUCH = 16,
+				/// Edges of the shapes touch, but the shapes themselves do not overlap.
+				TOUCH = 16,
 
-			/// The shapes intersect.
-			OVERLAP = 32,
+				/// The shapes intersect.
+				OVERLAP = 32,
 
-			/// The shape being tested is completely embedded.
-			ENCLOSED = 64
-		};
+				/// The shape being tested is completely embedded.
+				ENCLOSED = 64
+			};
 
-		enum Direction
-		{
-			LEFT   = 1 << 0, // - x-axis
-			RIGHT  = 1 << 1, // + x-axis
-			BOTTOM = 1 << 2, // - y-axis
-			TOP    = 1 << 3, // + y-axis
-			NEAR   = 1 << 4, // - z-axis
-			FAR    = 1 << 5 // + z-axis
-		};
+			enum Direction
+			{
+				LEFT   = 1 << 0, // - x-axis
+				RIGHT  = 1 << 1, // + x-axis
+				BOTTOM = 1 << 2, // - y-axis
+				TOP    = 1 << 3, // + y-axis
+				NEAR   = 1 << 4, // - z-axis
+				FAR    = 1 << 5 // + z-axis
+			};
+		}
 
+		using namespace Constants;
+		
 		/*
 		    Geometry is very inter-dependant, for example, a plane can be constructed from a triangle, but a triangle also relies on planes for intersection tests. Therefore, we predefine all general geometry classes here.
 		 */
