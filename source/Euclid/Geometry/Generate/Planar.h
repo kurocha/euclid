@@ -42,7 +42,7 @@ namespace Euclid {
 				for (std::size_t i = 0; i < 4; i += 1) {
 					typename MeshT::VertexT vertex;
 
-					vertex.position.zero();
+					vertex.position = 0;
 					vertex.position.set(size * Vec2(coordinates[i][0], coordinates[i][1]));
 
 					vertex.mapping = Vec2(mappings[i][0], mappings[i][1]);

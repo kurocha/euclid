@@ -74,7 +74,7 @@ namespace Euclid {
 				// If we are capping, add two more points for the center points at each end
 				if (cap_start || cap_end) {
 				    typename MeshT::VertexT vertex;
-				    vertex.position.zero();
+				    vertex.position = 0;
 
 				    mesh.vertices.push_back(vertex);
 
