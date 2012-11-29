@@ -1,13 +1,13 @@
 //
-//  Matrix.Multiplication.h
+//  Matrix.Multiply.h
 //  Euclid
 //
 //  Created by Samuel Williams on 27/11/12.
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#ifndef _EUCLID_NUMERICS_MATRIX_PROJECTIONS_H
-#define _EUCLID_NUMERICS_MATRIX_PROJECTIONS_H
+#ifndef _EUCLID_NUMERICS_MATRIX_MULTIPLY_H
+#define _EUCLID_NUMERICS_MATRIX_MULTIPLY_H
 
 #include "Matrix.h"
 #include "Angle.h"

@@ -12,6 +12,7 @@
 
 #include "Geometry.h"
 #include "../Numerics/Matrix.h"
+#include "../Numerics/Matrix.Projections.h"
 #include "../Numerics/Interpolate.h"
 
 namespace Euclid {
