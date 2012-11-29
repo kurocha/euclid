@@ -21,35 +21,39 @@ namespace Euclid
 	/// Mathematics and functionality directly associated with numbers.
 	namespace Numerics
 	{
-		/// Default floating point type
-		typedef float RealT;
+		namespace Constants {
+			/// Default floating point type
+			typedef float RealT;
 
-		/// Used as a template type for size dimension.
-		typedef std::size_t dimension;
+			/// Used as a template type for size dimension.
+			typedef std::size_t dimension;
 
-		/// Zero type. Used in some Numerics constructors.
-		enum Zero
-		{
-			ZERO = 0
-		};
+			/// Zero type. Used in some Numerics constructors.
+			enum Zero
+			{
+				ZERO = 0
+			};
 
-		/// Identity type. Used in some Numerics constructors.
-		enum Identity
-		{
-			IDENTITY = 1
-		};
+			/// Identity type. Used in some Numerics constructors.
+			enum Identity
+			{
+				IDENTITY = 1
+			};
 
-		/// 4D Vector indices, for use with Vector
-		enum
-		{
-			X = 0, Y = 1, Z = 2, W = 3
-		};
+			/// 4D Vector indices, for use with Vector
+			enum
+			{
+				X = 0, Y = 1, Z = 2, W = 3
+			};
 
-		/// 3D size indicies, for use with Vector
-		enum
-		{
-			WIDTH = 0, HEIGHT = 1, DEPTH = 2
-		};
+			/// 3D size indicies, for use with Vector
+			enum
+			{
+				WIDTH = 0, HEIGHT = 1, DEPTH = 2
+			};
+		}
+
+		using namespace Constants;
 	}
 }
 
