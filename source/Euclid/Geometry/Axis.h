@@ -45,7 +45,7 @@ namespace Euclid {
 			}
 
 			MatrixT from_origin() const {
-				return translate(-_translation) << _rotation;
+				return translate(_translation) << _rotation;
 			}
 
 			MatrixT mate_with(const Axis & axis) const {
