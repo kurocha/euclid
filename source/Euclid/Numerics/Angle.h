@@ -30,19 +30,12 @@ namespace Euclid
 		template <typename FloatT = double>
 		struct Radians;
 
-		template <typename FloatT = double>
-		struct Degrees;
-
 		template <typename FloatT>
 		struct Radians
 		{
 			FloatT value;
 
 			constexpr Radians (const FloatT & _value) : value(_value) {}
-
-			constexpr operator Degrees<FloatT> () const {
-				return {value * R2D};
-			}
 
 			constexpr operator Radians<float> () const {
 				return {value};
@@ -52,30 +45,57 @@ namespace Euclid
 				return value;
 			}
 
-			constexpr Radians operator + (const Radians & other) const {
+			constexpr Radians operator+ (const Radians & other) const {
 				return {value + other.value};
 			}
 
-			constexpr Radians operator - (const Radians & other) const {
+			constexpr Radians operator- (const Radians & other) const {
 				return {value - other.value};
 			}
 
 			template <typename OtherT>
-			constexpr Radians operator * (const OtherT & other) const {
+			constexpr Radians operator* (const OtherT & other) const {
 				return {value * other};
 			}
 
-			constexpr Radians operator / (const Radians & other) const {
+			constexpr Radians operator/ (const Radians & other) const {
 				return {value / other.value};
 			}
 
 			template <typename OtherT>
-			constexpr Radians operator / (const OtherT & other) const {
+			constexpr Radians operator/ (const OtherT & other) const {
 				return {value / other};
 			}
 
 			constexpr Radians operator- () const {
 				return {-value};
+			}
+
+			Radians & operator+= (const Radians & other) {
+				value += other.value;
+				return *this;
+			}
+
+			Radians & operator-= (const Radians & other) {
+				value -= other.value;
+				return *this;
+			}
+
+			template <typename OtherT>
+			Radians & operator*= (const OtherT & other) {
+				value *= other;
+				return *this;
+			}
+
+			Radians & operator/= (const Radians & other) {
+				value /= other.value;
+				return *this;
+			}
+
+			template <typename OtherT>
+			Radians & operator/= (const OtherT & other) {
+				value /= other;
+				return *this;
 			}
 
 			Number<FloatT> sin() const {
@@ -106,56 +126,8 @@ namespace Euclid
 		}
 
 		template <typename FloatT>
-		struct Degrees
-		{
-			FloatT value;
-
-			constexpr Degrees (const FloatT & _value) : value(_value) {}
-
-			constexpr operator Radians<FloatT> () const {
-				return {value * D2R};
-			}
-
-			constexpr operator FloatT () const {
-				return value;
-			}
-
-			constexpr Degrees operator + (const Degrees & other) {
-				return {value + other.value};
-			}
-
-			constexpr Degrees operator - (const Degrees & other) {
-				return {value - other.value};
-			}
-
-			constexpr Degrees operator * (const FloatT & other) {
-				return {value * other};
-			}
-
-			constexpr Degrees operator / (const Degrees & other) {
-				return {value / other.value};
-			}
-			
-			constexpr Degrees operator / (const FloatT & other) {
-				return {value / other.value};
-			}
-
-			Number<FloatT> sin() const {
-				return std::sin(value * R2D);
-			}
-
-			Number<FloatT> cos() const {
-				return std::cos(value * R2D);
-			}
-
-			Number<FloatT> tan() const {
-				return std::tan(value * R2D);
-			}
-		};
-
-		template <typename FloatT>
-		constexpr Degrees<FloatT> degrees(const FloatT & value) {
-			return value;
+		constexpr Radians<FloatT> degrees(const FloatT & value) {
+			return value * D2R;
 		}
 
 		namespace Constants

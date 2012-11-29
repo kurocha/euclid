@@ -68,6 +68,16 @@ namespace Euclid {
 					examiner.check_equal(M_PI_2, R90.value);
 
 					examiner.check_equal(R90.sin(), 1.0);
+
+					auto r = R90;
+
+					examiner << "Angle was divided." << std::endl;
+					examiner.check((r / 2).equivalent(R45));
+
+					r /= 3;
+
+					examiner << "In-place division" << std::endl;
+					examiner.check(r.equivalent(R30));
 				}
 			},
 
