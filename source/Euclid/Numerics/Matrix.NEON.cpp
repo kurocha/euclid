@@ -47,7 +47,7 @@ namespace Euclid {
 						  // no output
 						  :
 						  // input - note *value* of pointer doesn't change
-						  : "r" (result.value()), "r" (left.value()), "r" (right.value())
+						  : "r" (result.data()), "r" (left.data()), "r" (right.data())
 						  : "memory", "q0", "q1", "q2", "q3", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15" //clobber
 						  );
 		}
@@ -67,7 +67,7 @@ namespace Euclid {
 						  "vstmia      %0, {q0}"           // output = result registers
 
 						  : // no output
-						  : "r" (result.value()), "r" (left.value()), "r" (right.value()) // input - note *value* of pointer doesn't change
+						  : "r" (result.data()), "r" (left.data()), "r" (right.data()) // input - note *value* of pointer doesn't change
 						  : "memory", "q0", "q1", "q2", "q3", "q4", "q5" //clobber
 						  );
 		}
