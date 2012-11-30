@@ -84,7 +84,7 @@ namespace Euclid
 					examiner.check(f4.equivalent(b4));
 
 					float fv[4] = {1.0, 2.0, 3.0, 4.0};
-					Vec4 v = vector(fv);
+					Vec4 v = fv;
 
 					examiner.check(v.equivalent({1, 2, 3, 4}));
 				}

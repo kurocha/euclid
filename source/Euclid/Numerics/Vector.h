@@ -57,6 +57,12 @@ namespace Euclid
 				std::fill(next, this->end(), 0);
 			}
 
+			template <typename OtherNumericT>
+			Vector (const OtherNumericT (&data)[E])
+			{
+				std::copy(data, data + E, this->begin());
+			}
+
 			template <typename = typename std::enable_if<E == 1>::type>
 			operator NumericT () const
 			{
@@ -412,14 +418,6 @@ namespace Euclid
 		constexpr inline Vector<1+sizeof...(TailT), HeadT> vector (const HeadT & head, TailT... tail)
 		{
 			return {head, (HeadT)tail...};
-		}
-
-		template <dimension E, typename NumericT>
-		inline Vector<E, NumericT> vector (const NumericT (&data)[E])
-		{
-			Vector<E, NumericT> result;
-			result.set(data);
-			return result;
 		}
 
 		template <dimension E, typename NumericT>

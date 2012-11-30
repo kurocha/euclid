@@ -69,6 +69,12 @@ namespace Euclid
 				}
 			}
 
+			template <typename OtherNumericT>
+			Matrix (const OtherNumericT (&data)[R*C])
+			{
+				std::copy(data, data + R*C, this->begin());
+			}
+
 			// Transform Constructors:
 			template <dimension N, typename AxisNumericT>
 			Matrix(const Translation<N, AxisNumericT> & translation) : Matrix(IDENTITY)

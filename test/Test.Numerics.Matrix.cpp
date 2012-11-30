@@ -26,6 +26,19 @@ namespace Euclid
 		UnitTest::Suite MatrixTestSuite {
 			"Euclid::Numerics::Matrix",
 
+			{"Construction",
+				[](UnitTest::Examiner & examiner) {
+					float data[] = {
+						1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+					};
+
+					Mat44 m = data;
+
+					examiner << "Constructing matrix from float array." << std::endl;
+					examiner.check(m.at(3, 3) == 16);
+				}
+			},
+
 			{"Identities",
 				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;
