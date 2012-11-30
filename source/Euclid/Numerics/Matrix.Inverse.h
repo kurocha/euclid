@@ -106,11 +106,11 @@ namespace Euclid {
 		}
 
 		template <typename NumericT>
-		Matrix<4, 4, NumericT> inverse (const Matrix<4, 4, NumericT> & source) const
+		Matrix<4, 4, NumericT> inverse (const Matrix<4, 4, NumericT> & source)
 		{
 			Matrix<4, 4, NumericT> result;
 
-			invert_matrix_4x4(source.value(), result.value());
+			invert_matrix_4x4(source.data(), result.data());
 			
 			return result;
 		}

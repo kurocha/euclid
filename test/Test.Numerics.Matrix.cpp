@@ -3,6 +3,7 @@
 
 #include <Euclid/Numerics/Matrix.h>
 #include <Euclid/Numerics/Matrix.Multiply.h>
+#include <Euclid/Numerics/Matrix.Inverse.h>
 #include <Euclid/Numerics/Matrix.IO.h>
 #include <Euclid/Numerics/Vector.IO.h>
 
@@ -191,6 +192,16 @@ namespace Euclid
 					r = a * pt;
 
 					examiner.check(r.equivalent(Vec4(1.0, -3.0, 2.0, 1.0)));
+				}
+			},
+
+			{"Inverse",
+				[](UnitTest::Examiner & examiner) {
+					Mat44 m1 = rotate<X>(R90);
+					Mat44 m2 = inverse(m1);
+
+					examiner << "Matrix * Inverse Matrix is identity." << std::endl;
+					examiner.check((m1 * m2).equivalent(IDENTITY));
 				}
 			},
 
