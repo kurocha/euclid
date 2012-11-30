@@ -12,6 +12,7 @@
 #include "Line.h"
 #include "AlignedBox.h"
 #include "../Numerics/Matrix.h"
+#include "../Numerics/Matrix.Inverse.h"
 
 namespace Euclid
 {
@@ -26,8 +27,7 @@ namespace Euclid
 			struct Transformation {
 				Matrix<4, 4, NumericT> inverse_projection_matrix;
 				Matrix<4, 4, NumericT> inverse_view_matrix;
-				
-				NumericT near = -1.0;
+				NumericT near;
 				
 				Vector<4, NumericT> convert_from_projection_space_to_object_space(Vector<4, NumericT> coordinate) const;
 				
@@ -49,8 +49,8 @@ namespace Euclid
 		template <typename NumericT>
 		typename Eye<NumericT>::Transformation eye_transformation(const Matrix<4, 4, NumericT> & projection_matrix, const Matrix<4, 4, NumericT> & view_matrix, NumericT near = -1) {
 			return typename Eye<NumericT>::Transformation {
-				projection_matrix.inverse_matrix(),
-				view_matrix.inverse_matrix(),
+				inverse(projection_matrix),
+				inverse(view_matrix),
 				near
 			};
 		}
