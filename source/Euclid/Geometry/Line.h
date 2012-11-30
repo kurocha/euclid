@@ -107,7 +107,15 @@ namespace Euclid {
 				return Line(from, (to - from).normalize());
 			}
 		};
-
+		
+		template <typename NumericT>
+		Vector<2, NumericT> normal(const Line<2, NumericT> & line)
+		{
+			auto d = line.direction();
+			
+			return Vector<2, NumericT>(d[Y], -d[X]);
+		}
+		
 		typedef Line<2> Line2;
 		typedef Line<3> Line3;
 
@@ -190,6 +198,14 @@ namespace Euclid {
 				return (_end - _start).normalize();
 			}
 		};
+		
+		template <typename NumericT>
+		Vector<2, NumericT> normal(const LineSegment<2, NumericT> & line_segment)
+		{
+			auto d = line_segment.direction();
+
+			return Vector<2, NumericT>(d[Y], -d[X]);
+		}
 
 		typedef LineSegment<2> LineSegment2;
 		typedef LineSegment<3> LineSegment3;

@@ -30,38 +30,25 @@ namespace Euclid
 					examiner.check(c.point_at_time(ta).equivalent({0.5, 0.5}));
 				}
 			},
-			/*
-			 {"Line Transformations",
-			 [](UnitTest::Examiner & examiner) {
-			 using namespace Euclid::Geometry;
+			
+			{"Line Normals",
+				[](UnitTest::Examiner & examiner) {
+					Line2 a(ZERO, Vec2(0.5, 0.75).normalize());
+					
+					Vec2 n1 = normal(a);
+					
+					examiner << "Line normal is perpendicular." << std::endl;
+					examiner.check(n1.dot(a.direction()).equivalent(0));
 
-			 Line3 a(ZERO, Vec3{10, 5, 3}.normalize());
-			 Line3 b({10, 5, 3}, Vec3{5, 2, -8}.normalize());
+					LineSegment2 b(Vec2(-5, 2), Vec2(12, 11));
 
-			 Vec3 norm = {0, 0, 1};
-			 Vec3 v1 = {10, 0, 0};
-			 a.set_point({10, 0, 0});
-			 a.set_direction({1, 0, 0});
+					Vec2 n2 = normal(b);
 
-			 b.set_point(Vec3(ZERO));
-			 b.set_direction({-1, 0, 0});
-
-			 Mat44 mat = a.transformation_to_mate_with_line(b, norm);
-			 Vec3 r = mat * v1;
-
-			 examiner.check(r.equivalent(Vec3(ZERO))) << "Transformed vertex is correct";
-
-			 v1 *= 2;
-			 r = mat * v1;
-
-			 examiner.check(r.equivalent({-10, 0, 0})) << "Transformed vertex is correct";
-
-			 Line3 q = a.rotated_line(norm, R90);
-
-			 examiner.check(q.direction().equivalent({0, 1, 0})) << "Rotated line is correct";
-			 }
-			 },
-			 */
+					examiner << "Line normal is perpendicular." << std::endl;
+					examiner.check(n2.dot(b.direction()).equivalent(0));
+				}
+			},
+			
 			{"Line Segments",
 				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Geometry;
