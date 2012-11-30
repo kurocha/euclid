@@ -61,6 +61,13 @@ namespace Euclid {
 
 			return cross_product(a1, b1).normalize();
 		}
+
+		// Calculate a clockwise normal to the 2d vector.
+		template <typename NumericT>
+		Vector<2, NumericT> normal(const Vector<2, NumericT> & direction)
+		{
+			return Vector<2, NumericT>(direction[Y], -direction[X]);
+		}
 	}
 }
 
