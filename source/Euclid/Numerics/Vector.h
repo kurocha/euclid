@@ -56,6 +56,12 @@ namespace Euclid
 				auto next = std::copy(other.begin(), other.begin() + std::min(F, E), this->begin());
 				std::fill(next, this->end(), 0);
 			}
+
+			template <typename = typename std::enable_if<E == 1>::type>
+			operator NumericT () const
+			{
+				return (*this)[0];
+			}
 			
 			/// Copy count elements of raw data into the vector.
 			template <typename OtherNumericT>

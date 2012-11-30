@@ -85,6 +85,17 @@ namespace Euclid
 				}
 			},
 
+			{"Conversion",
+				[](UnitTest::Examiner & examiner) {
+					Vec1 f = 10.0;
+
+					examiner << "Converting 1-dimentional vector." << std::endl;
+					RealT v = f;
+
+					examiner.check_equal(v, 10.0);
+				}
+			},
+
 			{"Cross Product",
 				[](UnitTest::Examiner & examiner) {
 					Vec3 a{1, 0, 0}, b{0, 1, 0};
