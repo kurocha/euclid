@@ -414,6 +414,22 @@ namespace Euclid
 			return {head, (HeadT)tail...};
 		}
 
+		template <dimension E, typename NumericT>
+		inline Vector<E, NumericT> vector (const NumericT (&data)[E])
+		{
+			Vector<E, NumericT> result;
+			result.set(data);
+			return result;
+		}
+
+		template <dimension E, typename NumericT>
+		inline Vector<E, NumericT> vector (NumericT * data)
+		{
+			Vector<E, NumericT> result;
+			result.set(data);
+			return result;
+		}
+
 // MARK: -
 // MARK: Operators
 
