@@ -43,15 +43,14 @@ namespace Euclid {
 					typename MeshT::VertexT vertex;
 
 					vertex.position = 0;
-					vertex.position.set(size * Vec2(coordinates[i][0], coordinates[i][1]));
-
-					vertex.mapping = Vec2(mappings[i][0], mappings[i][1]);
+					vertex.position = Vec2(coordinates[i]) * size;
+					vertex.mapping = Vec2(mappings[i]);
 
 					mesh.vertices.push_back(vertex);
 				}
 
 				// The indices for the triangle fan:
-				typename MeshT::std::size_t indices[] = {
+				typename MeshT::IndexT indices[] = {
 					0, 1, 2, 3, 4, 1
 				};
 

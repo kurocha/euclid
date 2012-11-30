@@ -29,7 +29,7 @@ namespace Euclid {
 
 						typename MeshT::VertexT vertex;
 						vertex.position = Vec3(radius * cos_phi * sin_theta, radius * sin_phi * sin_theta, radius * cos_theta);
-						vertex.normal = vertex.position.normalized_vector();
+						vertex.normal = vertex.position.normalize();
 						vertex.mapping = Vec2(RealT(slice) / RealT(slices - 1), RealT(stack) / RealT(stacks));
 
 						mesh.vertices.push_back(vertex);
