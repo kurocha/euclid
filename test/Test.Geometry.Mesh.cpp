@@ -20,6 +20,19 @@ namespace Euclid
 					examiner.check_equal(mesh.vertices.size(), 4 * (6+1));
 				}
 			},
+
+			{"Size and Alignment",
+				[](UnitTest::Examiner & examiner) {
+					examiner << "Vector size doens't include padding." << std::endl;
+					examiner.check_equal(sizeof(Vec1), sizeof(RealT) * 1);
+					examiner.check_equal(sizeof(Vec2), sizeof(RealT) * 2);
+					examiner.check_equal(sizeof(Vec3), sizeof(RealT) * 3);
+					examiner.check_equal(sizeof(Vec4), sizeof(RealT) * 4);
+
+					examiner << "The default vertex doesn't include padding." << std::endl;
+					examiner.check_equal(sizeof(RealT) * 8, sizeof(VertexP3N3M2));
+				}
+			},
 		};
 	}
 }
