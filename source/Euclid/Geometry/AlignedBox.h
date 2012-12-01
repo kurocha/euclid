@@ -57,7 +57,7 @@ namespace Euclid {
 			{
 			}
 
-			AlignedBox (const Identity &, const NumericT &n = 1) : _min(ZERO), _max(IDENTITY, n)
+			AlignedBox (const Identity &, const NumericT &n = 1) : _min(ZERO), _max(n)
 			{
 			}
 
