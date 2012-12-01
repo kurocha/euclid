@@ -308,7 +308,7 @@ namespace Euclid
 			}
 
 			/// Normalize the vector to the given length. Defaults to 1.
-			Vector normalize (NumericT & length, const NumericT & desired_length = 1) const
+			Vector normalize (const NumericT & length, const NumericT & desired_length) const
 			{
 				if (!Numerics::equivalent(length, desired_length)) {
 					NumericT factor = desired_length / length;
