@@ -20,7 +20,7 @@ namespace Euclid
 		Matrix<R, C, NumericT>::Matrix (const Quaternion<QuaternionNumericT> & rotation) : Matrix(IDENTITY)
 		{
 			static_assert(R >= 3 && C >= 3, "Matrix must be at least 3x3 to contain rotation!");
-			assert(rotation.length_squared().equivalent(1) && "Quaternion magnitude must be 1");
+			assert(rotation.length().equivalent(1) && "Quaternion magnitude must be 1");
 
 			auto x = rotation[X], y = rotation[Y], z = rotation[Z], w = rotation[W];
 
