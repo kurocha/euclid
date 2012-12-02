@@ -1,6 +1,6 @@
 //
 //  Geometry/AlignedBox.h
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 3/01/07.
 //  Copyright (c) 2007 Samuel Williams. All rights reserved.

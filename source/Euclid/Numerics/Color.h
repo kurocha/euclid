@@ -1,6 +1,6 @@
 //
 //  Numerics/Color.h
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 1/05/10.
 //  Copyright (c) 2010 Samuel Williams. All rights reserved.

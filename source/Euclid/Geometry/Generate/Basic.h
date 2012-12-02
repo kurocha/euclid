@@ -1,6 +1,6 @@
 //
 //  Geometry/Generate/Basic.h
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 14/4/12.
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.

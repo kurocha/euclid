@@ -1,6 +1,6 @@
 //!
 //  Geometry/Spline.h
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 #ifndef _EUCLID_GEOMETRY_SPLINE_H
 #define _EUCLID_GEOMETRY_SPLINE_H
 

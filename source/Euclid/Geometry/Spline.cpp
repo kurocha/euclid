@@ -1,6 +1,6 @@
 //
 //  Geometry/Spline.cpp
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 1/03/07.
 //  Copyright (c) 2007 Samuel Williams. All rights reserved.

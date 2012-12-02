@@ -1,6 +1,6 @@
 //
 //  Numerics/Average.h
-// This file is part of the "Euclid" project, and is released under the MIT license.
+//  This file is part of the "Euclid" project, and is released under the MIT license.
 //
 //  Created by Samuel Williams on 31/10/08.
 //  Copyright (c) 2008 Samuel Williams. All rights reserved.
