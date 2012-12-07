@@ -17,9 +17,9 @@ define_target "euclid" do |target|
 	
 	target.depends :platform
 	target.depends "Language/C++11"
-	target.depends "Library/unit-test"
+	target.depends "Library/UnitTest"
 	
-	target.provides "Library/euclid" do
+	target.provides "Library/Euclid" do
 		append linkflags "-lEuclid"
 	end
 end
