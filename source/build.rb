@@ -1,10 +1,12 @@
 
-add_library 'Euclid' do
-	def sources(environment)
+compile_library 'Euclid' do
+	def source_files(environment)
 		FileList[root, 'Euclid/**/*.cpp']
 	end
-	
-	def headers(environment)
+end
+
+copy_headers do
+	def source_files(environment)
 		FileList[root, 'Euclid/**/*.{h,hpp}']
 	end
 end

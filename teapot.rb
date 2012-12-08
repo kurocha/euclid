@@ -7,19 +7,26 @@ required_version "0.5"
 
 define_target "euclid" do |target|
 	target.install do |environment|
-		top = Teapot::Build.top(package.path)
+		Teapot::Build.install_directory(package.path, 'source', environment)
+	end
+	
+	target.depends :platform
+	target.depends "Language/C++11"
+	
+	target.provides "Library/Euclid" do
+		append linkflags "-lEuclid"
+	end
+end
 
-		top.add_directory('source')
-		top.add_directory('test')
-		
-		top.execute(:install, environment)
+define_target "euclid-tests" do |target|
+	target.install do |environment|
+		Teapot::Build.install_directory(package.path, 'test', environment)
 	end
 	
 	target.depends :platform
 	target.depends "Language/C++11"
 	target.depends "Library/UnitTest"
+	target.depends "Library/Euclid"
 	
-	target.provides "Library/Euclid" do
-		append linkflags "-lEuclid"
-	end
+	target.provides "Test/Euclid"
 end

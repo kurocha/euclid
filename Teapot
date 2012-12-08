@@ -1,3 +1,9 @@
 
-package "unit-test", :version => "0.2"
+source "../"
+
+package "platform-darwin-osx"
+package "variants"
+
+package "unit-test"
 package "euclid", :local => "./"
+
