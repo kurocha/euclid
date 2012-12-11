@@ -82,11 +82,23 @@ namespace Euclid
 					examiner.check(b4.sum() == f4.sum());
 
 					examiner.check(f4.equivalent(b4));
+				}
+			},
 
+			{"Data Construction",
+				[](UnitTest::Examiner & examiner) {
+					examiner << "Construct from fixed sized array" << std::endl;
 					float fv[4] = {1.0, 2.0, 3.0, 4.0};
-					Vec4 v = fv;
+					Vec4 v1 = fv;
 
-					examiner.check(v.equivalent({1, 2, 3, 4}));
+					examiner.check(v1.equivalent({1, 2, 3, 4}));
+
+					examiner << "Construct from data pointer" << std::endl;
+					
+					unsigned char * data = (unsigned char *)"Hello World";
+					Vector<5, unsigned char> v2 = (data + 6);
+
+					examiner.check(v2.equivalent({'W', 'o', 'r', 'l', 'd'}));
 				}
 			},
 

@@ -21,9 +21,6 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-// MARK: -
-// MARK: Vector
-
 		/// A fixed-size numeric vector.
 		template <dimension E, typename NumericT = RealT>
 		class Vector : public std::array<NumericT, E> {
@@ -59,6 +56,12 @@ namespace Euclid
 
 			template <typename OtherNumericT>
 			Vector (const OtherNumericT (&data)[E])
+			{
+				std::copy(data, data + E, this->begin());
+			}
+
+			template <typename OtherNumericT>
+			Vector (const OtherNumericT * data)
 			{
 				std::copy(data, data + E, this->begin());
 			}
