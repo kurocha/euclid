@@ -52,7 +52,8 @@ namespace Euclid {
 				return axis.from_origin() << to_origin();
 			}
 
-			MatrixT mate_with(const Axis & axis, const MatrixT & intermediate_transform) const {
+			template <typename TransformT>
+			MatrixT mate_with(const Axis & axis, const TransformT & intermediate_transform) const {
 				return axis.from_origin() << intermediate_transform << to_origin();
 			}
 		};
