@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <cfloat>
 #include <type_traits>
+#include <algorithm>
 
 namespace Euclid
 {
