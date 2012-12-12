@@ -91,6 +91,14 @@ namespace Euclid
 					at(i, i) = scale.factor[i];
 				}
 			}
+
+			template <dimension K = 1, typename ScaleFactorT>
+			Matrix(const UniformScale<ScaleFactorT> & scale) : Matrix(IDENTITY)
+			{
+				for (dimension i = 0; i < std::min(R, C) - K; i += 1) {
+					at(i, i) = scale.factor;
+				}
+			}
 			
 			template <dimension N, typename AngleNumericT, typename AxisNumericT>
 			Matrix(const AngleAxisRotation<N, AngleNumericT, AxisNumericT> & rotation) : Matrix(IDENTITY) {

@@ -205,6 +205,13 @@ namespace Euclid
 					r = a * pt;
 
 					examiner.check(r.equivalent(Vec4(1.0, -3.0, 2.0, 1.0)));
+
+					Mat44 b = scale(2);
+
+					Vec4 q = b * Vec4(1, 1, 1);
+
+					examiner << "Uniform scale doubled size of vector" << std::endl;
+					examiner.check(q.equivalent({2, 2, 2}));
 				}
 			},
 
