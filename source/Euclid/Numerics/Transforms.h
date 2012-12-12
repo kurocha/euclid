@@ -102,7 +102,7 @@ namespace Euclid {
 			}
 		};
 
-		template <dimension E, typename NumericT>
+		template <typename NumericT>
 		UniformScale<NumericT> scale (const NumericT & factor) {
 			return {factor};
 		}
