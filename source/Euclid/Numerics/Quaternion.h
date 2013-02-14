@@ -39,7 +39,7 @@ namespace Euclid
 			/// Angle axis constructor.
 			Quaternion (const Radians<NumericT> & angle, const Vector<3, NumericT> & axis) {
 				auto half_angle = angle / 2.0;
-
+				
 				(*this) = (axis * half_angle.sin()).expand(half_angle.cos());
 			}
 

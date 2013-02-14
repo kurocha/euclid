@@ -190,8 +190,7 @@ namespace Euclid
 			}
 
 			/// Reflect a vector around a given normal.
-			/// Be aware that the vector returned still points in the same direction. You generally want to reverse this if you are bouncing a ball against a
-			/// wall.
+			/// Be aware that the vector returned still points in the same direction. You generally want to reverse this if you are bouncing a ball against a wall.
 			Vector reflect (const Vector & normal) const
 			{
 				return (*this) - (normal * (2.0 * this->dot(normal)));
