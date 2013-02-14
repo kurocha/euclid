@@ -141,7 +141,7 @@ namespace Euclid
 			/// 60 degree rotation
 			constexpr Radians<> R60 = R30 * 2.0;
 			/// 90 degree rotation
-			constexpr Radians<> R90 {M_PI_2};
+			constexpr Radians<> R90 = M_PI_2;
 			/// 180 degree rotation
 			constexpr Radians<> R180 = M_PI;
 			/// 270 degree rotation
