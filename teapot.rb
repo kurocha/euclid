@@ -3,11 +3,11 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-required_version "0.5"
+required_version "0.6"
 
 define_target "euclid" do |target|
 	target.install do |environment|
-		Teapot::Build.install_directory(package.path, 'source', environment)
+		install_directory(package.path, 'source', environment)
 	end
 	
 	target.depends :platform
@@ -20,7 +20,7 @@ end
 
 define_target "euclid-tests" do |target|
 	target.install do |environment|
-		Teapot::Build.install_directory(package.path, 'test', environment)
+		install_directory(package.path, 'test', environment)
 	end
 	
 	target.depends :platform
