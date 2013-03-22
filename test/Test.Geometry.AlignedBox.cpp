@@ -1,5 +1,4 @@
 
-
 #include <UnitTest/UnitTest.h>
 
 #include <Euclid/Numerics/Vector.IO.h>
