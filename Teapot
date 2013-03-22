@@ -1,9 +1,0 @@
-
-source "../"
-
-package "platform-darwin-osx"
-package "variants"
-
-package "unit-test"
-package "euclid", :local => "./"
-

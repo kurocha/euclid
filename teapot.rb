@@ -3,7 +3,7 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-required_version "0.6"
+required_version "0.7.0"
 
 define_target "euclid" do |target|
 	target.build do |environment|
