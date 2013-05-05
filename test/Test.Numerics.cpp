@@ -16,10 +16,11 @@ namespace Euclid {
 		void calculate_accuracy() {
 			using F = FloatEquivalenceTraits<FloatT>;
 
-			auto one = F::convert_to_integer(FloatT(0.0));
-			auto one_plus_epsilon = F::convert_to_integer(FloatT(0.0) + EpsilonTraits<FloatT, 0>::EPSILON);
+			auto epsilon = EpsilonTraits<FloatT, 0>::EPSILON;
+			auto zero = F::convert_to_integer(FloatT(0.0));
+			auto zero_plus_epsilon = F::convert_to_integer(FloatT(0.0) + EpsilonTraits<FloatT, 0>::EPSILON);
 
-			std::cout << "Accuracy of float(" << sizeof(FloatT) << ") = " << (one_plus_epsilon - one) << std::endl;
+			std::cout << "Accuracy of float(" << sizeof(FloatT) << ") = " << (zero_plus_epsilon - zero) << "; epsion = " << epsilon << std::endl;
 		}
 
 		UnitTest::Suite NumericsTestSuite {
@@ -39,6 +40,16 @@ namespace Euclid {
 					// We expect better accuracy for double precision:
 					examiner << "Float values are equal" << std::endl;
 					examiner.check(!equivalent<double>(0.1, 0.1000000001));
+
+					auto a = number(0.000001f), b = number(0.0000011f), c = number(0.000002f);
+
+					examiner << "Similar numbers are equivalent." << std::endl;
+					examiner.check(a.equivalent(b));
+
+					examiner << "Different numbers are not equivalent." << std::endl;
+					examiner.check(!a.equivalent(c));
+
+					
 				}
 			},
 

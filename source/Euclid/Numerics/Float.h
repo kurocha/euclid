@@ -44,7 +44,7 @@ namespace Euclid
 			typedef typename IntegerSizeTraits<sizeof(float)>::UnsignedT UnitT;
 
 			constexpr static double SCALE = 1.0;
-			constexpr static UnitT UNITS = 4;
+			constexpr static UnitT UNITS = 8;
 			constexpr static float EPSILON = FLT_EPSILON * UNITS;
 		};
 
@@ -53,7 +53,7 @@ namespace Euclid
 			typedef typename IntegerSizeTraits<sizeof(double)>::UnsignedT UnitT;
 
 			constexpr static double SCALE = 1.0;
-			constexpr static UnitT UNITS = 4;
+			constexpr static UnitT UNITS = 8;
 			constexpr static double EPSILON = DBL_EPSILON * UNITS;
 		};
 
