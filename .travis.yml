@@ -1,0 +1,16 @@
+language: cpp
+script:
+    - bundle exec teapot -c travis fetch
+    - bundle exec teapot -c travis build Test/Euclid variant-debug compiler-clang-3.2
+    - ./teapot/platforms/travis/linux-debug/bin/euclid-test-runner 
+compiler: clang
+install:
+# libstdc++-4.8-dev
+    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+# clang++-3.2
+    - sudo add-apt-repository --yes ppa:h-rayflood/llvm
+    - sudo apt-get -qq update
+    - sudo apt-get -qq install libstdc++-4.8-dev clang-3.2
+# ruby 2.0 and teapot
+    - rvm use 2.0 --install --binary --fuzzy
+    - bundle install
