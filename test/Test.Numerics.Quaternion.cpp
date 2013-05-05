@@ -35,7 +35,7 @@ namespace Euclid
 					Quat q = rotate(R90, vector(1.0, 0.0, 0.0));
 					Mat44 m = rotate(R90, vector(1.0, 0.0, 0.0));
 
-					Vec3 si(15.14, -12.5, 4.55);
+					Vec3 si(15.0, -12.5, 4.0);
 
 					Vec3 r1, r2;
 
