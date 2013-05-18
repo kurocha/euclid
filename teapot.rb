@@ -23,6 +23,12 @@ define_target "euclid-tests" do |target|
 		build_directory(package.path, 'test', environment)
 	end
 	
+	target.run do |environment|
+		environment = environment.flatten
+		
+		Commands.run(environment[:install_prefix] + "bin/euclid-test-runner")
+	end
+	
 	target.depends :platform
 	target.depends "Language/C++11"
 	target.depends "Library/UnitTest"
@@ -46,6 +52,8 @@ define_configuration "travis" do |configuration|
 	configuration.require "variants"
 	
 	configuration.require "unit-test"
+	
+	configuration[:run] = ["Test/Euclid"]
 end
 
 define_configuration "local" do |configuration|
