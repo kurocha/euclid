@@ -237,7 +237,7 @@ namespace Euclid
 			}
 
 			/// Clamp all components of the vector between given values.
-			Vector clamp (const NumericT & min = 0, const NumericT & max = 1)
+			Vector clamp (const NumericT & min = 0, const NumericT & max = 1) const
 			{
 				Vector result;
 
@@ -248,7 +248,7 @@ namespace Euclid
 			}
 
 			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
-			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints)
+			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints) const
 			{
 				const Vector & a = *this;
 
@@ -266,14 +266,14 @@ namespace Euclid
 			}
 
 			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
-			Vector constrain(const Vector & b, bool minimum = true)
+			Vector constrain(const Vector & b, bool maximum = true) const
 			{
 				const Vector & a = *this;
 
 				Vector result;
 
 				for (std::size_t i = 0; i < E; i += 1) {
-					if (minimum)
+					if (!maximum)
 						result[i] = std::min(a[i], b[i]);
 					else
 						result[i] = std::max(a[i], b[i]);

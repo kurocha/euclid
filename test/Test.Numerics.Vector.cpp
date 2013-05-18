@@ -279,6 +279,21 @@ namespace Euclid
 				}
 			},
 
+			{"Constraints",
+				[](UnitTest::Examiner & examiner) {
+					examiner << "Checking interpolated constraints";
+					Vec3 x(0, 0, 0);
+					auto y = x.constrain({10, 10, 10}, {0.5, 0.5, 0.5});
+					examiner.check(y.equivalent({5, 5, 5}));
+
+					examiner << "Checking min/max constraints";
+					Vec3 a(10, -10, 0), b(0, 10, 10);
+					auto c = a.constrain(b, false), d = a.constrain(b, true);
+					examiner.check(c.equivalent({0, -10, 0}));
+					examiner.check(d.equivalent({10, 10, 10}));
+				}
+			},
+
 			{"Distribution",
 				[](UnitTest::Examiner & examiner) {
 					using namespace Euclid::Numerics;

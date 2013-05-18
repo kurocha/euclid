@@ -85,11 +85,10 @@ namespace Euclid {
 			// Bounds _min and _max must infact be minima and maxima.
 			// This function establishes this condition.
 			void normalize_bounds () {
-				VectorT t(ZERO);
 				VectorT c(_min);
 
-				_min.constrain(_max, t - 1);
-				_max.constrain(c, t + 1);
+				_min = _min.constrain(_max, false);
+				_max = _max.constrain(c, true);
 
 				for (dimension i = 0; i < D; i += 1) {
 					_min[i] = std::min(_min[i], _max[i]);
@@ -226,10 +225,8 @@ namespace Euclid {
 
 			/// Expand the box to include the other point.
 			AlignedBox& union_with_point (const VectorT & point) {
-				Vector<D> t(ZERO);
-
-				_min.constrain(point, t - 1);
-				_max.constrain(point, t + 1);
+				_min = _min.constrain(point, false);
+				_max = _max.constrain(point, true);
 
 				return *this;
 			}
@@ -238,8 +235,8 @@ namespace Euclid {
 			AlignedBox& union_with_box (const AlignedBox & other) {
 				Vector<D> t(ZERO);
 
-				_min.constrain(other.min(), t - 1);
-				_max.constrain(other.max(), t + 1);
+				_min = _min.constrain(other.min(), false);
+				_max = _max.constrain(other.max(), true);
 
 				return *this;
 			}
@@ -251,10 +248,8 @@ namespace Euclid {
 			/// @sa intersects_with()
 			AlignedBox& clip_to_box (const AlignedBox & other)
 			{
-				Vector<D> t(ZERO);
-
-				_min.constrain(other._min, t + 1);
-				_max.constrain(other._max, t - 1);
+				_min = _min.constrain(other._min, true);
+				_max = _max.constrain(other._max, false);
 
 				return *this;
 			}
