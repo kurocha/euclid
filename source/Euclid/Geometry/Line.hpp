@@ -123,6 +123,15 @@ namespace Euclid
 			return (end() - at).normalize() == d;
 		}
 
+		template <dimension D, typename NumericT>
+		bool LineSegment<D, NumericT>::intersects_with (const AlignedBox<D, NumericT> & other, NumericT & t1, NumericT & t2) const
+		{
+			Vector<D, NumericT> d(end() - start());
+			Line<D, NumericT> l(start(), d);
+
+			return l.intersects_with(other, t1, t2);
+		}
+
 		template <typename NumericT>
 		bool line_intersection_test (const LineSegment<1, NumericT> & lhs, const LineSegment<1, NumericT> & rhs, LineSegment<1, NumericT> & overlap)
 		{

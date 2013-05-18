@@ -165,6 +165,7 @@ namespace Euclid {
 			}
 
 			bool intersects_with (const AlignedBox<D, NumericT> & other, VectorT & at) const;
+			bool intersects_with (const AlignedBox<D, NumericT> & other, NumericT & t1, NumericT & t2) const;
 			bool intersects_with (const LineSegment<D, NumericT> & other, NumericT & this_time, NumericT & other_time) const;
 			bool intersects_with (const LineSegment<D, NumericT> & other, LineSegment<D, NumericT> & overlap) const;
 
@@ -194,6 +195,22 @@ namespace Euclid {
 
 			Vector<D> direction () const {
 				return (_end - _start).normalize();
+			}
+
+			bool equivalent(const LineSegment & other) const {
+				return Numerics::equivalent(_start, other._start) && Numerics::equivalent(_end, other._end);
+			}
+
+			bool clip(const AlignedBox<D, NumericT> & box, LineSegment & segment) const {
+				NumericT t1, t2;
+
+				if (intersects_with(box, t1, t2)) {
+					segment = LineSegment(point_at_time(t1), point_at_time(t2));
+
+					return true;
+				}
+
+				return false;
 			}
 		};
 		

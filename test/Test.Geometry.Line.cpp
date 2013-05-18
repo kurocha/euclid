@@ -51,8 +51,6 @@ namespace Euclid
 			
 			{"Line Segments",
 				[](UnitTest::Examiner & examiner) {
-					using namespace Euclid::Geometry;
-
 					LineSegment3 a(0, 10);
 					examiner << "Line is correct length" << std::endl;
 					examiner.check(a.offset().length_squared() == (10 * 10) * 3);
@@ -72,8 +70,6 @@ namespace Euclid
 
 			{"Line Segment Intersections",
 				[](UnitTest::Examiner & examiner) {
-					using namespace Euclid::Geometry;
-
 					LineSegment3 a(ZERO, 10);
 					LineSegment3 b({0, 10, 0}, {10, 0, 10});
 
@@ -86,6 +82,19 @@ namespace Euclid
 					LineSegment3 c(0, 10.1);
 					examiner << "Line segments don't intersect" << std::endl;
 					examiner.check(!a.intersects_with(c, ta, tb));
+				}
+			},
+
+			{"Line Segment Clipping",
+				[](UnitTest::Examiner & examiner) {
+					LineSegment3 segment(-10, 10), result;
+					AlignedBox3 box(-5, 5);
+
+					examiner << "Line segment intersects box" << std::endl;
+					examiner.check(segment.clip(box, result));
+
+					examiner << "Line segment was clipped correctly" << std::endl;
+					examiner.check(result.equivalent({box.min(), box.max()}));
 				}
 			},
 		};
