@@ -122,6 +122,11 @@ namespace Euclid {
 				return !(*this == other);
 			}
 
+			bool operator< (const AlignedBox & other) const
+			{
+				return _min < other._min && _max < other._max;
+			}
+
 			bool equivalent (const AlignedBox & other) const
 			{
 				return min().equivalent(other.min()) && max().equivalent(other.max());
@@ -357,6 +362,10 @@ namespace Euclid {
 
 			// This just subtracts a single edge from another box, essentially a helper for subtract_using_translation
 			bool subtract_edge (const AlignedBox & other, dimension axis, const BoxEdge & edge, const NumericT & offset = 0);
+			
+			AlignedBox bounding_box() const {
+				return *this;
+			}
 		};
 
 		typedef AlignedBox<2, RealT> AlignedBox2;
