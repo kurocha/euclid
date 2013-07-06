@@ -120,7 +120,7 @@ namespace Euclid {
 					_location = (typename TraitsT::PartitionLocation) 0;
 					_base = base;
 
-					bzero(&_children, sizeof(_children));
+					std::fill_n(_children, TraitsT::Q, nullptr);
 				}
 
 				Partition (Partition *parent, typename TraitsT::PartitionLocation location) : _location(location), _parent(parent)
@@ -130,17 +130,15 @@ namespace Euclid {
 					_parent->_children[_location] = this;
 					_base = parent->_base;
 
-					bzero(&_children, sizeof(_children));
+					std::fill_n(_children, TraitsT::Q, nullptr);
 
 					compute_position();
 				}
 
 				~Partition () {
-					for (unsigned i = 0; i < TraitsT::Q; i += 1) {
-						if (_children[i] != NULL) {
+					for (unsigned i = 0; i < TraitsT::Q; i += 1)
+						if (_children[i])
 							delete _children[i];
-						}
-					}
 				}
 
 				VecT origin () const {
