@@ -38,7 +38,7 @@ namespace Euclid
 
 			// Implicit convertion between Radians<float> and Radians<double>.
 			template <typename OtherNumericT>
-			Radians(const Radians<OtherNumericT> angle) : value(angle._value) {}
+			Radians(const Radians<OtherNumericT> angle) : value(angle.value) {}
 
 			constexpr operator Radians<float> () const {
 				return {value};
