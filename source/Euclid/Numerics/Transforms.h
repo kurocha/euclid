@@ -177,7 +177,7 @@ namespace Euclid {
 		AngleAxisRotation<E, NumericT, NumericT> rotate(const Vector<E, NumericT> & from, const Vector<E, NumericT> & to, const Vector<E, NumericT> & normal) {
 			auto angle = to.angle_between(from);
 
-			if (angle.equivalent(0)) {
+			if (angle.equivalent(R0)) {
 				return {angle, normal};
 			} else if (angle.equivalent(R180)) {
 				return {angle, cross_product(from, normal).normalize()};

@@ -18,7 +18,7 @@ namespace Euclid
 					examiner.check(a1.translation().equivalent(0));
 
 					examiner << "Identity axis has zero rotation." << std::endl;
-					examiner.check(a1.rotation().angle().equivalent(0));
+					examiner.check(a1.rotation().angle().equivalent(0_deg));
 
 					auto a2 = Axis<RealT>{{1, 2, 3}, rotate<Z>(R90)};
 

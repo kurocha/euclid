@@ -45,29 +45,29 @@ namespace Euclid
 			}
 
 			constexpr Radians operator+ (const Radians & other) const {
-				return {value + other.value};
+				return Radians{value + other.value};
 			}
 
 			constexpr Radians operator- (const Radians & other) const {
-				return {value - other.value};
+				return Radians{value - other.value};
 			}
 
 			template <typename OtherT>
 			constexpr Radians operator* (const OtherT & other) const {
-				return {value * other};
+				return Radians{value * other};
 			}
 
 			constexpr Radians operator/ (const Radians & other) const {
-				return {value / other.value};
+				return Radians{value / other.value};
 			}
 
 			template <typename OtherT>
 			constexpr Radians operator/ (const OtherT & other) const {
-				return {value / other};
+				return Radians{value / other};
 			}
 
 			constexpr Radians operator- () const {
-				return {-value};
+				return Radians{-value};
 			}
 
 			Radians & operator+= (const Radians & other) {
@@ -111,7 +111,7 @@ namespace Euclid
 
 			Radians offset_to (const Radians & other) const {
 				auto x = this->value, y = other.value;
-				return std::atan2(std::sin(x-y), std::cos(x-y));
+				return Radians{std::atan2(std::sin(x-y), std::cos(x-y))};
 			}
 
 			bool equivalent(const Radians & other) const {
@@ -121,12 +121,12 @@ namespace Euclid
 
 		template <typename FloatT>
 		constexpr Radians<FloatT> radians(const FloatT & value) {
-			return value;
+			return Radians<FloatT>{value};
 		}
 
 		template <typename FloatT>
 		constexpr Radians<FloatT> degrees(const FloatT & value) {
-			return value * D2R;
+			return Radians<FloatT>{value * D2R};
 		}
 
 		constexpr Radians<double> operator"" _rad(long double r) { return Radians<double>(r); }
@@ -136,12 +136,13 @@ namespace Euclid
 
 		namespace Constants
 		{
-			constexpr Radians<double> R10 = M_PI_2 / 9.0;
-			constexpr Radians<double> R30 = M_PI_2 / 3.0;
-			constexpr Radians<double> R45 = M_PI_4;
+			constexpr Radians<double> R0{0};
+			constexpr Radians<double> R10{M_PI_2 / 9.0};
+			constexpr Radians<double> R30{M_PI_2 / 3.0};
+			constexpr Radians<double> R45{M_PI_4};
 			constexpr Radians<double> R60 = R30 * 2.0;
-			constexpr Radians<double> R90 = M_PI_2;
-			constexpr Radians<double> R180 = M_PI;
+			constexpr Radians<double> R90{M_PI_2};
+			constexpr Radians<double> R180{M_PI};
 			constexpr Radians<double> R270 = R90 * 3.0;
 			constexpr Radians<double> R360 = R180 * 2.0;
 		}

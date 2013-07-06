@@ -18,19 +18,19 @@ namespace Euclid
 		template <typename NumericT>
 		auto Number<NumericT>::asin () -> Radians<RealT>
 		{
-			return std::asin(value);
+			return Radians<RealT>{std::asin(value)};
 		}
 
 		template <typename NumericT>
 		auto Number<NumericT>::acos () -> Radians<RealT>
 		{
-			return std::acos(value);
+			return Radians<RealT>{std::acos(value)};
 		}
 
 		template <typename NumericT>
 		auto Number<NumericT>::atan () -> Radians<RealT>
 		{
-			return std::atan(value);
+			return Radians<RealT>{std::atan(value)};
 		}
 	}
 }

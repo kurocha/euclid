@@ -45,7 +45,7 @@ namespace Euclid {
 
 				assert((base_radius != 0.0 || top_radius != 0.0) && "Both base_radius and top_radius are zero!");
 
-				Mat44 rotation = Numerics::rotate<3, float>(float(-R360 / slices), center);
+				Mat44 rotation = Numerics::rotate<3, float>(-R360 / slices, center);
 
 				// N stacks has n+1 divisions, one for the start, one for the end
 				std::size_t divisions = stacks + 1;
