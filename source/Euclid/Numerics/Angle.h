@@ -23,8 +23,8 @@ namespace Euclid
 		namespace Constants
 		{
 			/// Radians to degrees multiplier
-			const double R2D = (180.0 / M_PI);
-			const double D2R = (M_PI / 180.0);
+			constexpr double R2D = (180.0 / M_PI);
+			constexpr double D2R = (M_PI / 180.0);
 		}
 
 		template <typename FloatT = RealT>
@@ -32,17 +32,13 @@ namespace Euclid
 		{
 			FloatT value;
 
-			Radians() = default;
+			constexpr Radians() = default;
 
-			constexpr Radians (const FloatT & _value) : value(_value) {}
+			explicit constexpr Radians(const FloatT & _value) : value(_value) {}
 
 			// Implicit convertion between Radians<float> and Radians<double>.
 			template <typename OtherNumericT>
-			Radians(const Radians<OtherNumericT> angle) : value(angle.value) {}
-
-			constexpr operator Radians<float> () const {
-				return {value};
-			}
+			constexpr Radians(const Radians<OtherNumericT> angle) : value(angle.value) {}
 
 			constexpr operator FloatT () const {
 				return value;
@@ -133,23 +129,20 @@ namespace Euclid
 			return value * D2R;
 		}
 
+		constexpr Radians<double> operator"" _rad(long double r) { return Radians<double>(r); }
+		constexpr Radians<double> operator"" _rad(unsigned long long r) { return Radians<double>((double)r); }
+		constexpr Radians<double> operator"" _deg(long double d) { return Radians<double>(d * D2R); }
+		constexpr Radians<double> operator"" _deg(unsigned long long d) { return Radians<double>((double)d * D2R); }
+
 		namespace Constants
 		{
-			/// 10 degree rotation
 			constexpr Radians<double> R10 = M_PI_2 / 9.0;
-			/// 30 degree rotation
 			constexpr Radians<double> R30 = M_PI_2 / 3.0;
-			/// 45 degree rotation
 			constexpr Radians<double> R45 = M_PI_4;
-			/// 60 degree rotation
 			constexpr Radians<double> R60 = R30 * 2.0;
-			/// 90 degree rotation
 			constexpr Radians<double> R90 = M_PI_2;
-			/// 180 degree rotation
 			constexpr Radians<double> R180 = M_PI;
-			/// 270 degree rotation
 			constexpr Radians<double> R270 = R90 * 3.0;
-			/// 360 degree rotation
 			constexpr Radians<double> R360 = R180 * 2.0;
 		}
 	}
