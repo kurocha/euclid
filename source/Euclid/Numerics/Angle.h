@@ -27,13 +27,12 @@ namespace Euclid
 			const double D2R = (M_PI / 180.0);
 		}
 
-		template <typename FloatT = double>
-		struct Radians;
-
-		template <typename FloatT>
+		template <typename FloatT = RealT>
 		struct Radians
 		{
 			FloatT value;
+
+			Radians() = default;
 
 			constexpr Radians (const FloatT & _value) : value(_value) {}
 
