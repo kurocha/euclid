@@ -56,7 +56,7 @@ namespace Euclid
 			AlignedBox<3, NumericT> clip_box(-1, 1);
 			Vec3u k(2);
 
-			auto inverse_view_matrix = m.inverse_matrix();
+			auto inverse_view_matrix = inverse(m);
 			for (std::size_t i = 0; i < 8; i += 1) {
 				_corners[i] = inverse_view_matrix * clip_box.corner(k.distribute(i));
 			}
