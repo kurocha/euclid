@@ -106,8 +106,8 @@ namespace Euclid
 		};
 
 		template <typename NumericT>
-		Quaternion<NumericT> quaternion (const Vector<4, NumericT> values) {
-			return values;
+		Quaternion<NumericT> quaternion (const Vector<4, NumericT> & v) {
+			return v;
 		}
 		
 		template <typename NumericT>
