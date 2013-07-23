@@ -129,6 +129,12 @@ namespace Euclid
 			return Radians<FloatT>{value * D2R};
 		}
 
+		template <typename FloatT>
+		inline constexpr Number<FloatT> number(const Radians<FloatT> & angle)
+		{
+			return {angle.value};
+		}
+
 		constexpr Radians<double> operator"" _rad(long double r) { return Radians<double>(r); }
 		constexpr Radians<double> operator"" _rad(unsigned long long r) { return Radians<double>((double)r); }
 		constexpr Radians<double> operator"" _deg(long double d) { return Radians<double>(d * D2R); }

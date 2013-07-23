@@ -503,6 +503,12 @@ namespace Euclid
 			return a.equivalent(b);
 		}
 
+		template <dimension E, typename NumericT>
+		inline constexpr Number<NumericT> number(const Vector<E, NumericT> & vector)
+		{
+			return {vector.length()};
+		}
+
 // MARK: -
 
 		extern template class Vector<2, RealT>;
