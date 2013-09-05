@@ -117,7 +117,7 @@ namespace Euclid
 				return value < lower.value ? lower : (value > upper.value ? upper : *this);
 			}
 
-			constexpr Number absolute()
+			constexpr Number absolute() const
 			{
 				return value * (value < 0 ? -1 : 1);
 			}
