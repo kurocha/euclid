@@ -12,12 +12,14 @@
 
 #include "Numerics.h"
 
-namespace Euclid {
-	namespace Numerics {
-
+namespace Euclid
+{
+	namespace Numerics
+	{
 		/// This class can assist in the calculation of mathematical averages.
 		template <typename NumericT>
-		class Average {
+		class Average
+		{
 		protected:
 			/// The number of samples taken so far.
 			std::size_t _samples;
@@ -85,7 +87,6 @@ namespace Euclid {
 				add_samples(other);
 			}
 		};
-		
 	}
 }
 
