@@ -16,7 +16,7 @@ namespace Euclid
 {
 	namespace Numerics
 	{
-		template <typename NumericT>
+		template <typename NumericT = RealT>
 		class Distribution : protected Average<NumericT>
 		{
 		protected:
@@ -26,6 +26,11 @@ namespace Euclid
 		public:
 			Distribution() : _minimum(0), _maximum(0)
 			{
+			}
+
+			const std::vector<NumericT> & samples() const
+			{
+				return _samples;
 			}
 
 			void add_sample(const NumericT & sample)
