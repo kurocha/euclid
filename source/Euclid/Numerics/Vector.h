@@ -66,7 +66,7 @@ namespace Euclid
 				std::copy(data, data + E, this->begin());
 			}
 
-			template <typename = typename std::enable_if<E == 1>::type>
+			template <dimension _E = E, typename = typename std::enable_if<_E == 1>::type>
 			operator NumericT () const
 			{
 				return (*this)[0];
