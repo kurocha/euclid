@@ -122,28 +122,28 @@ namespace Euclid
 				return value * (value < 0 ? -1 : 1);
 			}
 
-			Number truncate(bool up = false)
+			Number truncate(bool up = false) const
 			{
 				return _truncate(value, up);
 			}
 
-			Number modulo(const Number & modulus)
+			Number modulo(const Number & modulus) const
 			{
 				return _modulo(value, (NumericT)modulus);
 			}
 
-			Number wrap(const Number & modulus)
+			Number wrap(const Number & modulus) const
 			{
 				return modulo(modulus) + (value < 0 ? modulus : (Number)0);
 			}
 
 			template <typename ExponentT>
-			Number raise(const ExponentT & exponent)
+			Number raise(const ExponentT & exponent) const
 			{
 				return _raise(value, value_of(exponent));
 			}
 
-			bool equivalent(const Number & other)
+			bool equivalent(const Number & other) const
 			{
 				return Numerics::equivalent(value, other.value);
 			}
@@ -159,41 +159,41 @@ namespace Euclid
 			}
 
 			template <typename OtherNumericT>
-			Number operator+ (const OtherNumericT & other)
+			Number operator+ (const OtherNumericT & other) const
 			{
 				return value + other;
 			}
 
 			template <typename OtherNumericT>
-			Number operator- (const OtherNumericT & other)
+			Number operator- (const OtherNumericT & other) const
 			{
 				return value - other;
 			}
 
 			template <typename OtherNumericT>
-			Number operator* (const OtherNumericT & other)
+			Number operator* (const OtherNumericT & other) const
 			{
 				return value * other;
 			}
 
 			template <typename OtherNumericT>
-			Number operator/ (const OtherNumericT & other)
+			Number operator/ (const OtherNumericT & other) const
 			{
 				return value / other;
 			}
 
 			template <typename OtherNumericT>
-			Number operator%(const OtherNumericT & modulus)
+			Number operator%(const OtherNumericT & modulus) const
 			{
 				return modulo(modulus);
 			}
 
-			Number max (const Number & other)
+			Number max (const Number & other) const
 			{
 				return std::max(value, other.value);
 			}
 
-			Number min (const Number & other)
+			Number min (const Number & other) const
 			{
 				return std::min(value, other.value);
 			}
