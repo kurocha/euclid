@@ -28,11 +28,8 @@ namespace Euclid {
 			/* Mix it up! */
 			for (std::size_t i = 0; i < 256; ++i) {
 				std::size_t w = r256() % 256;
-				/* Swap */
-				register unsigned char c;
-				c = _indicies[w];
-				_indicies[w] = _indicies[i];
-				_indicies[i] = c;
+				
+				std::swap(_indicies[w], _indicies[i]);
 			}
 
 			for (std::size_t i = 0; i < 256; ++i) _table[i] = (RealT)r01();
