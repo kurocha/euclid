@@ -1,15 +1,13 @@
 language: cpp
 script:
-    - teapot -c travis fetch
-    - teapot -c travis run variant-debug compiler-clang-3.2
+  - teapot -c travis fetch
+  - teapot -c travis build Test/UnitTest variant-debug compiler-clang
 compiler: clang
 install:
 # libstdc++-4.8-dev
-    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-# clang++-3.2
-    - sudo add-apt-repository --yes ppa:h-rayflood/llvm
-    - sudo apt-get -qq update
-    - sudo apt-get -qq install libstdc++-4.8-dev clang-3.2
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install libstdc++-4.8-dev
 # ruby 2.0 and teapot
-    - rvm use 2.0 --install --binary --fuzzy
-    - gem install teapot
+  - rvm use 2.0 --install --binary --fuzzy
+  - bundle install
