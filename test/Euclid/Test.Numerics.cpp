@@ -123,8 +123,8 @@ namespace Euclid {
 					examiner.check_equal(1.5f, float_value);
 
 					// cos(R90) should normally be considered zero:
-					examiner << "cos(R90) is zero" << std::endl;
-					examiner.check(R90.cos().equivalent(0));
+					examiner << "cos(R90) is zero = " << R90.cos() << std::endl;
+					examiner.check(R90.cos().equivalent(0.0));
 				}
 			},
 
