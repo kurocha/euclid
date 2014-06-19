@@ -1,7 +1,7 @@
 language: cpp
 script:
   - teapot -c travis fetch
-  - teapot -c travis build Test/UnitTest variant-debug compiler-clang
+  - teapot -c travis build Test/Euclid variant-debug compiler-clang
 compiler: clang
 install:
 # libstdc++-4.8-dev
