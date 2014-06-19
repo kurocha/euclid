@@ -120,7 +120,7 @@ namespace Euclid {
 					_location = (typename TraitsT::PartitionLocation) 0;
 					_base = base;
 
-					std::fill_n(_children, TraitsT::Q, nullptr);
+					std::fill_n(_children, (std::size_t)TraitsT::Q, nullptr);
 				}
 
 				Partition (Partition *parent, typename TraitsT::PartitionLocation location) : _location(location), _parent(parent)
@@ -130,7 +130,7 @@ namespace Euclid {
 					_parent->_children[_location] = this;
 					_base = parent->_base;
 
-					std::fill_n(_children, TraitsT::Q, nullptr);
+					std::fill_n(_children, (std::size_t)TraitsT::Q, nullptr);
 
 					compute_position();
 				}
