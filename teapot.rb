@@ -46,20 +46,11 @@ define_target "euclid-tests" do |target|
 	target.provides "Test/Euclid"
 end
 
-define_configuration "euclid" do |configuration|
+define_configuration "travis" do |configuration|
 	configuration[:source] = "https://github.com/dream-framework"
 	
 	configuration.require "platforms"
 	configuration.require "build-files"
-	configuration.require "unit-test"
-end
-
-define_configuration "travis" do |configuration|
-	configuration[:source] = "https://github.com/dream-framework"
-	
-	configuration.require "platform-linux"
-	configuration.require "build-files"
-	configuration.require "variants"
 	
 	configuration.require "unit-test"
 end
