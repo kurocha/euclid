@@ -7,10 +7,11 @@
 //
 //
 
-#include "PerlinNoise.h"
+#include "PerlinNoise.hpp"
 
 #include <random>
-#include "Interpolate.h"
+#include <functional>
+#include "Interpolate.hpp"
 
 namespace Euclid {
 	namespace Numerics {

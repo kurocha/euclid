@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#include "Matrix.NEON.h"
+#include "Matrix.NEON.hpp"
 
 #ifdef __arm__
 

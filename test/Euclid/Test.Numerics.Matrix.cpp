@@ -1,13 +1,13 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Matrix.h>
-#include <Euclid/Numerics/Matrix.Multiply.h>
-#include <Euclid/Numerics/Matrix.Inverse.h>
-#include <Euclid/Numerics/Matrix.IO.h>
-#include <Euclid/Numerics/Vector.IO.h>
+#include <Euclid/Numerics/Matrix.hpp>
+#include <Euclid/Numerics/Matrix.Multiply.hpp>
+#include <Euclid/Numerics/Matrix.Inverse.hpp>
+#include <Euclid/Numerics/Matrix.IO.hpp>
+#include <Euclid/Numerics/Vector.IO.hpp>
 
-#include <Euclid/Numerics/Average.h>
+#include <Euclid/Numerics/Average.hpp>
 
 namespace Euclid
 {

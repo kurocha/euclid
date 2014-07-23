@@ -7,7 +7,7 @@
 //
 //
 
-#include "Plane.h"
+#include "Plane.hpp"
 
 namespace Euclid {
 	namespace Geometry {

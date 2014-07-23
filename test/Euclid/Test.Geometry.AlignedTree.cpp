@@ -1,8 +1,8 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/AlignedTree.h>
-#include <Euclid/Numerics/Vector.IO.h>
+#include <Euclid/Geometry/AlignedTree.hpp>
+#include <Euclid/Numerics/Vector.IO.hpp>
 
 namespace Euclid
 {

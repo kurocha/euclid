@@ -1,8 +1,8 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/Mesh.h>
-#include <Euclid/Geometry/Generate/Cube.h>
+#include <Euclid/Geometry/Mesh.hpp>
+#include <Euclid/Geometry/Generate/Cube.hpp>
 
 namespace Euclid
 {

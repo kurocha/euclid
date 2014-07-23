@@ -1,8 +1,8 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Vector.IO.h>
-#include <Euclid/Geometry/AlignedBox.h>
+#include <Euclid/Numerics/Vector.IO.hpp>
+#include <Euclid/Geometry/AlignedBox.hpp>
 
 namespace Euclid
 {

@@ -1,10 +1,10 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Quaternion.h>
-#include <Euclid/Numerics/Transforms.h>
-#include <Euclid/Numerics/Quaternion.Multiply.h>
-#include <Euclid/Numerics/Matrix.Multiply.h>
+#include <Euclid/Numerics/Quaternion.hpp>
+#include <Euclid/Numerics/Transforms.hpp>
+#include <Euclid/Numerics/Quaternion.Multiply.hpp>
+#include <Euclid/Numerics/Matrix.Multiply.hpp>
 
 namespace Euclid
 {

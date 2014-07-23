@@ -7,11 +7,11 @@
 //
 //
 
-#include "Frustum.h"
+#include "Frustum.hpp"
 
-#include "Sphere.h"
-#include "AlignedBox.h"
-#include "Triangle.h"
+#include "Sphere.hpp"
+#include "AlignedBox.hpp"
+#include "Triangle.hpp"
 
 #include <iostream>
 

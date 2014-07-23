@@ -1,10 +1,10 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Vector.IO.h>
-#include <Euclid/Geometry/Geometry.h>
-#include <Euclid/Geometry/Intersection.h>
-#include <Euclid/Geometry/Triangle.h>
+#include <Euclid/Numerics/Vector.IO.hpp>
+#include <Euclid/Geometry/Geometry.hpp>
+#include <Euclid/Geometry/Intersection.hpp>
+#include <Euclid/Geometry/Triangle.hpp>
 
 namespace Euclid
 {

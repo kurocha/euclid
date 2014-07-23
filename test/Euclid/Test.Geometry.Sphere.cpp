@@ -1,7 +1,7 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/Sphere.h>
+#include <Euclid/Geometry/Sphere.hpp>
 
 namespace Euclid
 {

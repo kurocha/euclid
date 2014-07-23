@@ -1,6 +1,6 @@
 
-#include <UnitTest/UnitTest.h>
-#include <Euclid/Geometry/Line.h>
+#include <UnitTest/UnitTest.hpp>
+#include <Euclid/Geometry/Line.hpp>
 
 namespace Euclid
 {

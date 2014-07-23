@@ -7,11 +7,11 @@
 //
 //
 
-#include "Triangle.h"
+#include "Triangle.hpp"
 
-#include "AlignedBox.h"
-#include "Plane.h"
-#include "Line.h"
+#include "AlignedBox.hpp"
+#include "Plane.hpp"
+#include "Line.hpp"
 
 namespace Euclid {
 	namespace Geometry {

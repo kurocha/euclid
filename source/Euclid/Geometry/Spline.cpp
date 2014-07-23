@@ -8,10 +8,10 @@
 //
 
 
-#include "Spline.h"
+#include "Spline.hpp"
 
-#include "Triangle.h"
-#include "Line.h"
+#include "Triangle.hpp"
+#include "Line.hpp"
 
 namespace Euclid {
 	namespace Geometry {

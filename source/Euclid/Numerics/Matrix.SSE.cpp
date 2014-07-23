@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#include "Matrix.SSE.h"
+#include "Matrix.SSE.hpp"
 
 #ifdef __SSE2__
 

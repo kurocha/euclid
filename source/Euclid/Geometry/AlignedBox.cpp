@@ -7,7 +7,7 @@
 //
 //
 
-#include "AlignedBox.h"
+#include "AlignedBox.hpp"
 
 namespace Euclid {
 	namespace Geometry {

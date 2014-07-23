@@ -1,11 +1,11 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Vector.h>
-#include <Euclid/Numerics/Vector.Distribution.h>
-#include <Euclid/Numerics/Vector.Geometry.h>
-#include <Euclid/Numerics/Vector.Ratios.h>
-#include <Euclid/Numerics/Vector.IO.h>
+#include <Euclid/Numerics/Vector.hpp>
+#include <Euclid/Numerics/Vector.Distribution.hpp>
+#include <Euclid/Numerics/Vector.Geometry.hpp>
+#include <Euclid/Numerics/Vector.Ratios.hpp>
+#include <Euclid/Numerics/Vector.IO.hpp>
 
 #include <set>
 #include <tuple>

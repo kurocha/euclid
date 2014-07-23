@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#include "Axis.h"
+#include "Axis.hpp"
 
 namespace Euclid {
 	namespace Geometry {

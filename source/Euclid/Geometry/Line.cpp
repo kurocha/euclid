@@ -7,7 +7,7 @@
 //
 //
 
-#include "Line.h"
+#include "Line.hpp"
 
 namespace Euclid {
 	namespace Geometry {

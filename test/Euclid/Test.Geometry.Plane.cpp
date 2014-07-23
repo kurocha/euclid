@@ -1,8 +1,8 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/Plane.h>
-#include <Euclid/Geometry/Line.h>
+#include <Euclid/Geometry/Plane.hpp>
+#include <Euclid/Geometry/Line.hpp>
 
 namespace Euclid
 {

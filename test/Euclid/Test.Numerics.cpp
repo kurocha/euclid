@@ -1,12 +1,12 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Numerics.h>
-#include <Euclid/Numerics/Angle.h>
-#include <Euclid/Numerics/Integer.h>
-#include <Euclid/Numerics/Float.h>
-#include <Euclid/Numerics/Average.h>
-#include <Euclid/Numerics/Interpolate.h>
+#include <Euclid/Numerics/Numerics.hpp>
+#include <Euclid/Numerics/Angle.hpp>
+#include <Euclid/Numerics/Integer.hpp>
+#include <Euclid/Numerics/Float.hpp>
+#include <Euclid/Numerics/Average.hpp>
+#include <Euclid/Numerics/Interpolate.hpp>
 
 #include <iomanip>
 

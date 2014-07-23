@@ -1,7 +1,7 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/Eye.h>
+#include <Euclid/Geometry/Eye.hpp>
 
 namespace Euclid
 {

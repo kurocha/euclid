@@ -7,7 +7,7 @@
 //
 //
 
-#include "AlignedTree.h"
+#include "AlignedTree.hpp"
 
 namespace Euclid {
 	namespace Geometry {

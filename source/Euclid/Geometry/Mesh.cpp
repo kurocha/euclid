@@ -7,11 +7,11 @@
 //
 //
 
-#include "Mesh.h"
+#include "Mesh.hpp"
 
-#include "../Numerics/Matrix.Multiply.h"
-#include "Triangle.h"
-#include "Line.h"
+#include "../Numerics/Matrix.Multiply.hpp"
+#include "Triangle.hpp"
+#include "Line.hpp"
 
 namespace Euclid {
 	namespace Geometry {

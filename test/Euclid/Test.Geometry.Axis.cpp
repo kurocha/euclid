@@ -1,7 +1,7 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Geometry/Axis.h>
+#include <Euclid/Geometry/Axis.hpp>
 
 namespace Euclid
 {

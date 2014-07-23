@@ -6,8 +6,8 @@
 //  Copyright (c) 2011 Samuel Williams. All rights reserved.
 //
 
-#include "Eye.h"
-#include "../Numerics/Matrix.Multiply.h"
+#include "Eye.hpp"
+#include "../Numerics/Matrix.Multiply.hpp"
 
 namespace Euclid
 {

@@ -1,7 +1,7 @@
 
-#include <UnitTest/UnitTest.h>
+#include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Number.h>
+#include <Euclid/Numerics/Number.hpp>
 
 namespace Euclid
 {

@@ -7,8 +7,8 @@
 //
 //
 
-#include "Sphere.h"
-#include "../Numerics/Vector.h"
+#include "Sphere.hpp"
+#include "../Numerics/Vector.hpp"
 
 namespace Euclid {
 	namespace Geometry {

@@ -7,7 +7,7 @@
 //
 //
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 namespace Euclid
 {
