@@ -11,8 +11,7 @@ define_target "euclid" do |target|
 		
 		copy headers: source_root.glob('Euclid/**/*.{h,hpp}')
 		
-		build static_library: "Euclid",
-			source_files: source_root.glob('Euclid/**/*.cpp')
+		build static_library: "Euclid", source_files: source_root.glob('Euclid/**/*.cpp')
 	end
 	
 	target.depends "Build/Files"
@@ -30,10 +29,7 @@ define_target "euclid-tests" do |target|
 	target.build do
 		test_root = target.package.path + 'test'
 		
-		build executable: "Euclid-tests", 
-			source_files: test_root.glob('Euclid/**/*.cpp')
-		
-		run executable: "Euclid-tests"
+		run tests: "Euclid", source_files: test_root.glob('Euclid/**/*.cpp')
 	end
 	
 	target.depends "Build/Clang"
