@@ -11,20 +11,26 @@
 
 #include "Matrix.hpp"
 
+// Interesting math for different projections can be found here:
+// https://github.com/g-truc/glm/blob/f48fe286ad88f9ffd5c5e9f0d95a6cd1107ac40b/glm/gtc/matrix_transform.inl
+
 namespace Euclid {
 	namespace Numerics {
-		template <typename NumericT>
-		Matrix<4, 4, NumericT> perspective_projection_matrix (const NumericT & field_of_view, const NumericT & aspect_ratio, const NumericT & near, const NumericT & far) {
-			NumericT f = 1.0 / std::tan(field_of_view * 0.5);
-			NumericT n = 1.0 / (near - far);
+		/// Accepts any numeric data-type but considers field_of_view to be radians. This is a left hand implementation with the clip box from 0..1
+		template <typename T>
+		Matrix<4, 4, T> perspective_projection_matrix (const T & field_of_view, const T & aspect_ratio, const T & near, const T & far) {
+			//assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
 
-			Matrix<4, 4, NumericT> result(ZERO);
+			Matrix<4, 4, T> result(ZERO);
 
-			result[0] = f / aspect_ratio;
-			result[5] = f;
-			result[10] = (far + near) * n;
-			result[11] = -1.0;
-			result[14] = (2 * far * near) * n;
+			const T tanHalfFovy = std::tan(field_of_view / static_cast<T>(2));
+
+			result[0] = static_cast<T>(1) / (aspect_ratio * tanHalfFovy);
+			result[5] = static_cast<T>(1) / (tanHalfFovy);
+			result[11] = static_cast<T>(1);
+
+			result[10] = far / (far - near);
+			result[14] = -(far * near) / (far - near);
 
 			return result;
 		}
@@ -35,7 +41,7 @@ namespace Euclid {
 
 			result[0] = 2.0 / size[X];
 			result[5] = 2.0 / size[Y];
-			result[10] = -2.0 / size[Z];
+			result[10] = 1.0 / size[Z];
 
 			result[12] = -translation[X];
 			result[13] = -translation[Y];
