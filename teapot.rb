@@ -21,7 +21,7 @@ define_target "euclid" do |target|
 	target.depends "Language/C++11"
 	
 	target.provides "Library/Euclid" do
-		append linkflags "-lEuclid"
+		append linkflags ->{install_prefix + "lib/libEuclid.a"}
 	end
 end
 

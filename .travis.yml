@@ -1,13 +1,15 @@
 language: cpp
+sudo: false
 script:
   - teapot -c travis fetch
-  - teapot -c travis build Test/Euclid variant-debug compiler-clang
+  - teapot -c travis build Test/Euclid
 compiler: clang
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libstdc++-4.8-dev
 install:
-# libstdc++-4.8-dev
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install libstdc++-4.8-dev
-# ruby 2.0 and teapot
-  - rvm use 2.0 --install --binary --fuzzy
+  - rvm use 2.3 --install --binary --fuzzy
   - bundle install
