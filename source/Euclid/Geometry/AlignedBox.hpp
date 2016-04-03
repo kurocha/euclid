@@ -378,8 +378,7 @@ namespace Euclid {
 		/// Return an ortographic projection as described by the given AlignedBox.
 		template <typename NumericT>
 		Matrix<4, 4, NumericT> orthographic_projection_matrix (const AlignedBox<3, NumericT> & box) {
-			Vector<3, NumericT> translation = (box.max() + box.min()) / (box.max() - box.min());
-			return orthographic_projection_matrix(translation, box.size());
+			return orthographic_projection_matrix(box.min(), box.max());
 		}
 	}
 }

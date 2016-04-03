@@ -18,6 +18,9 @@ namespace Euclid
 {
 	namespace Geometry
 	{
+		/**
+			We assume a right-hand coordinate system (all modern graphics APIs use this) with a clip box going from 0..1.
+		*/
 		template <typename NumericT = RealT>
 		struct Eye {
 			Vector<3, NumericT> origin;
@@ -27,7 +30,7 @@ namespace Euclid
 			struct Transformation {
 				Matrix<4, 4, NumericT> inverse_projection_matrix;
 				Matrix<4, 4, NumericT> inverse_view_matrix;
-				NumericT near;
+				NumericT near, far;
 				
 				Vector<4, NumericT> convert_from_projection_space_to_object_space(Vector<4, NumericT> coordinate) const;
 				
@@ -47,11 +50,11 @@ namespace Euclid
 		};
 		
 		template <typename NumericT>
-		typename Eye<NumericT>::Transformation eye_transformation(const Matrix<4, 4, NumericT> & projection_matrix, const Matrix<4, 4, NumericT> & view_matrix, NumericT near = -1) {
+		typename Eye<NumericT>::Transformation eye_transformation(const Matrix<4, 4, NumericT> & projection_matrix, const Matrix<4, 4, NumericT> & view_matrix, NumericT near = 0, NumericT far = 1) {
 			return typename Eye<NumericT>::Transformation {
 				inverse(projection_matrix),
 				inverse(view_matrix),
-				near
+				near, far
 			};
 		}
 		

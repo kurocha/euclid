@@ -23,13 +23,16 @@ namespace Euclid
 		Eye<NumericT> Eye<NumericT>::Transformation::convert_from_viewport_space_to_object_space (const AlignedBox<2, NumericT> & viewport, const Vector<2, NumericT> & point) const
 		{
 			// Reverse the viewport transformation
-			Vector<2, NumericT> normalized_point;
+			Vector<3, NumericT> normalized_point;
 
 			// Calculate position in normal projection box
 			normalized_point[X] = ((point[X] - viewport.origin()[X]) / viewport.size()[X]) * 2.0 - 1.0;
 			normalized_point[Y] = ((point[Y] - viewport.origin()[Y]) / viewport.size()[Y]) * 2.0 - 1.0;
-
-			return convert_from_normalized_space_to_object_space(normalized_point << near);
+			
+			// The point on the window space is essentially on the near plane:
+			normalized_point[Z] = near;
+			
+			return convert_from_normalized_space_to_object_space(normalized_point);
 		}
 
 		template <typename NumericT>
@@ -37,12 +40,14 @@ namespace Euclid
 		{
 			// Reverse the viewport transformation from normalized device coordinates back into object space
 			Eye<NumericT> result;
-
+			
+			// The origin of the view matrix, the inverse of the translation from object space to view space:
 			result.origin = vector(inverse_view_matrix.at(3, 0), inverse_view_matrix.at(3, 1), inverse_view_matrix.at(3, 2));
-
+			
 			auto p1 = (inverse_view_matrix * (inverse_projection_matrix * (normalized_point << 1.0)));
-
-			normalized_point[Z] *= -1;
+			
+			// In the case of orthographic projections, the origin might be on the near plane. So, we make a new point further out and use that for computing the direction.
+			normalized_point[Z] += static_cast<NumericT>(1);
 			auto p2 = (inverse_view_matrix * (inverse_projection_matrix * (normalized_point << 1.0)));
 
 			p1 /= p1[W];
@@ -51,7 +56,7 @@ namespace Euclid
 			result.forward = Line<3, NumericT>{p1.reduce(), (p2 - p1).reduce().normalize()};
 
 			// Calculate up direction
-			Vector<3, NumericT> eye_up = {0.0, 1.0, 0.0};
+			Vector<3, NumericT> eye_up = {0.0, -1.0, 0.0};
 			result.up = inverse_view_matrix * eye_up;
 
 			return result;

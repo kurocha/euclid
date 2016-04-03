@@ -1,8 +1,8 @@
 language: cpp
 sudo: false
 script:
-  - teapot -c travis fetch
-  - teapot -c travis build Test/Euclid
+  - teapot -c test fetch
+  - teapot -c test build Test/Euclid
 compiler: clang
 addons:
   apt:
