@@ -19,18 +19,27 @@ namespace Euclid {
 	namespace Numerics {
 		/// Accepts any numeric data-type but considers field_of_view to be radians. This is a left hand implementation with the clip box from 0..1
 		template <typename NumericT>
-		Matrix<4, 4, NumericT> perspective_projection_matrix (const NumericT & field_of_view, const NumericT & aspect_ratio, const NumericT & near, const NumericT & far) {
+		Matrix<4, 4, NumericT> perspective_projection_matrix (const Radians<NumericT> & field_of_view, const NumericT & aspect_ratio, const NumericT & near, const NumericT & far) {
 			//assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
+
+			// Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+			// Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
+			// Result[2][3] = - static_cast<T>(1);
+			// Result[2][2] = zFar / (zNear - zFar);
+			// Result[3][2] = -(zFar * zNear) / (zFar - zNear);
 
 			Matrix<4, 4, NumericT> result(ZERO);
 
-			const NumericT tanHalfFovy = std::tan(field_of_view / static_cast<NumericT>(2));
+//		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
+			const NumericT tanHalfFovy = (field_of_view / static_cast<NumericT>(2)).tan();
+			std::cerr << "fov: " << field_of_view << " tan: " << tanHalfFovy << std::endl;
 
+			//static_cast<T>(1) / (aspect * tanHalfFovy);
 			result[0] = static_cast<NumericT>(1) / (aspect_ratio * tanHalfFovy);
-			result[5] = static_cast<NumericT>(1) / (tanHalfFovy);
-			result[11] = static_cast<NumericT>(1);
+			result[5] = static_cast<NumericT>(1) / tanHalfFovy;
+			result[11] = - static_cast<NumericT>(1);
 
-			result[10] = far / (far - near);
+			result[10] = far / (near - far);
 			result[14] = -(far * near) / (far - near);
 
 			return result;
