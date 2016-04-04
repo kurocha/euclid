@@ -6,11 +6,9 @@
 //  Copyright (c) 2012 Samuel Williams. All rights reserved.
 //
 
-#ifndef _EUCLID_NUMERICS_MATRIX_PROJECTIONS_H
-#define _EUCLID_NUMERICS_MATRIX_PROJECTIONS_H
+#pragma once
 
 #include "Matrix.hpp"
-#include <iostream>
 
 // Interesting math for different projections can be found here:
 // https://github.com/g-truc/glm/blob/f48fe286ad88f9ffd5c5e9f0d95a6cd1107ac40b/glm/gtc/matrix_transform.inl
@@ -22,21 +20,12 @@ namespace Euclid {
 		Matrix<4, 4, NumericT> perspective_projection_matrix (const Radians<NumericT> & field_of_view, const NumericT & aspect_ratio, const NumericT & near, const NumericT & far) {
 			//assert(abs(aspect - std::numeric_limits<T>::epsilon()) > static_cast<T>(0));
 
-			// Result[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
-			// Result[1][1] = static_cast<T>(1) / (tanHalfFovy);
-			// Result[2][3] = - static_cast<T>(1);
-			// Result[2][2] = zFar / (zNear - zFar);
-			// Result[3][2] = -(zFar * zNear) / (zFar - zNear);
-
 			Matrix<4, 4, NumericT> result(ZERO);
 
-//		T const tanHalfFovy = tan(fovy / static_cast<T>(2));
-			const NumericT tanHalfFovy = (field_of_view / static_cast<NumericT>(2)).tan();
-			std::cerr << "fov: " << field_of_view << " tan: " << tanHalfFovy << std::endl;
+			const NumericT t = (field_of_view / static_cast<NumericT>(2)).tan();
 
-			//static_cast<T>(1) / (aspect * tanHalfFovy);
-			result[0] = static_cast<NumericT>(1) / (aspect_ratio * tanHalfFovy);
-			result[5] = static_cast<NumericT>(1) / tanHalfFovy;
+			result[0] = static_cast<NumericT>(1) / (aspect_ratio * t);
+			result[5] = static_cast<NumericT>(1) / t;
 			result[11] = - static_cast<NumericT>(1);
 
 			result[10] = far / (near - far);
@@ -64,5 +53,3 @@ namespace Euclid {
 		}
 	}
 }
-
-#endif
