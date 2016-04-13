@@ -30,7 +30,7 @@ namespace Euclid {
 			Vec4 color;
 		};
 
-		enum Layout {
+		enum class Layout : uint32_t {
 			POINTS = 0,
 			LINES = 1,
 			LINE_LOOP = 2,
@@ -41,15 +41,17 @@ namespace Euclid {
 		};
 
 		/// A mesh is a list of vertices and an ordered list of indices which make up a set of triangles. We assume that all meshes are made up of triangle strips. These assumptions and limitations are primarily to keep the generation of Mesh objects simple.
-		template <typename _VertexT = VertexP3N3M2, typename _IndexT = uint16_t>
+		template <typename VertexType = VertexP3N3M2, typename IndexType = uint16_t>
 		class Mesh {
 		public:
-			typedef _IndexT IndexT;
-			typedef _VertexT VertexT;
+			typedef IndexType Index;
+			typedef VertexType Vertex;
+			typedef std::vector<Index> Indices;
+			typedef std::vector<Vertex> Vertices;
 
 			Layout layout;
-			std::vector<IndexT> indices;
-			std::vector<VertexT> vertices;
+			Indices indices;
+			Vertices vertices;
 
 			// Apply some kind of tranform to all vertices.
 			template <typename TransformT>
@@ -58,13 +60,13 @@ namespace Euclid {
 					vertices[i].apply(transform);
 			}
 
-			inline Mesh& operator<<(IndexT index) {
+			inline Mesh& operator<<(Index index) {
 				indices.push_back(index);
 
 				return *this;
 			}
 
-			inline Mesh& operator<<(VertexT vertex) {
+			inline Mesh& operator<<(Vertex vertex) {
 				vertices.push_back(vertex);
 
 				return *this;

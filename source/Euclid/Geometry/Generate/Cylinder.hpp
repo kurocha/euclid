@@ -37,7 +37,7 @@ namespace Euclid {
 
 			template <typename MeshT>
 			void cylinder(MeshT & mesh, const RealT &base_radius, const RealT &top_radius, const RealT &height, const std::size_t &slices, const std::size_t &stacks, bool cap_start, bool cap_end) {
-				mesh.layout = TRIANGLES;
+				mesh.layout = Layout::TRIANGLES;
 
 				Vec3 base{0, base_radius, 0};
 				Vec3 top{height, top_radius, 0};
