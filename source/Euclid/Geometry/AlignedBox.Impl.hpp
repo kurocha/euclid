@@ -167,8 +167,7 @@ namespace Euclid
 		}
 
 		template <dimension D, typename NumericT>
-		AlignedBox<D, NumericT> AlignedBox<D, NumericT>::subtract_using_translation (const AlignedBox<D, NumericT> & from, const AlignedBox<D, NumericT> & to,
-		                                                                             const NumericT & offset)
+		AlignedBox<D, NumericT> AlignedBox<D, NumericT>::subtract_using_translation (const AlignedBox<D, NumericT> & from, const AlignedBox<D, NumericT> & to, const NumericT & offset)
 		{
 			VectorT orientation = from.orientation_of(to);
 			AlignedBox translation = from;

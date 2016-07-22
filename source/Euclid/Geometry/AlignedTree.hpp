@@ -93,7 +93,8 @@ namespace Euclid {
 			typedef typename TraitsT::SpaceT SpaceT;
 			typedef std::set<ObjectT> ObjectSetT;
 
-			class Partition {
+			class Partition
+			{
 			protected:
 				ObjectSetT _objects;
 
@@ -357,7 +358,8 @@ namespace Euclid {
 
 		protected:
 			SpaceT _bounds;
-			Partition *_top;
+			bool _expanding;
+			Partition _top;
 
 			void expand (const unsigned & dir) {
 				if (dir && LEFT) {
@@ -368,20 +370,18 @@ namespace Euclid {
 			}
 
 		public:
-			AlignedTree (const VecT & origin, const VecT & size) : _bounds(origin, origin + size), _expanding(true) {
-				_top = new Partition(this, origin, size);
+			AlignedTree (const VecT & origin, const VecT & size) : _bounds(origin, origin + size), _expanding(true), _top(this, origin, size) {
 			}
 
 			// The top partition in the tree.
 			Partition * top () {
-				return _top;
+				return &_top;
 			}
 
 			const Partition * top () const {
-				return _top;
+				return &_top;
 			}
 
-			bool _expanding;
 			bool expanding () const { return _expanding; }
 			void set_expanding (bool expanding) { _expanding = expanding; }
 
@@ -397,10 +397,10 @@ namespace Euclid {
 			Partition * insert (ObjectT o, bool redistribute = true) {
 				SpaceT b = TraitsT::calculate_bounding_box(o);
 
-				if (!_top->bounding_box().contains_box(b))
+				if (!_top.bounding_box().contains_box(b))
 					return NULL;
 
-				Partition * p = _top->insert(o);
+				Partition * p = _top.insert(o);
 
 				// TraitsT::R is the threshold at which we redistribute objects:
 				if (redistribute && p->objects().size() > TraitsT::R) {
@@ -414,10 +414,10 @@ namespace Euclid {
 			Partition * find (ObjectT o) {
 				SpaceT b = TraitsT::calculate_bounding_box(o);
 
-				if (!_top->bounding_box().intersects_with(b))
+				if (!_top.bounding_box().intersects_with(b))
 					return NULL;
 
-				return _top->find(o);
+				return _top.find(o);
 			}
 
 			// Erase an object if it exists.
@@ -437,12 +437,12 @@ namespace Euclid {
 
 			// Find the smallest partition which encloses the given point.
 			Partition* partition_for_point (const Vec2 &point) {
-				return _top->partition_for_point(point);
+				return _top.partition_for_point(point);
 			}
 
 			// Find the smallest partition which encloses the given rectangle.
 			Partition* partition_for_rect (const SpaceT &rect) {
-				return _top->partition_for_rect(rect);
+				return _top.partition_for_rect(rect);
 			}
 		};
 	}
