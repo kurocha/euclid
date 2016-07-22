@@ -60,12 +60,16 @@ namespace Euclid
 			/* BaseT */ _raise (BaseT base, ExponentT exponent) {
 				BaseT result = 1;
 
-				while (exponent != 0) {
+				while (true) {
 					if ((exponent & 1) == 1)
 						result *= base;
 					
-					base *= base;
 					exponent >>= 1;
+					
+					// We specifically check here whether we need to continue further to avoid overflow of base.
+					if (exponent == 0) break;
+					
+					base *= base;
 				}
 				
 				return result;
