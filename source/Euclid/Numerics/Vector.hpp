@@ -246,6 +246,17 @@ namespace Euclid
 
 				return result;
 			}
+			
+			// Raise components of the vector to the given power.
+			Vector raise (const NumericT & power) const
+			{
+				Vector result;
+				
+				for (dimension i = 0; i < E; ++i)
+					result[i] = number((*this)[i]).raise(power);
+
+				return result;
+			}
 
 			/// Linearly interpolate from (-1...1) between the smallest and largest components of the individual axes.
 			Vector constrain(const Vector & b, const Vector<E, RealT> & constraints) const
