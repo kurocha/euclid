@@ -18,7 +18,7 @@ define_target "euclid" do |target|
 	target.depends "Build/Clang"
 	
 	target.depends :platform
-	target.depends "Language/C++11"
+	target.depends "Language/C++11", private: true
 	
 	target.provides "Library/Euclid" do
 		append linkflags ->{install_prefix + "lib/libEuclid.a"}
@@ -35,7 +35,7 @@ define_target "euclid-tests" do |target|
 	target.depends "Build/Clang"
 	
 	target.depends :platform
-	target.depends "Language/C++11"
+	target.depends "Language/C++11", private: true
 	target.depends "Library/UnitTest"
 	target.depends "Library/Euclid"
 	
@@ -43,7 +43,7 @@ define_target "euclid-tests" do |target|
 end
 
 define_configuration "test" do |configuration|
-	configuration[:source] = "https://github.com/dream-framework"
+	configuration[:source] = "https://github.com/kurocha"
 	
 	configuration.require "platforms"
 	configuration.require "build-files"
