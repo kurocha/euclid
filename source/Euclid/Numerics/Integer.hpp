@@ -56,7 +56,7 @@ namespace Euclid
 		};
 
 		template <>
-		struct NumericOutputTraits<char> {
+		struct NumericOutputTraits<signed char> {
 			typedef std::int16_t NumericT;
 		};
 
