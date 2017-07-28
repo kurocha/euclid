@@ -44,22 +44,6 @@ namespace Euclid
 			typedef std::int64_t SignedT;
 		};
 
-		/// This helper provides integer data-types which are guaranteed to be printed as numbers using `std::ostream`.
-		template <typename AnyT>
-		struct NumericOutputTraits {
-			typedef AnyT NumericT;
-		};
-
-		template <>
-		struct NumericOutputTraits<unsigned char> {
-			typedef std::uint16_t NumericT;
-		};
-
-		template <>
-		struct NumericOutputTraits<signed char> {
-			typedef std::int16_t NumericT;
-		};
-
 		/// If the supplied value is a power of two, it is returned, otherwise the next highest power of 2 is calculated and returned. The integral must be
 		// http://acius2.blogspot.com/2007/11/calculating-next-power-of-2.html
 		template <typename IntegralT>

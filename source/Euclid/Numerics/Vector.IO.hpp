@@ -19,7 +19,7 @@ namespace Euclid {
 		{
 			for (dimension i = 0; i < E; ++i) {
 				// We use this helper to ensure that char and unsigned char are printed correctly.
-				output << (typename NumericOutputTraits<NumericT>::NumericT)(vec[i]) << ((i + 1) != E ? " " : "");
+				output << +vec[i] << ((i + 1) != E ? " " : "");
 			}
 
 			return output;

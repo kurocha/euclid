@@ -61,7 +61,8 @@ namespace Euclid
 		struct FloatEquivalenceTraits {
 			typedef _FloatT FloatT;
 
-			typedef typename IntegerSizeTraits<sizeof(FloatT)>::SignedT IntegralT;
+			using IntegralT = typename IntegerSizeTraits<sizeof(FloatT)>::SignedT;
+			using UnsignedT = typename IntegerSizeTraits<sizeof(FloatT)>::UnsignedT;
 
 			union Conversion {
 				FloatT float_value;
@@ -92,7 +93,7 @@ namespace Euclid
 				return conversion.float_value;
 			}
 
-			static IntegralT integral_difference(const FloatT & a, const FloatT & b)
+			static UnsignedT integral_difference(const FloatT & a, const FloatT & b)
 			{
 				// Make lexicographically ordered as a twos-complement int
 				IntegralT i = convert_to_integer(a), j = convert_to_integer(b);
