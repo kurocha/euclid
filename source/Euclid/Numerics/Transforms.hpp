@@ -16,8 +16,8 @@ namespace Euclid {
 	namespace Numerics {
 		template <typename LeftT, typename RightT>
 		struct Transforms {
-			const LeftT & left;
-			const RightT & right;
+			const LeftT left;
+			const RightT right;
 
 		protected:
 			template <typename ApplyT, typename TransformT>
