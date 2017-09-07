@@ -25,7 +25,7 @@ namespace Euclid {
 			VectorT _direction;
 
 		public:
-			Line () = default;
+			Line () {}
 
 			Line (const VectorT & direction) : _point(ZERO), _direction(direction)
 			{
@@ -137,7 +137,7 @@ namespace Euclid {
 			VectorT _end;
 
 		public:
-			LineSegment () = default;
+			LineSegment () {}
 
 			LineSegment (const VectorT & end) : _start(ZERO), _end(end)
 			{
