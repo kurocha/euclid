@@ -2,6 +2,8 @@
 
 Provides computational geometry and maths primitives.
 
+[![Build Status](https://travis-ci.org/kurocha/euclid.svg?branch=master)](https://travis-ci.org/kurocha/euclid)
+
 ## Setup
 
 The build tool [teapot] needs to be installed (which requires [Ruby]):
