@@ -183,36 +183,23 @@ namespace Euclid
 			{"Comparisons",
 				[](UnitTest::Examiner & examiner) {
 					Vec2 v1 = {1, 1}, v2 = {1, 2}, v3 = {2, 1}, v4 = {2, 2};
-
-					// Equality
-					examiner << "==" << std::endl;
-					examiner.check(v1 == v1);
-					examiner << "!=" << std::endl;
-					examiner.check(v1 != v2);
+					
+					examiner.expect(v1) == v1;
+					examiner.expect(v1) != v2;
 
 					// Lesser than
-					examiner << "<" << std::endl;
-					examiner.check(v1 < v2);
-					examiner << "<" << std::endl;
-					examiner.check(!v4 < v1);
-					examiner << "<=" << std::endl;
-					examiner.check(v1 <= v2);
-					examiner << "<=" << std::endl;
-					examiner.check(v1 <= v1);
-					examiner << "<=" << std::endl;
-					examiner.check(!v2 <= v1);
+					examiner.expect(v1) < v2;
+					examiner.expect(v4).to_not() < v1;
+					examiner.expect(v1) <= v2;
+					examiner.expect(v1) <= v1;
+					examiner.expect(v2).to_not() <= v1;
 
 					// Greater than
-					examiner << ">" << std::endl;
-					examiner.check(v2 > v1);
-					examiner << ">" << std::endl;
-					examiner.check(v3 > v2);
-					examiner << ">=" << std::endl;
-					examiner.check(!(v2 >= v3));
-					examiner << ">=" << std::endl;
-					examiner.check(v1 >= v1);
-					examiner << ">=" << std::endl;
-					examiner.check(v3 >= v2);
+					examiner.expect(v2) > v1;
+					examiner.expect(v3) > v2;
+					examiner.expect(v2).to_not() >= v3;
+					examiner.expect(v1) >= v1;
+					examiner.expect(v3) >= v2;
 				}
 			},
 
