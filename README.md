@@ -1,20 +1,41 @@
-Euclid
-======
+# Euclid
 
-Euclid is a modern C++ math library with many convenient numeric and geometric primitives built in.
+Provides computational geometry and maths primitives.
 
-[![Build Status](https://travis-ci.org/dream-framework/euclid.png?branch=master)](https://travis-ci.org/dream-framework/euclid)
+## Setup
 
-Build and Install
------------------
+The build tool [teapot] needs to be installed (which requires [Ruby]):
 
-Use Teapot to build and install Euclid:
+	$ gem install teapot
 
-	$ cd euclid
-	$ sudo gem install teapot
-	$ teapot build Library/Euclid variant-debug
+[teapot]: https://teapot.nz/
+[Ruby]: https://www.ruby-lang.org/en/downloads/
 
-Currently, only Mac OS X and Linux are supported using standards conformant C++11 compilers.
+### Dependencies
+
+Fetch all the necessary project dependencies:
+
+	$ cd $PROJECT_TARGET_NAME
+	$ teapot fetch
+
+### Tests
+
+Run the tests to confirm basic functionality:
+
+	$ cd $PROJECT_TARGET_NAME
+	$ teapot Test/$PROJECT_IDENTIFIER
+
+## Usage
+
+Euclid has two main namespaces, `Euclid::Geometry` and `Euclid::Numerics`.
+
+## Contributing
+
+1. Fork it.
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Create new Pull Request.
 
 ## License
 
