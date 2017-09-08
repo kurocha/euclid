@@ -132,17 +132,13 @@ namespace Euclid {
 				return min().equivalent(other.min()) && max().equivalent(other.max());
 			}
 
-			/// Returns the minimum point of the box.
-			const VectorT &min () const { return _min; }
-
-			/// Returns the maximum point of the box.
-			VectorT &min () { return _min; }
-
-			/// Returns the minimum point of the box.
-			const VectorT &max () const { return _max; }
-
-			/// Returns the maximum point of the box.
-			VectorT &max () { return _max; }
+			/// Returns the minimum point of the box:
+			const VectorT & min () const { return _min; }
+			VectorT & min () { return _min; }
+			
+			/// Returns the maximum point of the box:
+			const VectorT & max () const { return _max; }
+			VectorT & max () { return _max; }
 
 			/// Returns the origin of the box.
 			/// @sa min()

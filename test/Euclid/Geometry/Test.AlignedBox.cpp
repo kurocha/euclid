@@ -1,8 +1,8 @@
 
 #include <UnitTest/UnitTest.hpp>
 
-#include <Euclid/Numerics/Vector.IO.hpp>
 #include <Euclid/Geometry/AlignedBox.hpp>
+#include <Euclid/Geometry/AlignedBox.IO.hpp>
 
 namespace Euclid
 {
@@ -136,6 +136,21 @@ namespace Euclid
 					c2a.subtract_in_order(c1, vector<unsigned>(0, 1, 2));
 					examiner << "Box was subtracted correctly" << std::endl;
 					examiner.check(c2a == c3);
+				}
+			},
+			
+			{"it can read and write to string",
+				[](UnitTest::Examiner & examiner) {
+					std::stringstream input("{{1,2},{3,4}}"), output;
+					
+					AlignedBox<2, unsigned> box;
+					input >> box;
+					
+					examiner.expect(box) == AlignedBox<2, unsigned>{{1,2},{3,4}};
+					
+					output << box;
+					
+					examiner.expect(output.str()) == "{{1,2},{3,4}}";
 				}
 			},
 		};

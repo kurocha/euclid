@@ -20,7 +20,23 @@ namespace Euclid {
 		template <dimension D, typename NumericT>
 		std::ostream & operator<<(std::ostream & output, const AlignedBox<D, NumericT> & aligned_box)
 		{
-			return output << "{" << aligned_box.min() << "->" << aligned_box.max() << "}";
+			return output
+				<< '{'
+				<< aligned_box.min()
+				<< ','
+				<< aligned_box.max()
+				<< '}';
+		}
+		
+		template <dimension D, typename NumericT>
+		std::istream & operator>>(std::istream & input, AlignedBox<D, NumericT> & aligned_box)
+		{
+			return input
+				>> expect_character<'{'>
+				>> aligned_box.min()
+				>> expect_character<','>
+				>> aligned_box.max()
+				>> expect_character<'}'>;
 		}
 	}
 }
